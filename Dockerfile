@@ -33,7 +33,7 @@ FROM node:22-alpine AS production
 WORKDIR /app
 
 ENV NODE_ENV=production
-ENV PORT=3000
+ENV PORT=8080
 
 RUN addgroup -g 1001 -S nodejs && adduser -S nodejs -u 1001
 
@@ -44,7 +44,7 @@ COPY --from=server-build /app/server/dist ./server/dist
 COPY --from=client-build /app/client/dist ./server/client/dist
 
 USER nodejs
-EXPOSE 3000
+EXPOSE 8080
 
 CMD ["node", "server/dist/index.js"]
 

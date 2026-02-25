@@ -1,0 +1,61 @@
+# Manual deploy: build Docker image, push to Azure Container Registry, deploy to Azure Web App.
+# Trigger from Actions tab → "Deploy to Azure" → Run workflow.
+
+name: Deploy to Azure (ACR + Web App)
+
+on:
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        description: 'Docker image tag (default: git SHA)'
+        required: false
+        default: ''
+
+env:
+  ACR_NAME: 'wildroseplainsacr'      # e.g. myregistry
+  IMAGE_NAME: 'portfolio'    # e.g. website (image will be <ACR_NAME>.azurecr.io/<IMAGE_NAME>:<tag>)
+  WEBAPP_NAME: 'wildroseplains'   # Azure Web App name
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set image tag
+        id: tag
+        run: |
+          TAG="${{ inputs.image_tag }}"
+          if [ -z "$TAG" ]; then TAG="${{ github.sha }}"; fi
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+          echo "Using image tag: $TAG"
+
+      - name: Azure Login (client secret)
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Log in to Azure Container Registry
+        run: |
+          az acr login --name ${{ env.ACR_NAME }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push image to ACR
+        run: |
+          IMAGE="${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ steps.tag.outputs.tag }}"
+          docker build -t "$IMAGE" -f Dockerfile .
+          docker push "$IMAGE"
+          echo "IMAGE_FULL=$IMAGE" >> $GITHUB_ENV
+
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ env.WEBAPP_NAME }}
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          images: ${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ steps.tag.outputs.tag }}
