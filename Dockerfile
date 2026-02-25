@@ -12,9 +12,10 @@ RUN npm run client:install
 FROM node:22-alpine AS client-build
 WORKDIR /app
 
+COPY package.json ./
 COPY --from=deps /app/node_modules /app/node_modules
 COPY --from=deps /app/client/node_modules /app/client/node_modules
-COPY package.json client/package.json client/
+COPY client/package.json client/
 COPY client/ client/
 
 RUN npm run build
