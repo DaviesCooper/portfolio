@@ -1,0 +1,159 @@
+.rnd {
+  position: absolute !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.rnd.active {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+.window {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-window);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.titlebar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 8px;
+  background: var(--bg-titlebar);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  cursor: move;
+}
+
+.titleIcon {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.titleText {
+  flex: 1;
+  font-size: 13px;
+  color: var(--fg);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.buttons {
+  display: flex;
+  gap: 2px;
+}
+
+.titlebarBtn {
+  width: 28px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+  color: var(--fg-dim);
+  cursor: pointer;
+}
+
+.titlebarBtn:hover {
+  background: var(--border);
+  color: var(--fg);
+}
+
+.closeBtn:hover {
+  background: var(--close-hover);
+  color: white;
+}
+
+.iconLine {
+  display: block;
+  height: 2px;
+  background: currentColor;
+  border-radius: 1px;
+}
+
+.iconBox {
+  width: 10px;
+  height: 10px;
+  border: 1.5px solid currentColor;
+  border-radius: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.iconRestore {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.iconX {
+  position: relative;
+  width: 10px;
+  height: 10px;
+}
+
+.iconX .iconLine {
+  position: absolute;
+  width: 12px;
+  left: -1px;
+  top: 4px;
+}
+
+.iconX .iconLine:first-child {
+  transform: rotate(45deg);
+}
+
+.iconX .iconLine:last-child {
+  transform: rotate(-45deg);
+}
+
+.content {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Transparent overlay over iframe (e.g. PDF): first click focuses window, then passes through */
+.iframeFocusOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  cursor: default;
+}
+
+/* Hide heavy content (e.g. PDF iframe) during drag/resize to avoid repaint lag */
+.contentInteracting iframe {
+  visibility: hidden;
+}
+
+.taskbarButton {
+  padding: 4px 12px;
+  font-size: 12px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--fg);
+  cursor: pointer;
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.taskbarButton:hover {
+  background: var(--accent);
+  color: white;
+}

@@ -1,0 +1,56 @@
+/* Old-school Windows 9x/NT/2000 BSOD */
+.screen {
+  position: fixed;
+  inset: 0;
+  background: #0000aa;
+  color: #fff;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  cursor: pointer;
+  font-family: "Lucida Console", "Consolas", "Courier New", monospace;
+  font-size: 14px;
+  line-height: 1.4;
+  user-select: none;
+  padding: 24px 32px;
+  box-sizing: border-box;
+  overflow: auto;
+}
+
+.screen:focus {
+  outline: none;
+}
+
+.content {
+  max-width: 640px;
+}
+
+.main {
+  margin: 0 0 1em 0;
+}
+
+.stopName {
+  margin: 0 0 1em 0;
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.tech {
+  margin: 1.5em 0 0.25em 0;
+}
+
+.stopCode {
+  margin: 0;
+  font-size: 13px;
+}
+
+.meme {
+  margin: 1.5em 0 0 0;
+  font-style: italic;
+}
+
+.restore {
+  margin: 2em 0 0 0;
+  font-weight: bold;
+  text-decoration: underline;
+}

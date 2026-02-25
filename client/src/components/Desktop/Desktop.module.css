@@ -1,0 +1,19 @@
+.desktop {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background: var(--bg-desktop);
+  overflow: hidden;
+}
+
+.windowArea {
+  position: absolute;
+  inset: 0;
+  bottom: 28px;
+  overflow: hidden;
+}
+
+.unknown {
+  padding: 1rem;
+  color: var(--fg-dim);
+}

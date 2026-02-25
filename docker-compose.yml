@@ -1,0 +1,13 @@
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+    # Optional: mount built assets for live updates without rebuilding the image.
+    # Build locally (npm run server:build && npm run build) then uncomment:
+    # volumes:
+    #   - ./server/dist:/app/server/dist:ro
+    #   - ./client/dist:/app/server/client/dist:ro

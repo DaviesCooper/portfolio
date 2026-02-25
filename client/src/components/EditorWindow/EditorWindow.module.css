@@ -1,0 +1,136 @@
+.editor {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  background: var(--bg-terminal, #0c0c0f);
+  color: #e4e4e7;
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.toolbarGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.btn {
+  padding: 0.35rem 0.65rem;
+  font-family: inherit;
+  font-size: 12px;
+  color: #e4e4e7;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.btn:active {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.btnPrimary {
+  background: rgba(34, 197, 94, 0.25);
+  border-color: rgba(34, 197, 94, 0.4);
+  color: #86efac;
+}
+
+.btnPrimary:hover {
+  background: rgba(34, 197, 94, 0.35);
+  border-color: rgba(34, 197, 94, 0.5);
+}
+
+.saveStatus {
+  font-size: 11px;
+  color: #a1a1aa;
+  margin-left: 0.25rem;
+}
+
+.saveStatus.saved {
+  color: #86efac;
+}
+
+.saveStatus.error {
+  color: #f87171;
+}
+
+.searchReplace {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: 0.5rem;
+  padding-left: 0.5rem;
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.searchReplace label {
+  font-size: 11px;
+  color: #a1a1aa;
+}
+
+.searchReplace input {
+  padding: 0.25rem 0.5rem;
+  font-family: inherit;
+  font-size: 12px;
+  width: 140px;
+  max-width: 100%;
+  color: #e4e4e7;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+}
+
+.searchReplace input::placeholder {
+  color: #71717a;
+}
+
+.textareaWrap {
+  flex: 1;
+  min-height: 0;
+  padding: 0.75rem;
+}
+
+.textarea {
+  width: 100%;
+  height: 100%;
+  min-height: 200px;
+  padding: 0.75rem;
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #e4e4e7;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  resize: none;
+  box-sizing: border-box;
+  tab-size: 4;
+}
+
+.textarea::placeholder {
+  color: #71717a;
+}
+
+.textarea:focus {
+  outline: none;
+  border-color: rgba(125, 211, 252, 0.4);
+  box-shadow: 0 0 0 2px rgba(125, 211, 252, 0.15);
+}

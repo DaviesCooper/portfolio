@@ -1,0 +1,37 @@
+# Development: live code updates without rebuilding the image.
+# Server: mount ./server, nodemon restarts on .ts changes.
+# Client: mount ./client, Vite HMR. Use http://localhost:5173 for the app.
+#
+# Usage: docker compose -f docker-compose.dev.yml up --build -d   (background)
+# Or:    docker compose -f docker-compose.dev.yml up --build     (foreground, logs in terminal)
+# Then:  server at http://localhost:3000 (API), app at http://localhost:5173 (Vite).
+# Logs:  docker compose -f docker-compose.dev.yml logs -f
+
+services:
+  server:
+    build:
+      context: .
+      target: dev
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+    volumes:
+      - ./server:/app/server
+    command: ["npx", "nodemon", "--exec", "tsx server/index.ts", "-w", "server", "-e", "ts"]
+
+  client:
+    build:
+      context: .
+      target: dev
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_PROXY_TARGET=http://server:3000
+    volumes:
+      - ./client:/app/client
+    # Reinstall deps in-container so Rollup/Vite get linux-musl binaries (host node_modules are wrong platform)
+    command: ["sh", "-c", "cd client && npm install && npm run dev"]
+    depends_on:
+      - server

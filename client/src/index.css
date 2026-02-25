@@ -1,0 +1,29 @@
+/* Arch Linux–inspired theme: dark grays, Arch blue accent */
+:root {
+  --bg-desktop: #0c0c0c;
+  --bg-terminal: #1a1a1a;
+  --bg-titlebar: #242424;
+  --bg-panel: #242424;
+  --bg-window: #242424;
+  --fg: #e0e0e0;
+  --fg-dim: #888888;
+  --accent: #1793d1;
+  --accent-hover: #33a8e0;
+  --border: #333333;
+  --close-hover: #c7162b;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  --font-ui: system-ui, -apple-system, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  margin: 0;
+  height: 100%;
+  font-family: var(--font-ui);
+  background: var(--bg-desktop);
+  color: var(--fg);
+  overflow: hidden;
+}
