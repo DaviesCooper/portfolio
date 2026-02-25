@@ -46,6 +46,53 @@
 .markdownWrap > *:first-child { margin-top: 0; }
 .markdownWrap > *:last-child { margin-bottom: 0; }
 
+/* --- Project: AutoSteamworks (warm copper/steam theme) --- */
+.projectAutoSteamworks {
+  position: relative;
+  --proj-accent: #d97706;
+  --proj-accent-hover: #f59e0b;
+  --proj-bg-tint: rgba(217, 119, 6, 0.04);
+  --proj-border: rgba(217, 119, 6, 0.2);
+}
+.projectAutoSteamworks::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--proj-bg-tint) 0%, transparent 50%);
+  pointer-events: none;
+  border-radius: inherit;
+}
+.projectAutoSteamworks h1,
+.projectAutoSteamworks h2 {
+  border-bottom-color: var(--proj-border);
+  color: #fef3c7;
+}
+.projectAutoSteamworks a {
+  color: #fbbf24;
+  border-bottom-color: transparent;
+}
+.projectAutoSteamworks a:hover {
+  color: #fcd34d;
+  border-bottom-color: rgba(251, 191, 36, 0.5);
+}
+.projectAutoSteamworks blockquote {
+  border-left-color: var(--proj-accent);
+  color: #fde68a;
+  background: rgba(217, 119, 6, 0.06);
+  border-radius: 0 6px 6px 0;
+}
+.projectAutoSteamworks hr {
+  border-top-color: var(--proj-border);
+}
+.projectAutoSteamworks code {
+  color: #fef3c7;
+  background: rgba(217, 119, 6, 0.15);
+}
+.projectAutoSteamworks pre {
+  border-color: var(--proj-border);
+  background: rgba(217, 119, 6, 0.08);
+}
+
 /* Headings */
 .markdownWrap h1 {
   font-size: 1.875rem;
@@ -185,14 +232,25 @@
   text-align: center;
   margin: 1em 0;
 }
+/* Break out centered single-image paragraphs so banners can be full-width */
+.markdownWrap p[align="center"]:has(img:only-child) {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  margin-left: -50vw;
+  max-width: none;
+}
 .markdownWrap p[align="center"] img {
   display: inline-block;
   vertical-align: top;
   margin: 0 0.5rem;
-  max-width: min(400px, 45%);
+  max-width: min(1200px, 96vw);
 }
 .markdownWrap p[align="center"] img:only-child {
   margin: 0;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* video (e.g. inline MP4) */

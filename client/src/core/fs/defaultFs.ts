@@ -21,7 +21,9 @@ export function createDefaultFs(commandNames?: string[]): VfsNode {
   const projectsDir = dir('projects');
   user.children!.set('Resume', fileFromUrl('Resume', MIME_APPLICATION_PDF, '/resume/Resume.pdf'));
   user.children!.set('About', fileFromUrl('About', MIME_TEXT_MARKDOWN, '/about/About.md'));
-  projectsDir.children!.set('Genetic_Stippling', fileFromUrl('Genetic_Stippling', MIME_TEXT_MARKDOWN, '/genetic_stippling/Genetic_Stippling.md'));
+  projectsDir.children!.set('genetic-stippling', fileFromUrl('genetic-stippling', MIME_TEXT_MARKDOWN, '/genetic-stippling/genetic-stippling.md'));
+  projectsDir.children!.set('auto-steamworks', fileFromUrl('auto-steamworks', MIME_TEXT_MARKDOWN, '/auto-steamworks/auto-steamworks.md'));
+  projectsDir.children!.set('hvvoculus', fileFromUrl('hvvoculus', MIME_TEXT_MARKDOWN, '/hvvoculus/hvvoculus.md'));
   user.children!.set('projects', projectsDir);
 
   // --- /etc (classic Linux config files) ---

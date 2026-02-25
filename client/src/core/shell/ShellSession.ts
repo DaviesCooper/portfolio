@@ -58,13 +58,13 @@ export class ShellSession {
       allStdout += result.stdout;
       allStderr += result.stderr;
 
-      if (op === null) return { stdout: allStdout, stderr: allStderr, exitCode: lastResult.exitCode };
+      if (op === null) return { stdout: allStdout, stderr: allStderr, exitCode: lastResult.exitCode, setCwd: lastResult.setCwd };
       if (op === ';') continue;
-      if (op === '&&' && result.exitCode !== 0) return { stdout: allStdout, stderr: allStderr, exitCode: lastResult.exitCode };
-      if (op === '||' && result.exitCode === 0) return { stdout: allStdout, stderr: allStderr, exitCode: lastResult.exitCode };
+      if (op === '&&' && result.exitCode !== 0) return { stdout: allStdout, stderr: allStderr, exitCode: lastResult.exitCode, setCwd: lastResult.setCwd };
+      if (op === '||' && result.exitCode === 0) return { stdout: allStdout, stderr: allStderr, exitCode: lastResult.exitCode, setCwd: lastResult.setCwd };
     }
 
-    return { stdout: allStdout, stderr: allStderr, exitCode: lastResult.exitCode };
+    return { stdout: allStdout, stderr: allStderr, exitCode: lastResult.exitCode, setCwd: lastResult.setCwd };
   }
 
   /**
@@ -121,6 +121,7 @@ export class ShellSession {
       stdout: lastResult.stdout,
       stderr: allStderr.join(''),
       exitCode: lastResult.exitCode,
+      setCwd: lastResult.setCwd,
     };
   }
 

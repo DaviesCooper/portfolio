@@ -128,8 +128,11 @@ export function MarkdownViewer({ payload }: ViewerProps) {
 
   if (content == null) return <div className={styles.error}>No content</div>;
 
+  const isAutoSteamworks = Boolean(sourceUrl?.includes('auto-steamworks'));
+  const wrapClass = isAutoSteamworks ? `${styles.markdownWrap} ${styles.projectAutoSteamworks}` : styles.markdownWrap;
+
   return (
-    <div className={styles.markdownWrap} tabIndex={-1}>
+    <div className={wrapClass} tabIndex={-1} data-project={isAutoSteamworks ? 'auto-steamworks' : undefined}>
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         rehypePlugins={[rehypeRaw, ...rehypePlugins]}
