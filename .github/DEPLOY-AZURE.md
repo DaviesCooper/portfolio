@@ -6,8 +6,9 @@ The workflow **Deploy to Azure (ACR + Web App)** runs only when triggered manual
 
 Edit [`.github/workflows/azure-deploy.yml`](../workflows/azure-deploy.yml) and set the `env` block at the top:
 
-- **ACR_NAME** – Azure Container Registry name (e.g. `myregistry`).
-- **IMAGE_NAME** – Name used for the image in ACR (e.g. `website`). Full image: `<ACR_NAME>.azurecr.io/<IMAGE_NAME>:<tag>`.
+- **ACR_NAME** – Registry resource name (for `az acr login`). In Portal: ACR → Overview → **Name** (e.g. `myregistry`).
+- **ACR_LOGIN_SERVER** – Full login server hostname for push/deploy. In Portal: ACR → Overview → **Login server** (e.g. `myregistry.azurecr.io` or `myregistry-xxxx.azurecr.io` if Azure added a suffix).
+- **IMAGE_NAME** – Name used for the image in ACR (e.g. `portfolio`). Full image: `<ACR_LOGIN_SERVER>/<IMAGE_NAME>:<tag>`.
 - **WEBAPP_NAME** – Name of the Azure Web App (Linux, container-based).
 
 ## 2. GitHub secrets
@@ -98,7 +99,7 @@ The Web App will now pull images from ACR using its managed identity. No registr
 
    | Name | Value |
    |------|--------|
-   | `DOCKER_REGISTRY_SERVER_URL` | `https://<ACR_NAME>.azurecr.io` |
+   | `DOCKER_REGISTRY_SERVER_URL` | `https://<ACR_LOGIN_SERVER>` (use the exact Login server from ACR → Overview) |
    | `DOCKER_REGISTRY_SERVER_USERNAME` | (ACR username from Access keys) |
    | `DOCKER_REGISTRY_SERVER_PASSWORD` | (ACR password from Access keys) |
 

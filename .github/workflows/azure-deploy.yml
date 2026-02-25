@@ -12,9 +12,12 @@ on:
         default: ''
 
 env:
-  ACR_NAME: 'wildroseplainsacr'      # e.g. myregistry
-  IMAGE_NAME: 'portfolio'    # e.g. website (image will be <ACR_NAME>.azurecr.io/<IMAGE_NAME>:<tag>)
-  WEBAPP_NAME: 'wildroseplains'   # Azure Web App name
+  # Registry resource name (for az acr login). Find in Portal: ACR → Overview → "Name".
+  ACR_NAME: 'wildroseplainsacr'
+  # Full login server (for image push). Find in Portal: ACR → Overview → "Login server".
+  ACR_LOGIN_SERVER: 'wildroseplainsacr-a7agf0bxhcbwacba.azurecr.io'
+  IMAGE_NAME: 'portfolio'
+  WEBAPP_NAME: 'wildroseplains'
 
 jobs:
   build-and-deploy:
@@ -48,8 +51,8 @@ jobs:
 
       - name: Build and push image to ACR
         run: |
-          IMAGE="${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ steps.tag.outputs.tag }}"
-          docker build -t "$IMAGE" -f Dockerfile .
+          IMAGE="${{ env.ACR_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:${{ steps.tag.outputs.tag }}"
+          docker build --target production -t "$IMAGE" -f Dockerfile .
           docker push "$IMAGE"
           echo "IMAGE_FULL=$IMAGE" >> $GITHUB_ENV
 
@@ -58,4 +61,4 @@ jobs:
         with:
           app-name: ${{ env.WEBAPP_NAME }}
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          images: ${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ steps.tag.outputs.tag }}
+          images: ${{ env.ACR_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:${{ steps.tag.outputs.tag }}
