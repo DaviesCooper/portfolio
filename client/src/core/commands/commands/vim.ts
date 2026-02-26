@@ -32,6 +32,6 @@ export class VimCommand implements ICommand {
       maximized: false,
       payload: { filePath, filename, text: initialContent },
     });
-    return { stdout: 'The full functionality ofvim is a bit much to write in typescript for my portfolio. I hope my replacement is good enough.', stderr: '', exitCode: 0 };
+    return { stdout: 'The full functionality of vim is a bit much to write in typescript for my portfolio. I hope my replacement is good enough.', stderr: '', exitCode: 0 };
   }
 }
