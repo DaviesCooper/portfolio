@@ -21,6 +21,7 @@ import { MvCommand } from './commands/mv';
 import { MkdirCommand } from './commands/mkdir';
 import { TouchCommand } from './commands/touch';
 import { EditCommand } from './commands/edit';
+import { VimCommand } from './commands/vim';
 
 export function createCommandRegistry(): CommandRegistry {
   const registry = new CommandRegistry();
@@ -46,7 +47,8 @@ export function createCommandRegistry(): CommandRegistry {
     .register(new MvCommand())
     .register(new MkdirCommand())
     .register(new TouchCommand())
-    .register(new EditCommand());
+    .register(new EditCommand())
+    .register(new VimCommand());
   return registry;
 }
 

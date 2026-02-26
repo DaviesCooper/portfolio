@@ -24,7 +24,7 @@ export class PingCommand implements ICommand {
 
     return {
       stdout: '',
-      stderr: "I'm not about to risk a malicious actor ddosing someone from my server. Nice try though!\n",
+      stderr: "Pong.\n",
       exitCode: 1,
     };
   }

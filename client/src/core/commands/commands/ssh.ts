@@ -9,6 +9,6 @@ export class SshCommand implements ICommand {
   readonly description = 'Open secure shell connection to a remote host';
 
   execute(_args: string[], _context: CommandContext): CommandResult {
-    return { stdout: '', stderr: 'You think I\'m just going to give you unfettered access to an external network?\n', exitCode: 1 };
+    return { stdout: 'ok I\'ll be quiet then...', stderr: '', exitCode: 1 };
   }
 }
