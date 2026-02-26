@@ -33,7 +33,9 @@
 }
 
 .startIcon {
-  font-size: 14px;
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
 }
 
 .windowList {

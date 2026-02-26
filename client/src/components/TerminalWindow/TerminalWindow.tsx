@@ -121,6 +121,50 @@ function renderLineWithAnsi(line: string): React.ReactNode {
   return <>{parts}</>;
 }
 
+/** Match markdown-style links [text](url) for clickable links in output. */
+const MARKDOWN_LINK_REGEX = /\[([^\]]*)\]\((https?:\/\/[^)]+)\)/g;
+
+/**
+ * Render a line that may contain ANSI codes and markdown links [text](url).
+ * Links are rendered as actual <a> elements so they are clickable.
+ */
+function renderLineWithAnsiAndLinks(line: string): React.ReactNode {
+  const segments: React.ReactNode[] = [];
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+  const re = new RegExp(MARKDOWN_LINK_REGEX.source, 'g');
+
+  while ((match = re.exec(line)) !== null) {
+    const [full, linkText, url] = match;
+    const before = line.slice(lastIndex, match.index);
+    if (before.length > 0) {
+      segments.push(renderLineWithAnsi(before));
+    }
+    segments.push(
+      <a
+        key={match.index}
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={styles.outputLink}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {linkText}
+      </a>
+    );
+    lastIndex = match.index + full.length;
+  }
+
+  const tail = line.slice(lastIndex);
+  if (tail.length > 0) {
+    segments.push(renderLineWithAnsi(tail));
+  }
+
+  if (segments.length === 0) return null;
+  if (segments.length === 1) return segments[0];
+  return <>{segments}</>;
+}
+
 interface TerminalWindowProps {
   commandRegistry: CommandRegistry;
   fs: IVirtualFilesystem;
@@ -139,8 +183,9 @@ export function TerminalWindow({
   const [outputLines, setOutputLines] = useState<string[]>(() => [
     'Hi, I\'m Cooper Davies, PhD. Thanks for stopping by, glad you\'re here!',
     'This is my personal portfolio which you can use to explore my work and learn more about me.',
-    'Although this may look like a linux desktop, it is actually an entirely emulated filesystem',
-    'written entirely in javascript.\n\n',
+    'Although this may look like a linux desktop, it is actually purely emulated.',
+    'Everything is written in javascript.',
+    'You can find the source code for this portfolio [here](https://github.com/DaviesCooper/portfolio).\n\n',
     'Feel free to explore and toy around with the commands. You can\'t actually break anything so',
     'don\'t worry about it. For example, see what happens if you "rm -rf /"\n\n',
     'Type help to see a list of commands.\n\n',
@@ -275,7 +320,7 @@ export function TerminalWindow({
       <div ref={scrollRef} className={styles.output}>
         {outputLines.map((line, i) => (
           <div key={i} className={styles.line}>
-            {renderLineWithAnsi(line)}
+            {renderLineWithAnsiAndLinks(line)}
           </div>
         ))}
       </div>

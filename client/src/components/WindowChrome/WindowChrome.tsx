@@ -115,6 +115,7 @@ export function WindowChrome({
     >
       <div ref={windowRef} className={styles.window} onMouseDown={onFocus}>
         <header className={styles.titlebar}>
+          <img src="/logo.svg" alt="" className={styles.titleIcon} aria-hidden />
           <span className={styles.titleText}>{win.title}</span>
           <div className={styles.buttons}>
             <button

@@ -32,8 +32,11 @@
 }
 
 .titleIcon {
-  font-size: 14px;
-  opacity: 0.9;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  object-fit: contain;
+  opacity: 0.95;
 }
 
 .titleText {

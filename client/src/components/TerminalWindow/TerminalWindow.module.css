@@ -23,6 +23,15 @@
   word-break: break-all;
 }
 
+.outputLink {
+  color: var(--ansi-cyan, #06989a);
+  text-decoration: underline;
+  cursor: pointer;
+}
+.outputLink:hover {
+  color: var(--fg);
+}
+
 /* ANSI colors — match SGR codes in core/ansi.ts; green matches prompt */
 .ansiGreen {
   color: #4e9a06;

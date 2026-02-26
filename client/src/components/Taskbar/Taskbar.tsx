@@ -17,7 +17,7 @@ export function Taskbar({ windows, activeId, onFocus, onOpenTerminal }: TaskbarP
         onClick={onOpenTerminal}
         title="Terminal"
       >
-        <span className={styles.startIcon}> $ </span>
+        <img src="/logo.svg" alt="" className={styles.startIcon} aria-hidden />
         <span>Terminal</span>
       </button>
       <div className={styles.windowList}>
