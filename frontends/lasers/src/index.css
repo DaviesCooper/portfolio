@@ -1,0 +1,62 @@
+/* Dark theme (default) — slate + teal accent */
+:root,
+[data-theme="dark"] {
+  --bg: #030712;
+  --bg-card: #0f172a;
+  --fg: #f1f5f9;
+  --fg-muted: #94a3b8;
+  --accent: #2dd4bf;
+  --accent-dim: #14b8a6;
+  --danger: #f87171;
+  --success: #4ade80;
+  --border: #1e293b;
+  --font-sans: 'DM Sans', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+/* Light theme — slate + teal accent */
+[data-theme="light"] {
+  --bg: #f8fafc;
+  --bg-card: #ffffff;
+  --fg: #0f172a;
+  --fg-muted: #64748b;
+  --accent: #0d9488;
+  --accent-dim: #14b8a6;
+  --border: #e2e8f0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  margin: 0;
+  height: 100%;
+  font-family: var(--font-sans);
+  background: var(--bg);
+  color: var(--fg);
+  overflow: hidden;
+}
+
+.theme-toggle {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 100;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  font-size: 1.25rem;
+  line-height: 1;
+  color: var(--fg);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.theme-toggle:hover {
+  background: var(--border);
+  border-color: var(--fg-muted);
+}

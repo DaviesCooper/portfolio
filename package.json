@@ -5,11 +5,14 @@
   "type": "module",
   "scripts": {
     "dev": "tsx server/index.ts",
-    "build": "cd client && npm run build",
+    "build": "cd frontends/vfs && npm run build",
     "server:build": "tsc -p server",
     "start": "node server/dist/index.js",
-    "client:dev": "cd client && npm run dev",
-    "client:install": "cd client && npm install",
+    "vfs:dev": "cd frontends/vfs && npm run dev",
+    "vfs:install": "cd frontends/vfs && npm install",
+    "lasers:dev": "cd frontends/lasers && npm run dev",
+    "lasers:install": "cd frontends/lasers && npm install",
+    "lasers:build": "cd frontends/lasers && npm run build",
     "dev:watch": "nodemon --exec \"tsx server/index.ts\" -w server -e ts"
   },
   "dependencies": {

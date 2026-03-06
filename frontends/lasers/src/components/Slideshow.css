@@ -1,0 +1,178 @@
+.slideshow {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-width: 52rem;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.slide {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2rem 0;
+  animation: slideIn 0.25s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.slide h2,
+.slide .slide-title {
+  margin: 0 0 1.25rem;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: -0.02em;
+}
+
+.slide-subtitle {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+  color: var(--fg-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* Title slide: main title (e.g. Protospace) is the big hero text */
+.title-slide .title-slide-title {
+  margin: 0 0 0.75rem;
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+}
+
+.title-slide .title-slide-subtitle {
+  font-size: 1.125rem;
+  margin-bottom: 1.25rem;
+}
+
+.slide-lead {
+  font-size: 1.125rem;
+  line-height: 1.6;
+  color: var(--fg);
+  margin: 0;
+}
+
+.slide-note {
+  margin: 1.25rem 0 0;
+  font-size: 0.9rem;
+  color: var(--fg-muted);
+  font-style: italic;
+}
+
+.slide ul,
+.slide ol {
+  margin: 0;
+  padding-left: 1.5rem;
+  line-height: 1.65;
+}
+
+.slide li {
+  margin-bottom: 0.5rem;
+}
+
+.slide li:last-child {
+  margin-bottom: 0;
+}
+
+.slide p {
+  margin: 0 0 0.75rem;
+}
+
+.slide p:last-child {
+  margin-bottom: 0;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 0 0;
+  border-top: 1px solid var(--border);
+  margin-top: auto;
+}
+
+.nav-dots {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.nav-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  border: none;
+  padding: 0;
+  background: var(--border);
+  cursor: pointer;
+  transition: background 0.15s, transform 0.15s;
+}
+
+.nav-dot:hover {
+  background: var(--fg-muted);
+}
+
+.nav-dot.active {
+  background: var(--accent);
+  transform: scale(1.2);
+}
+
+.nav-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.nav-btn {
+  padding: 0.5rem 1rem;
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--fg);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.nav-btn:hover:not(:disabled) {
+  background: var(--border);
+  border-color: var(--fg-muted);
+}
+
+.nav-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.nav-btn.next {
+  color: var(--accent);
+  border-color: var(--accent-dim);
+}
+
+.nav-btn.next:hover:not(:disabled) {
+  background: var(--accent-dim);
+  color: var(--bg);
+  border-color: var(--accent);
+}
+
+.slide-counter {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--fg-muted);
+}

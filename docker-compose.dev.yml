@@ -1,10 +1,11 @@
 # Development: live code updates without rebuilding the image.
 # Server: mount ./server, nodemon restarts on .ts changes.
-# Client: mount ./client, Vite HMR. Use http://localhost:5173 for the app.
+# VFS: mount ./frontends/vfs, Vite HMR at http://localhost:5173.
+# Lasers: mount ./frontends/lasers, Vite HMR at http://localhost:5174.
 #
 # Usage: docker compose -f docker-compose.dev.yml up --build -d   (background)
 # Or:    docker compose -f docker-compose.dev.yml up --build     (foreground, logs in terminal)
-# Then:  server at http://localhost:3000 (API), app at http://localhost:5173 (Vite).
+# Then:  server http://localhost:3000 | vfs http://localhost:5173 | lasers http://localhost:5174
 # Logs:  docker compose -f docker-compose.dev.yml logs -f
 
 services:
@@ -21,7 +22,7 @@ services:
       - ./server:/app/server
     command: ["npx", "nodemon", "--exec", "tsx server/index.ts", "-w", "server", "-e", "ts"]
 
-  client:
+  vfs:
     build:
       context: .
       target: dev
@@ -30,8 +31,21 @@ services:
     environment:
       - VITE_API_PROXY_TARGET=http://server:3000
     volumes:
-      - ./client:/app/client
-    # Reinstall deps in-container so Rollup/Vite get linux-musl binaries (host node_modules are wrong platform)
-    command: ["sh", "-c", "cd client && npm install && npm run dev"]
+      - ./frontends/vfs:/app/frontends/vfs
+    command: ["sh", "-c", "cd frontends/vfs && npm install && npm run dev"]
+    depends_on:
+      - server
+
+  lasers:
+    build:
+      context: .
+      target: dev
+    ports:
+      - "5174:5174"
+    environment:
+      - VITE_API_PROXY_TARGET=http://server:3000
+    volumes:
+      - ./frontends/lasers:/app/frontends/lasers
+    command: ["sh", "-c", "cd frontends/lasers && npm install && npm run dev"]
     depends_on:
       - server

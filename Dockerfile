@@ -5,20 +5,35 @@ WORKDIR /app
 COPY package.json package-lock.json* ./
 RUN npm install
 
-COPY client/ client/
-RUN npm run client:install
+COPY frontends/vfs/ frontends/vfs/
+RUN npm run vfs:install
 
-# ---- Client build ----
-FROM node:22-alpine AS client-build
+COPY frontends/lasers/ frontends/lasers/
+RUN npm run lasers:install
+
+# ---- VFS build ----
+FROM node:22-alpine AS vfs-build
 WORKDIR /app
 
 COPY package.json ./
 COPY --from=deps /app/node_modules /app/node_modules
-COPY --from=deps /app/client/node_modules /app/client/node_modules
-COPY client/package.json client/
-COPY client/ client/
+COPY --from=deps /app/frontends/vfs/node_modules /app/frontends/vfs/node_modules
+COPY frontends/vfs/package.json frontends/vfs/
+COPY frontends/vfs/ frontends/vfs/
 
 RUN npm run build
+
+# ---- Lasers build ----
+FROM node:22-alpine AS lasers-build
+WORKDIR /app
+
+COPY package.json ./
+COPY --from=deps /app/node_modules /app/node_modules
+COPY --from=deps /app/frontends/lasers/node_modules /app/frontends/lasers/node_modules
+COPY frontends/lasers/package.json frontends/lasers/
+COPY frontends/lasers/ frontends/lasers/
+
+RUN npm run lasers:build
 
 # ---- Server build ----
 FROM node:22-alpine AS server-build
@@ -42,7 +57,8 @@ COPY package.json ./
 RUN npm install --omit=dev
 
 COPY --from=server-build /app/server/dist ./server/dist
-COPY --from=client-build /app/client/dist ./server/client/dist
+COPY --from=vfs-build /app/frontends/vfs/dist ./server/frontends/vfs/dist
+COPY --from=lasers-build /app/frontends/lasers/dist ./server/frontends/lasers/dist
 
 USER nodejs
 EXPOSE 8080
@@ -56,12 +72,16 @@ WORKDIR /app
 COPY package.json package-lock.json* ./
 RUN npm install
 
-COPY client/ client/
-RUN npm run client:install && npm run build
+COPY frontends/vfs/ frontends/vfs/
+RUN npm run vfs:install && npm run build
+
+COPY frontends/lasers/ frontends/lasers/
+RUN npm run lasers:install && npm run lasers:build
 
 COPY server/ server/
-# So the server can serve static assets; path is server/client/dist in config
-RUN mkdir -p server/client/dist && cp -r client/dist/. server/client/dist/
+# So the server can serve static assets
+RUN mkdir -p server/frontends/vfs/dist && cp -r frontends/vfs/dist/. server/frontends/vfs/dist/
+RUN mkdir -p server/frontends/lasers/dist && cp -r frontends/lasers/dist/. server/frontends/lasers/dist/
 
 EXPOSE 3000
 # Override in compose: mount ./server and run nodemon
