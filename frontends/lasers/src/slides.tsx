@@ -1,5 +1,9 @@
-import type { SlideData, SlideSource } from './types';
+import type { LaserTool, SlideData, SlideSource } from './types';
 import { getSlideLabel } from './types';
+import { BurnSimulation } from './components/BurnSimulation';
+import { MeasuredBrace } from './components/MeasuredBrace';
+import { PrinciplesWithControls } from './components/PrinciplesWithControls';
+import { ToolSlider } from './components/ToolSlider';
 
 /**
  * To use Thunder Training (Laser 1) content: paste the PDF text into
@@ -11,12 +15,77 @@ export const slides: ReadonlyArray<SlideData> = [
     title: 'Protospace',
     subtitle: 'Lasers',
     content: (
-      <p className="slide-lead">The theory behind laser CNC machines.</p>
+      <>
+        <p className="tool-slider-label">Select which laser</p>
+        <ToolSlider />
+      </>
+    ),
+  },
+
+  {
+    id: 'housekeeping',
+    title: 'Housekeeping',
+    content: (
+      <>
+        <ul>
+          <li>Vetted vs. Unvetted Members</li>
+          <li>Recording During Class</li>
+          <li><a href="https://drive.google.com/drive/folders/0By-vvp6fxFekaHBreG1Id2dEb00?resourcekey=0-SUrE5drsOBu9F0jGrk1fZQ&usp=drive_link">Other Slides</a></li>
+        </ul>
+      </>
     ),
   },
   {
+    id: 'outline',
+    title: 'Class outline',
+    content: (tool: LaserTool) => {
+      const toolLabel = tool === 'xtool' ? 'XTool' : tool === 'trotec' ? 'Trotec' : 'Thunder';
+      return (
+        <div className="slide-outline-wrap">
+          <MeasuredBrace label="1 hr">
+            <ul className="slide-outline">
+              <li>Principles of Laser CNC Machines</li>
+              <li>Safety</li>
+              <li>Protospace Etiquette</li>
+              <li>{toolLabel} specifics</li>
+              <li>Safety Again</li>
+            </ul>
+          </MeasuredBrace>
+          <hr className="slide-outline-divider" />
+          <MeasuredBrace label="1 hr">
+            <ul className="slide-outline">
+              <li>Live Demo</li>
+            </ul>
+          </MeasuredBrace>
+        </div>
+      );
+    },
+  },
+  {
+    id: 'principles',
+    title: 'Principles of Laser CNC Machines',
+    content: (
+      <div className="slide-two-col">
+        <div className="slide-two-col-left">
+          <p>A laser cnc works by using a laser to deposit energy into some material.
+            As the laser deposits energy, the material ablates, or burns away.
+            Over time the material will burn. This will cause for the material to darken, and with enough exposure, eventually burn through.
+          </p>
+        </div>
+        <div className="slide-two-col-right">
+          <BurnSimulation />
+        </div>
+      </div>
+    ),
+  },
+  {
+    id: 'principles-controls',
+    title: 'Principles of Laser CNC Machines',
+    content: () => <PrinciplesWithControls />,
+  },
+  {
     id: 'safety',
-    title: 'Safety first',
+    title: 'Safety',
     content: (
       <>
         <ul>
@@ -30,95 +99,73 @@ export const slides: ReadonlyArray<SlideData> = [
     ),
   },
   {
-    id: 'overview',
-    title: 'Machine overview',
+    id: 'protospace-etiquette',
+    title: 'Protospace Etiquette',
     content: (
       <>
-        <p>Typical laser cutter layout:</p>
         <ul>
-          <li><strong>Bed</strong> — Flat surface where material sits. Keep it clean and level.</li>
-          <li><strong>Laser head</strong> — Moves in X and Y. The lens focuses the beam; keep it clean.</li>
-          <li><strong>Control panel</strong> — Start, stop, pause, and sometimes power/speed presets.</li>
-          <li><strong>Exhaust / duct</strong> — Removes smoke and fumes. Must run during operation.</li>
-        </ul>
-        <p className="slide-note">Your makerspace may use different brands (Epilog, Glowforge, Trotec, etc.). Ask staff for a machine-specific walkthrough.</p>
-      </>
-    ),
-  },
-  {
-    id: 'materials',
-    title: 'Materials',
-    content: (
-      <>
-        <p><strong>Generally safe to cut/engrave:</strong></p>
-        <ul>
-          <li>Wood, plywood, MDF (uncoated)</li>
-          <li>Acrylic (cast, not extruded when possible)</li>
-          <li>Paper, cardstock, cardboard</li>
-          <li>Some fabrics (cotton, leather)</li>
-          <li>Anodized or coated metals (engrave only, not cut)</li>
-        </ul>
-        <p><strong>Do not use:</strong> PVC, vinyl, polycarbonate, or any material that produces chlorine or other toxic fumes. When in doubt, ask staff.</p>
-      </>
-    ),
-  },
-  {
-    id: 'files',
-    title: 'File preparation',
-    content: (
-      <>
-        <p>Laser cutters read <strong>vector paths</strong> for cuts and sometimes <strong>raster images</strong> for engraving.</p>
-        <ul>
-          <li><strong>Recommended:</strong> SVG, DXF, or AI. Export from your design tool with strokes as paths, not as raster.</li>
-          <li><strong>Cut vs engrave:</strong> Cuts go through the material (one line = one pass). Engraving uses filled areas or raster; power/speed control depth or darkness.</li>
-          <li>Use the machine's software (or the driver) to assign <strong>power, speed, and frequency</strong> to each color or layer.</li>
+          <li>Clean up after yourself: remove scrap, wipe the bed if required, put tools back.</li>
+          <li>Don&apos;t block exhaust or vents. Report any odd smells or smoke to staff.</li>
+          <li>One person at the controls unless the space allows a buddy. No distractions near the machine while it&apos;s running.</li>
+          <li>Ask before using someone else&apos;s material or changing machine settings.</li>
         </ul>
       </>
     ),
   },
   {
-    id: 'settings',
-    title: 'Power, speed & frequency',
+    id: 'machine-specific',
+    title: 'Xtool, Trotec, or Thunder',
+    content: (tool: LaserTool) => {
+      const name = tool === 'xtool' ? 'XTool' : tool === 'trotec' ? 'Trotec' : 'Thunder';
+      const toolNotes =
+        tool === 'xtool'
+          ? 'XTool uses Laserbox or XCS software; check bed size and material settings for your model.'
+          : tool === 'trotec'
+            ? 'Trotec uses JobControl; speed and power are in the material database. Ask for the job manager walkthrough.'
+            : 'Thunder uses RDWorks or similar; focus and origin are set at the machine. Get a quick demo at the panel.';
+      return (
+        <>
+          <p>You selected <strong>{name}</strong>. Protospace may have multiple brands; this deck is tailored to your choice.</p>
+          <ul>
+            <li><strong>Bed &amp; head</strong> — Flat bed, moving laser head, lens focus.</li>
+            <li><strong>Control panel</strong> — Start, stop, pause, power/speed.</li>
+            <li><strong>Exhaust</strong> — Must run during operation.</li>
+          </ul>
+          <p className="slide-note">{toolNotes}</p>
+        </>
+      );
+    },
+  },
+  {
+    id: 'safety-again',
+    title: 'Safety again',
     content: (
       <>
+        <p className="slide-lead">Before you run the machine, remember:</p>
         <ul>
-          <li><strong>Power</strong> — Laser intensity. Higher = deeper cut or darker engrave. Too high can cause burning or fire.</li>
-          <li><strong>Speed</strong> — How fast the head moves. Slower = deeper cut. Faster = lighter engrave or score.</li>
-          <li><strong>Frequency (PPI)</strong> — Pulses per inch. Higher often gives a smoother edge on some materials; lower can reduce charring. Not all machines expose this.</li>
+          <li>Safety glasses on. Exhaust on. No unattended runs.</li>
+          <li>Know the emergency stop. Only use approved materials.</li>
+          <li>When in doubt, ask a staff member.</li>
         </ul>
-        <p className="slide-note">Start with your makerspace's material settings sheet. Test on a small scrap before running a full job.</p>
       </>
     ),
   },
   {
-    id: 'running',
-    title: 'Running a job',
-    content: (
-      <>
-        <ol>
-          <li>Load your file in the machine software and assign settings to each layer/color.</li>
-          <li>Place material flat on the bed and secure if needed. Close the lid.</li>
-          <li>Focus the laser (auto or manual, per machine). Wrong focus = weak or inconsistent cuts.</li>
-          <li>Position the origin (home) where you want the job to start.</li>
-          <li>Start the job and <strong>watch the first minute</strong>. If something looks wrong (smoke, smell, misalignment), hit stop.</li>
-        </ol>
-      </>
-    ),
-  },
-  {
-    id: 'after',
-    title: 'After the cut',
-    content: (
-      <>
-        <ul>
-          <li>Let the exhaust run for a short time after the job to clear fumes.</li>
-          <li>Remove material and any debris. Check the bed for residue or damage.</li>
-          <li>Clean the lens and bed if your makerspace requires it.</li>
-          <li>Dispose of scrap and waste according to your space's rules.</li>
-        </ul>
-        <p className="slide-lead">When in doubt, ask a staff member. Have fun and make safely.</p>
-      </>
-    ),
+    id: 'whats-next',
+    title: "What's next?",
+    content: (tool: LaserTool) => {
+      const name = tool === 'xtool' ? 'XTool' : tool === 'trotec' ? 'Trotec' : 'Thunder';
+      return (
+        <>
+          <ul>
+            <li>Hands-on at the <strong>{name}</strong>: loading files, power/speed, focus, and running a job.</li>
+            <li>Materials and file prep (vector vs raster, cut vs engrave) on the machine you&apos;ll use.</li>
+            <li>Cleanup and disposal. Where to find help and resources.</li>
+          </ul>
+          <p className="slide-lead">Have fun and make safely.</p>
+        </>
+      );
+    },
   },
 ] as const;
 

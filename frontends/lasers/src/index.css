@@ -29,6 +29,10 @@
   box-sizing: border-box;
 }
 
+html {
+  font-size: 1.25rem; /* scale up base to reduce dead space */
+}
+
 html, body, #root {
   margin: 0;
   height: 100%;
@@ -36,6 +40,18 @@ html, body, #root {
   background: var(--bg);
   color: var(--fg);
   overflow: hidden;
+}
+
+a {
+  color: var(--fg-muted);
+  text-decoration: none;
+  border-bottom: 1px solid var(--border);
+  transition: color 0.15s, border-color 0.15s;
+}
+
+a:hover {
+  color: var(--fg);
+  border-bottom-color: var(--fg-muted);
 }
 
 .theme-toggle {

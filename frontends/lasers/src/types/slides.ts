@@ -1,14 +1,20 @@
 import type { ReactNode } from 'react';
 
+/** Supported laser machines; used to conditionally render tool-specific slide content. */
+export type LaserTool = 'xtool' | 'trotec' | 'thunder';
+
 /** Opaque id for a slide; use for keys and DOM id. */
 export type SlideId = string;
+
+/** Slide content: static node or function of selected laser tool for conditional content. */
+export type SlideContent = ReactNode | ((tool: LaserTool) => ReactNode);
 
 /** Data for a single slide. Presentation-agnostic (I — minimal interface). */
 export interface SlideData {
   readonly id: SlideId;
   readonly title?: ReactNode;
   readonly subtitle?: ReactNode;
-  readonly content: ReactNode;
+  readonly content: SlideContent;
 }
 
 /** Abstraction for a slide deck. Slideshow depends on this, not on concrete arrays (D). */

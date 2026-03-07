@@ -8,16 +8,22 @@ import {
 } from '../hooks';
 import { defaultSlideSource } from '../slides';
 import type { ReactNode } from 'react';
-import type { SlideData, SlideSource } from '../types';
+import type { LaserTool, SlideContent, SlideData, SlideSource } from '../types';
 import './Slideshow.css';
+
+function resolveContent(content: SlideContent, tool: LaserTool): ReactNode {
+  return typeof content === 'function' ? content(tool) : content;
+}
 
 export interface SlideshowProps {
   /** Slide deck to display. Defaults to the built-in deck (D — depend on abstraction). */
   readonly slideSource?: SlideSource;
+  /** Selected laser machine; used to conditionally render tool-specific slide content. */
+  readonly selectedTool: LaserTool;
 }
 
 export function Slideshow(props: SlideshowProps): JSX.Element {
-  const { slideSource = defaultSlideSource } = props;
+  const { slideSource = defaultSlideSource, selectedTool } = props;
   const slides: SlideSource['slides'] = slideSource.slides;
   const slideCount: number = slides.length;
   const navigation: UseSlideNavigationResult = useSlideNavigation(slideCount);
@@ -36,6 +42,7 @@ export function Slideshow(props: SlideshowProps): JSX.Element {
   const slideData: SlideData = slides[index];
   const slideLabel: string = slideSource.getSlideLabel(slideData, index);
   const isTitleSlide: boolean = slideData.id === 'title';
+  const resolvedContent: ReactNode = resolveContent(slideData.content, selectedTool);
 
   const slideProps: {
     id: string;
@@ -48,7 +55,7 @@ export function Slideshow(props: SlideshowProps): JSX.Element {
     title: slideData.title,
     subtitle: slideData.subtitle,
     'aria-label': `Slide ${index + 1} of ${total}: ${slideLabel}`,
-    children: slideData.content,
+    children: resolvedContent,
   };
 
   return (

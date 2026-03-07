@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react';
 import type { JSX } from 'react';
+import { LaserToolProvider } from './context/LaserToolContext';
 import { Slideshow } from './components/Slideshow';
 import { ThemeToggle, type Theme } from './components/ThemeToggle';
+import type { LaserTool } from './types';
 
 const THEME_STORAGE_KEY = 'lasers-theme';
+const TOOL_STORAGE_KEY = 'lasers-tool';
 
 function readStoredTheme(): Theme {
   const stored = localStorage.getItem(THEME_STORAGE_KEY);
@@ -11,18 +14,29 @@ function readStoredTheme(): Theme {
   return 'dark';
 }
 
+function readStoredTool(): LaserTool {
+  const stored = localStorage.getItem(TOOL_STORAGE_KEY);
+  if (stored === 'xtool' || stored === 'trotec' || stored === 'thunder') return stored;
+  return 'xtool';
+}
+
 export default function App(): JSX.Element {
   const [theme, setTheme] = useState<Theme>(readStoredTheme);
+  const [tool, setTool] = useState<LaserTool>(readStoredTool);
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem(THEME_STORAGE_KEY, theme);
   }, [theme]);
 
+  useEffect(() => {
+    localStorage.setItem(TOOL_STORAGE_KEY, tool);
+  }, [tool]);
+
   return (
-    <>
+    <LaserToolProvider value={{ tool, setTool }}>
       <ThemeToggle theme={theme} onToggle={setTheme} />
-      <Slideshow />
-    </>
+      <Slideshow selectedTool={tool} />
+    </LaserToolProvider>
   );
 }
