@@ -1,0 +1,229 @@
+.gcode-path-sim {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  gap: 1rem;
+  margin: 0;
+  min-width: 0;
+}
+
+.gcode-path-sim-canvas-wrap {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.gcode-path-sim-canvas {
+  display: block;
+  width: 20rem;
+  height: 20rem;
+  max-width: min(20rem, 100%);
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  background: rgb(196, 165, 116);
+}
+
+.gcode-path-sim-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+}
+
+.gcode-path-sim-canvas-wrap .gcode-path-sim-label {
+  margin: 0;
+  font-size: 0.65rem;
+  color: var(--fg-muted);
+}
+
+.gcode-path-sim-canvas-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.gcode-path-sim-reset {
+  padding: 0.35rem 0.75rem;
+  font-size: 0.9rem;
+  font-family: var(--font-sans);
+  color: var(--fg);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.gcode-path-sim-reset:hover {
+  background: var(--border);
+  border-color: var(--fg-muted);
+}
+
+.gcode-path-sim-palette {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  flex-shrink: 0;
+}
+
+.gcode-path-sim-chip {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.7rem;
+  font-family: var(--font-mono, monospace);
+  color: var(--fg);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  cursor: grab;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+}
+
+.gcode-path-sim-chip:active {
+  cursor: grabbing;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.gcode-path-sim-chip:hover {
+  background: var(--border);
+  border-color: var(--fg-muted);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+}
+
+.gcode-path-sim-program {
+  flex: 1;
+  min-height: 0;
+  padding: 0.5rem;
+  border: 1px dashed var(--border);
+  border-radius: 6px;
+  background: var(--bg-card);
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  overflow: auto;
+}
+
+.gcode-path-sim-drop-hint {
+  font-size: 0.75rem;
+  color: var(--fg-muted);
+  font-style: italic;
+}
+
+.gcode-path-sim-program-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.4rem;
+  font-size: 0.75rem;
+  font-family: var(--font-mono, monospace);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+  transition: box-shadow 0.15s;
+}
+
+.gcode-path-sim-program-item:hover {
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.18);
+}
+
+.gcode-path-sim-program-item:active {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.22);
+}
+
+.gcode-path-sim-drag-handle {
+  flex-shrink: 0;
+  cursor: grab;
+  color: var(--fg);
+}
+
+.gcode-path-sim-drag-handle:active {
+  cursor: grabbing;
+}
+
+.gcode-path-sim-coord {
+  width: 2.5rem;
+  padding: 0.2rem 0.35rem;
+  font-size: 0.75rem;
+  font-family: var(--font-mono, monospace);
+  color: var(--fg);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  -moz-appearance: textfield;
+}
+
+.gcode-path-sim-coord::-webkit-outer-spin-button,
+.gcode-path-sim-coord::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.gcode-path-sim-program-item .gcode-path-sim-remove {
+  margin-left: auto;
+}
+
+.gcode-path-sim-remove {
+  flex-shrink: 0;
+  width: 1.25rem;
+  height: 1.25rem;
+  padding: 0;
+  font-size: 1rem;
+  line-height: 1;
+  color: var(--fg-muted);
+  background: transparent;
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s;
+}
+
+.gcode-path-sim-remove:hover {
+  color: var(--fg);
+  background: var(--border);
+}
+
+.gcode-path-sim-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.gcode-path-sim-play,
+.gcode-path-sim-clear {
+  padding: 0.35rem 0.75rem;
+  font-size: 0.85rem;
+  font-family: var(--font-sans);
+  color: var(--fg);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.gcode-path-sim-play:hover:not(:disabled),
+.gcode-path-sim-clear:hover {
+  background: var(--border);
+  border-color: var(--fg-muted);
+}
+
+.gcode-path-sim-play {
+  color: var(--bg);
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.gcode-path-sim-play:hover:not(:disabled) {
+  background: var(--accent-dim, var(--accent));
+  border-color: var(--accent-dim, var(--accent));
+}
+
+.gcode-path-sim-play:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

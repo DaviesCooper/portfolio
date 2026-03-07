@@ -104,7 +104,7 @@
 /* Principles slide: left = normal slide content, right = canvas + reset */
 .slide-two-col {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(18rem, 1fr);
+  grid-template-columns: minmax(0, 0.65fr) minmax(20rem, 1.35fr);
   gap: 2.5rem;
   align-items: center;
   width: 100%;
@@ -113,7 +113,7 @@
 
 .slide-two-col-left {
   min-width: 0;
-  max-width: 36rem;
+  max-width: 26rem;
 }
 
 .slide-two-col-left p {
@@ -124,6 +124,17 @@
 
 .slide-two-col-left p:last-child {
   margin-bottom: 0;
+}
+
+/* Raster and vector slides: smaller left-column text */
+.slide[data-slide-id="principles-controls-raster"] .slide-two-col-left p {
+  font-size: 1.2rem;
+  line-height: 1.5;
+}
+
+.slide[data-slide-id="principles-controls-positioning"] .slide-two-col-left p {
+  font-size: 1.3rem;
+  line-height: 1.5;
 }
 
 .slide-two-col-right {

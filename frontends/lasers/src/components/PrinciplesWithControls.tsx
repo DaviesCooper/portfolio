@@ -14,11 +14,7 @@ export function PrinciplesWithControls(): JSX.Element {
     <div className="slide-two-col">
       <div className="slide-two-col-left">
         <p>
-          The point of using a laser is so that we can control how much energy is deposited into the material.
-          We can do this by controlling the power of the laser.
-
-          We can also control the speed of the laser.
-          The speed of the laser is controlled by the speed of the material.
+          We can control how much energy is deposited into the material by controlling the power of the laser, or by controlling the speed of the laser.
         </p>
         {isXTool && (
           <p>

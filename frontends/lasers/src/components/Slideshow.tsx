@@ -1,11 +1,6 @@
 import { Slide } from './Slide';
 import { TitleSlide } from './TitleSlide';
-import {
-  useSlideKeyboard,
-  useSlideNavigation,
-  type UseSlideKeyboardOptions,
-  type UseSlideNavigationResult,
-} from '../hooks';
+import { useSlideNavigation, type UseSlideNavigationResult } from '../hooks';
 import { defaultSlideSource } from '../slides';
 import type { ReactNode } from 'react';
 import type { LaserTool, SlideContent, SlideData, SlideSource } from '../types';
@@ -28,8 +23,6 @@ export function Slideshow(props: SlideshowProps): JSX.Element {
   const slideCount: number = slides.length;
   const navigation: UseSlideNavigationResult = useSlideNavigation(slideCount);
   const { index, total, goNext, goPrev, goTo } = navigation;
-  const keyboardOptions: UseSlideKeyboardOptions = { goNext, goPrev, goTo, total };
-  useSlideKeyboard(keyboardOptions);
 
   if (total === 0) {
     return (

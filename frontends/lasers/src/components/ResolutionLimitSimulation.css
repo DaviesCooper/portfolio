@@ -1,0 +1,117 @@
+.resolution-limit-sim {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin: 0;
+}
+
+.resolution-limit-sim-canvas-wrap {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.resolution-limit-sim-canvas {
+  display: block;
+  width: 20rem;
+  height: 20rem;
+  max-width: min(20rem, 100%);
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  background: rgb(196, 165, 116);
+}
+
+.resolution-limit-sim-canvas-wrap .resolution-limit-sim-canvas-label {
+  margin: 0;
+  font-size: 0.65rem;
+  color: var(--fg-muted);
+}
+
+.resolution-limit-sim-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.resolution-limit-sim-play,
+.resolution-limit-sim-reset {
+  padding: 0.35rem 0.75rem;
+  font-size: 0.9rem;
+  font-family: var(--font-sans);
+  color: var(--fg);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.resolution-limit-sim-play:hover:not(:disabled),
+.resolution-limit-sim-reset:hover {
+  background: var(--border);
+  border-color: var(--fg-muted);
+}
+
+.resolution-limit-sim-play {
+  color: var(--bg);
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.resolution-limit-sim-play:hover:not(:disabled) {
+  background: var(--accent-dim, var(--accent));
+  border-color: var(--accent-dim, var(--accent));
+}
+
+.resolution-limit-sim-play:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.resolution-limit-sim-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.5rem;
+  width: 100%;
+  max-width: 20rem;
+}
+
+.resolution-limit-sim-controls .resolution-limit-sim-label {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+  font-size: 0.65rem;
+  color: var(--fg-muted);
+}
+
+.resolution-limit-sim-label-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.resolution-limit-sim-value {
+  font-variant-numeric: tabular-nums;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.resolution-limit-sim-slider {
+  width: 100%;
+  height: 0.5rem;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.resolution-limit-sim-controls .resolution-limit-sim-hint {
+  margin: 0;
+  font-size: 0.65rem;
+  color: var(--fg-muted);
+  line-height: 1.35;
+}

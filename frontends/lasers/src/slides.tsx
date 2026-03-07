@@ -1,8 +1,11 @@
 import type { LaserTool, SlideData, SlideSource } from './types';
 import { getSlideLabel } from './types';
 import { BurnSimulation } from './components/BurnSimulation';
+import { GCodePathSimulation } from './components/GCodePathSimulation';
 import { MeasuredBrace } from './components/MeasuredBrace';
 import { PrinciplesWithControls } from './components/PrinciplesWithControls';
+import { RasterPathSimulation } from './components/RasterPathSimulation';
+import { ResolutionLimitSimulation } from './components/ResolutionLimitSimulation';
 import { ToolSlider } from './components/ToolSlider';
 
 /**
@@ -82,6 +85,68 @@ export const slides: ReadonlyArray<SlideData> = [
     id: 'principles-controls',
     title: 'Principles of Laser CNC Machines',
     content: () => <PrinciplesWithControls />,
+  },
+  {
+    id: 'principles-controls-positioning',
+    title: 'Principles of Laser CNC Machines',
+    content: (
+      <div className="slide-two-col">
+        <div className="slide-two-col-left">
+          <p>We can automate the laser by giving it a series of commands to follow.
+            These commands are called G-code.
+            The most basic commands are essentially "go to this position", "turn the laser on or off", "move with this speed", and "use this much power".
+            Additional commands exist but they are more specialized.
+
+            This is called a vector path.
+          </p>
+        </div>
+        <div className="slide-two-col-right">
+          <GCodePathSimulation />
+        </div>
+      </div>)
+  },
+  {
+    id: 'principles-controls-raster',
+    title: 'Principles of Laser CNC Machines',
+    content: (
+      <div className="slide-two-col">
+        <div className="slide-two-col-left">
+          <p>Try to think of a path that can draw a portrait.
+            Like modern printers, the best approach is to cover every point of the image on the material.
+            These paths are not the most efficient way to draw an image, but they are guaranteed to be as accurate as the machine can make them.
+            We create a path that covers every pixel in the image and turn the laser on and off depending on the color of the pixel.
+            This is called a raster path.
+          </p>
+        </div>
+        <div className="slide-two-col-right">
+          <RasterPathSimulation />
+        </div>
+      </div>)
+  },
+  {
+    id: 'principles-controls-resolution',
+    title: 'Principles of Laser CNC Machines',
+    content: (tool: LaserTool) => {
+      const resolutionPpi =
+        tool === 'trotec' ? 1000 : tool === 'thunder' ? 500 : 762;
+      const toolName = tool === 'trotec' ? 'Trotec' : tool === 'thunder' ? 'Thunder' : 'XTool';
+      return (
+        <div className="slide-two-col">
+          <div className="slide-two-col-left">
+            <p>When following a path, the laser will move in small increments.
+              The smaller the increments, the more accurate the path will be.
+              The more increments, the longer it will take to complete the path.
+              The maximum resolution is limited by the machine itself.
+              These steps are typically referred to as pixels per inch (PPI), or dots per inch (DPI).
+              The {toolName} has a maximum resolution of {resolutionPpi} ppi.
+            </p>
+          </div>
+          <div className="slide-two-col-right">
+            <ResolutionLimitSimulation />
+          </div>
+        </div>
+      );
+    },
   },
   {
     id: 'safety',

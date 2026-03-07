@@ -18,14 +18,13 @@ function addHeat(grid: Float32Array, cx: number, cy: number, amount: number): vo
     for (let dx = -r; dx <= r; dx++) {
       const col = Math.floor(cx) + dx;
       const row = Math.floor(cy) + dy;
+      if (col < 0 || col >= GRID_COLS || row < 0 || row >= GRID_ROWS) continue;
       const dist = Math.sqrt(dx * dx + dy * dy);
       if (dist > HEAT_RADIUS) continue;
       const falloff = 1 - dist / (HEAT_RADIUS + 1);
       const idx = row * GRID_COLS + col;
-      if (idx >= 0 && idx < grid.length) {
-        const next = grid[idx] + amount * falloff;
-        grid[idx] = Math.min(CUT_THRESHOLD, next);
-      }
+      const next = grid[idx] + amount * falloff;
+      grid[idx] = Math.min(CUT_THRESHOLD, next);
     }
   }
 }
