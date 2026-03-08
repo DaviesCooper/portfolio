@@ -15,6 +15,8 @@ export interface SlideData {
   readonly title?: ReactNode;
   readonly subtitle?: ReactNode;
   readonly content: SlideContent;
+  /** If set, slide is only included when this tool is selected. */
+  readonly whenTool?: LaserTool;
 }
 
 /** Abstraction for a slide deck. Slideshow depends on this, not on concrete arrays (D). */

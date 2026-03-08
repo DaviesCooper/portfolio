@@ -1,3 +1,9 @@
+/* Smaller text in the left column for this slide */
+.slide[data-slide-id="principles-controls"] .slide-two-col-left p {
+  font-size: 1.1rem;
+  line-height: 1.5;
+}
+
 .principles-sim-row {
   display: flex;
   flex-direction: row;

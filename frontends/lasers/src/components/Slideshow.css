@@ -136,6 +136,15 @@
   font-size: 1.3rem;
   line-height: 1.5;
 }
+.slide[data-slide-id="principles-controls-resolution"] .slide-two-col-left p{
+  font-size: 1.2rem;
+  line-height: 1.5;
+}
+
+.slide[data-slide-id="principles-controls-air-assist"] .slide-two-col-left p {
+  font-size: 1.1rem;
+  line-height: 1.5;
+}
 
 .slide-two-col-right {
   display: flex;
