@@ -19,7 +19,9 @@ export interface SlideshowProps {
 
 export function Slideshow(props: SlideshowProps): JSX.Element {
   const { slideSource = defaultSlideSource, selectedTool } = props;
-  const slides: SlideSource['slides'] = slideSource.slides;
+  const slides: SlideSource['slides'] = slideSource.slides.filter(
+    (s: SlideData) => s.whenTool == null || s.whenTool === selectedTool
+  );
   const slideCount: number = slides.length;
   const navigation: UseSlideNavigationResult = useSlideNavigation(slideCount);
   const { index, total, goNext, goPrev, goTo } = navigation;

@@ -1,11 +1,15 @@
+# Production: single container serving VFS + lasers from built assets.
+# Usage: docker compose up --build -d   then open http://localhost:3000 and http://localhost:3000/lasers
 services:
   app:
-    build: .
+    build:
+      context: .
+      target: production
     ports:
       - "3000:8080"
     environment:
       - NODE_ENV=production
-      - PORT=3000
+      # App listens on 8080 in container; don't override PORT or mapping breaks
     # Optional: mount built assets for live updates without rebuilding the image.
     # Build locally (npm run server:build && npm run build) then uncomment:
     # volumes:

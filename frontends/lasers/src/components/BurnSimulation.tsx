@@ -1,33 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { addBurnHeat, createBurnHeatGrid, BURN_GRID_SIZE } from '../lib/burnCanvas';
 import './BurnSimulation.css';
 
-const GRID_COLS = 128;
-const GRID_ROWS = 128;
-const HEAT_RADIUS = 4;
 const BASE_HEAT_RATE = 0.05;
 const CUT_THRESHOLD = 1;
-
-/** Heat per cell: 0 = untouched, 0..1 = darkening, 1 = cut through (red). */
-function createGrid(): Float32Array {
-  return new Float32Array(GRID_COLS * GRID_ROWS);
-}
-
-function addHeat(grid: Float32Array, cx: number, cy: number, amount: number): void {
-  const r = Math.ceil(HEAT_RADIUS);
-  for (let dy = -r; dy <= r; dy++) {
-    for (let dx = -r; dx <= r; dx++) {
-      const col = Math.floor(cx) + dx;
-      const row = Math.floor(cy) + dy;
-      if (col < 0 || col >= GRID_COLS || row < 0 || row >= GRID_ROWS) continue;
-      const dist = Math.sqrt(dx * dx + dy * dy);
-      if (dist > HEAT_RADIUS) continue;
-      const falloff = 1 - dist / (HEAT_RADIUS + 1);
-      const idx = row * GRID_COLS + col;
-      const next = grid[idx] + amount * falloff;
-      grid[idx] = Math.min(CUT_THRESHOLD, next);
-    }
-  }
-}
 
 /** Blue light: wood-like material → transparent black → black → red. */
 const MATERIAL_BLUE = { r: 196, g: 165, b: 116 };
@@ -96,14 +72,14 @@ export interface BurnSimulationProps {
 export function BurnSimulation(props: BurnSimulationProps): JSX.Element {
   const { power = 100, laserType } = props;
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const gridRef = useRef<Float32Array>(createGrid());
+  const gridRef = useRef<Float32Array>(createBurnHeatGrid());
   const [isDragging, setIsDragging] = useState(false);
   const rafRef = useRef<number>(0);
   const lastPosRef = useRef<{ col: number; row: number } | null>(null);
   const heatRate = BASE_HEAT_RATE * (power / 100);
 
   useEffect(() => {
-    gridRef.current = createGrid();
+    gridRef.current = createBurnHeatGrid();
   }, [laserType]);
 
   const draw = useCallback(() => {
@@ -117,9 +93,9 @@ export function BurnSimulation(props: BurnSimulationProps): JSX.Element {
     const bgColor =
       getComputedStyle(document.documentElement).getPropertyValue('--bg').trim() || '#030712';
 
-    for (let row = 0; row < GRID_ROWS; row++) {
-      for (let col = 0; col < GRID_COLS; col++) {
-        const h = grid[row * GRID_COLS + col];
+    for (let row = 0; row < BURN_GRID_SIZE; row++) {
+      for (let col = 0; col < BURN_GRID_SIZE; col++) {
+        const h = grid[row * BURN_GRID_SIZE + col];
         ctx.fillStyle = heatToRgb(h, laserType, bgColor);
         ctx.fillRect(col, row, 1, 1);
       }
@@ -130,15 +106,15 @@ export function BurnSimulation(props: BurnSimulationProps): JSX.Element {
     const canvas = canvasRef.current;
     if (!canvas) return { col: 0, row: 0 };
     const rect = canvas.getBoundingClientRect();
-    const col = ((e.clientX - rect.left) / rect.width) * GRID_COLS;
-    const row = ((e.clientY - rect.top) / rect.height) * GRID_ROWS;
+    const col = ((e.clientX - rect.left) / rect.width) * BURN_GRID_SIZE;
+    const row = ((e.clientY - rect.top) / rect.height) * BURN_GRID_SIZE;
     return { col, row };
   }, []);
 
   const tick = useCallback(() => {
     if (isDragging && lastPosRef.current) {
       const { col, row } = lastPosRef.current;
-      addHeat(gridRef.current, col, row, heatRate);
+      addBurnHeat(gridRef.current, col, row, heatRate);
     }
     draw();
     rafRef.current = requestAnimationFrame(tick);
@@ -175,7 +151,7 @@ export function BurnSimulation(props: BurnSimulationProps): JSX.Element {
   }, []);
 
   const handleReset = useCallback(() => {
-    gridRef.current = createGrid();
+    gridRef.current = createBurnHeatGrid();
   }, []);
 
   useEffect(() => {
@@ -188,8 +164,8 @@ export function BurnSimulation(props: BurnSimulationProps): JSX.Element {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    canvas.width = GRID_COLS * dpr;
-    canvas.height = GRID_ROWS * dpr;
+    canvas.width = BURN_GRID_SIZE * dpr;
+    canvas.height = BURN_GRID_SIZE * dpr;
     const ctx = canvas.getContext('2d');
     if (ctx) ctx.scale(dpr, dpr);
     draw();
@@ -200,8 +176,8 @@ export function BurnSimulation(props: BurnSimulationProps): JSX.Element {
       <canvas
         ref={canvasRef}
         className="burn-simulation-canvas"
-        width={GRID_COLS}
-        height={GRID_ROWS}
+        width={BURN_GRID_SIZE}
+        height={BURN_GRID_SIZE}
         onMouseDown={handlePointerDown}
         onMouseMove={handlePointerMove}
         onMouseUp={handlePointerUp}
