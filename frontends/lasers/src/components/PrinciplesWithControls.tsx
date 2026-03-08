@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useLaserTool } from '../context/LaserToolContext';
 import { BurnSimulation } from './BurnSimulation';
-import { PowerKnob } from './PowerKnob';
+import { PowerSlider } from './PowerSlider';
 import './PrinciplesWithControls.css';
 
 export function PrinciplesWithControls(): JSX.Element {
@@ -27,15 +27,14 @@ export function PrinciplesWithControls(): JSX.Element {
         )}
       </div>
       <div className="slide-two-col-right">
-        <div className="principles-sim-row">
-          <BurnSimulation
-            power={power}
-            laserType={isXTool ? laserType : undefined}
-          />
+        <BurnSimulation
+          power={power}
+          laserType={isXTool ? laserType : undefined}
+        >
           <div className="principles-controls">
             <div className="principles-control principles-control-power">
               <span className="principles-control-label">Power</span>
-              <PowerKnob
+              <PowerSlider
                 value={power}
                 onChange={setPower}
                 aria-label="Laser power 0 to 100"
@@ -43,38 +42,30 @@ export function PrinciplesWithControls(): JSX.Element {
             </div>
             {isXTool && (
               <div className="principles-control principles-control-laser-type">
-                <span className="principles-control-label">Laser type</span>
-                <div
-                  className="principles-laser-type-toggle"
-                  role="tablist"
-                  aria-label="Laser type"
-                >
-                  <button
-                    type="button"
-                    role="tab"
-                    aria-selected={laserType === 'ir'}
-                    aria-label="IR laser"
-                    className={`principles-laser-type-segment ${laserType === 'ir' ? 'active' : ''}`}
-                    onClick={() => setLaserType('ir')}
-                  >
+                <span className="principles-control-label">Laser Type</span>
+                <div className="principles-laser-type-toggle-wrap">
+                  <span className={`principles-laser-type-option-label ${laserType === 'ir' ? 'active' : ''}`}>
                     IR
-                  </button>
-                  <div />
+                  </span>
                   <button
                     type="button"
-                    role="tab"
-                    aria-selected={laserType === 'blue'}
-                    aria-label="Blue light laser"
-                    className={`principles-laser-type-segment ${laserType === 'blue' ? 'active' : ''}`}
-                    onClick={() => setLaserType('blue')}
+                    className="principles-laser-type-toggle"
+                    role="switch"
+                    aria-checked={laserType === 'blue'}
+                    aria-label="Laser type"
+                    onClick={() => setLaserType((prev) => (prev === 'ir' ? 'blue' : 'ir'))}
                   >
-                    Blue light
+                    <span className={`principles-laser-type-segment ${laserType === 'ir' ? 'active' : ''}`} />
+                    <span className={`principles-laser-type-segment ${laserType === 'blue' ? 'active' : ''}`} />
                   </button>
+                  <span className={`principles-laser-type-option-label ${laserType === 'blue' ? 'active' : ''}`}>
+                    Blue light
+                  </span>
                 </div>
               </div>
             )}
           </div>
-        </div>
+        </BurnSimulation>
       </div>
     </div>
   );

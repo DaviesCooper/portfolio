@@ -1,0 +1,86 @@
+.home {
+  max-width: 28rem;
+  margin: 0 auto;
+}
+
+.hero {
+  margin-bottom: 2rem;
+}
+
+.name {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0 0 0.375rem 0;
+  letter-spacing: -0.02em;
+}
+
+.tagline {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.9375rem;
+  color: var(--muted, #8b949e);
+  margin: 0;
+}
+
+.section {
+  margin-bottom: 1.75rem;
+}
+
+.sectionTitle {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted, #8b949e);
+  margin: 0 0 0.75rem 0;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.card {
+  display: block;
+  padding: 1rem 1.25rem;
+  background: var(--card, #161b22);
+  border: 1px solid var(--border, #21262d);
+  border-radius: 8px;
+  text-decoration: none;
+  color: inherit;
+  min-height: 48px;
+  box-sizing: border-box;
+}
+
+.card:active {
+  background: var(--hover, #21262d);
+}
+
+.cardTitle {
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+.cardDesc {
+  display: block;
+  font-size: 0.8125rem;
+  color: var(--muted, #8b949e);
+  margin-top: 0.25rem;
+}
+
+.footerNote {
+  margin-top: 2rem;
+  font-size: 0.875rem;
+  color: var(--muted, #8b949e);
+}
+
+.footerNote a {
+  color: var(--muted, #8b949e);
+  text-decoration: none;
+}
+
+.footerNote a:active {
+  color: var(--fg, #e6edf3);
+}

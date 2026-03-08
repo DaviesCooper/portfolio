@@ -60,6 +60,7 @@
   flex-direction: column;
   gap: 1rem;
   flex: 0 0 auto;
+  min-height: 0;
 }
 
 .kerf-sim-control {
@@ -67,6 +68,8 @@
   flex-direction: column;
   gap: 0.35rem;
   align-items: flex-start;
+  flex: 1;
+  min-height: 0;
 }
 
 .kerf-sim-control-label {
@@ -75,8 +78,8 @@
   color: var(--fg-muted);
 }
 
+/* Dimensions come from PowerSlider.css (same as other sliders) */
 .kerf-sim-angle-slider {
-  width: 8rem;
   accent-color: var(--accent);
 }
 
@@ -100,4 +103,17 @@
 
 .kerf-head.fixed {
   cursor: default;
+}
+
+@media (max-width: 768px) {
+  .kerf-sim-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .kerf-sim-svg-wrap {
+    min-width: 0;
+    max-width: none;
+    width: 100%;
+  }
 }

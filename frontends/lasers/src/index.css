@@ -76,3 +76,9 @@ a:hover {
   background: var(--border);
   border-color: var(--fg-muted);
 }
+
+@media (max-width: 768px) {
+  .theme-toggle--hide-on-mobile {
+    display: none;
+  }
+}

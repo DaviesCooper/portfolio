@@ -5,7 +5,7 @@ import {
   burnHeatToRgbWood,
   createBurnHeatGrid,
 } from '../lib/burnCanvas';
-import { PowerKnob } from './PowerKnob';
+import { PowerSlider } from './PowerSlider';
 import './AirAssistSimulation.css';
 
 const BASE_HEAT_RATE_MIN = 0.02;
@@ -47,7 +47,7 @@ export function AirAssistSimulation(_props: AirAssistSimulationProps): JSX.Eleme
     }
   }, []);
 
-  const cellFromEvent = useCallback((e: React.MouseEvent<HTMLCanvasElement> | MouseEvent) => {
+  const cellFromEvent = useCallback((e: React.PointerEvent<HTMLCanvasElement> | PointerEvent) => {
     const canvas = canvasRef.current;
     if (!canvas) return { col: 0, row: 0 };
     const rect = canvas.getBoundingClientRect();
@@ -75,8 +75,9 @@ export function AirAssistSimulation(_props: AirAssistSimulationProps): JSX.Eleme
   }, [tick]);
 
   const handlePointerDown = useCallback(
-    (e: React.MouseEvent<HTMLCanvasElement>) => {
+    (e: React.PointerEvent<HTMLCanvasElement>) => {
       if (e.button !== 0) return;
+      e.currentTarget.setPointerCapture(e.pointerId);
       lastPosRef.current = cellFromEvent(e);
       setIsDragging(true);
     },
@@ -84,18 +85,26 @@ export function AirAssistSimulation(_props: AirAssistSimulationProps): JSX.Eleme
   );
 
   const handlePointerMove = useCallback(
-    (e: React.MouseEvent<HTMLCanvasElement>) => {
+    (e: React.PointerEvent<HTMLCanvasElement>) => {
       if (isDragging) lastPosRef.current = cellFromEvent(e);
     },
     [isDragging, cellFromEvent]
   );
 
-  const handlePointerUp = useCallback(() => {
+  const handlePointerUp = useCallback(
+    (e: React.PointerEvent<HTMLCanvasElement>) => {
+      e.currentTarget.releasePointerCapture(e.pointerId);
+      setIsDragging(false);
+      lastPosRef.current = null;
+    },
+    []
+  );
+
+  const handlePointerLeave = useCallback(() => {
     setIsDragging(false);
     lastPosRef.current = null;
   }, []);
-
-  const handlePointerLeave = useCallback(() => {
+  const handlePointerCancel = useCallback(() => {
     setIsDragging(false);
     lastPosRef.current = null;
   }, []);
@@ -106,8 +115,12 @@ export function AirAssistSimulation(_props: AirAssistSimulationProps): JSX.Eleme
 
   useEffect(() => {
     const onUp = () => setIsDragging(false);
-    window.addEventListener('mouseup', onUp);
-    return () => window.removeEventListener('mouseup', onUp);
+    window.addEventListener('pointerup', onUp);
+    window.addEventListener('pointercancel', onUp);
+    return () => {
+      window.removeEventListener('pointerup', onUp);
+      window.removeEventListener('pointercancel', onUp);
+    };
   }, []);
 
   useEffect(() => {
@@ -129,10 +142,11 @@ export function AirAssistSimulation(_props: AirAssistSimulationProps): JSX.Eleme
           className="air-assist-sim-canvas"
           width={BURN_GRID_SIZE}
           height={BURN_GRID_SIZE}
-          onMouseDown={handlePointerDown}
-          onMouseMove={handlePointerMove}
-          onMouseUp={handlePointerUp}
-          onMouseLeave={handlePointerLeave}
+          onPointerDown={handlePointerDown}
+          onPointerMove={handlePointerMove}
+          onPointerUp={handlePointerUp}
+          onPointerLeave={handlePointerLeave}
+          onPointerCancel={handlePointerCancel}
           aria-label="Drag to burn; adjust Air to change burn speed and spread"
         />
         <p className="air-assist-sim-caption">
@@ -145,7 +159,7 @@ export function AirAssistSimulation(_props: AirAssistSimulationProps): JSX.Eleme
       <div className="air-assist-sim-controls">
         <div className="air-assist-sim-control">
           <span className="air-assist-sim-control-label">Air</span>
-          <PowerKnob
+          <PowerSlider
             value={airLevel}
             onChange={setAirLevel}
             aria-label="Air 0 to 100"

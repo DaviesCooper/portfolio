@@ -115,3 +115,16 @@
   color: var(--fg-muted);
   line-height: 1.35;
 }
+
+@media (max-width: 768px) {
+  .resolution-limit-sim-canvas-wrap {
+    width: 100%;
+  }
+
+  .resolution-limit-sim-canvas {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+  }
+}

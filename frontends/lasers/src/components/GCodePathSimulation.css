@@ -200,6 +200,7 @@
 .gcode-path-sim-actions {
   display: flex;
   gap: 0.5rem;
+  justify-content: center;
 }
 
 .gcode-path-sim-play,
@@ -235,4 +236,22 @@
 .gcode-path-sim-play:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .gcode-path-sim {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .gcode-path-sim-canvas-wrap {
+    width: 100%;
+  }
+
+  .gcode-path-sim-canvas {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+  }
 }

@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
 import type { LaserTool } from '../types';
-import { PowerKnob } from './PowerKnob';
+import { PowerSlider } from './PowerSlider';
 import './KerfSimulation.css';
 
 const SVG_WIDTH = 320;
@@ -277,7 +277,7 @@ export function KerfSimulation({ tool }: KerfSimulationProps): JSX.Element {
         <div className="kerf-sim-controls">
           <div className="kerf-sim-control">
             <span className="kerf-sim-control-label">Focal length</span>
-            <PowerKnob
+            <PowerSlider
               value={focalLengthNorm}
               onChange={setFocalLengthNorm}
               aria-label="Focal length"
@@ -286,16 +286,18 @@ export function KerfSimulation({ tool }: KerfSimulationProps): JSX.Element {
           {isXTool && (
             <div className="kerf-sim-control">
               <span className="kerf-sim-control-label">Beam angle (galvo)</span>
-              <input
-                type="range"
-                min={-30}
-                max={30}
-                value={beamAngleDeg}
-                onChange={(e) => setBeamAngleDeg(Number(e.target.value))}
-                className="kerf-sim-angle-slider"
-                aria-label="Beam angle"
-              />
-              <span className="kerf-sim-angle-value">{beamAngleDeg}°</span>
+              <div className="power-slider-wrap">
+                <input
+                  type="range"
+                  min={-30}
+                  max={30}
+                  value={beamAngleDeg}
+                  onChange={(e) => setBeamAngleDeg(Number(e.target.value))}
+                  className="power-slider-input kerf-sim-angle-slider"
+                  aria-label="Beam angle"
+                />
+                <span className="power-slider-value kerf-sim-angle-value">{beamAngleDeg}°</span>
+              </div>
             </div>
           )}
         </div>

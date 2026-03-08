@@ -1,0 +1,83 @@
+/* Fixed viewport layer so touch scroll works despite #root { overflow: hidden } */
+.app {
+  position: fixed;
+  inset: 0;
+  height: 100vh;
+  height: 100dvh;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg, #0f1419);
+  color: var(--fg, #e6edf3);
+}
+
+.header {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  padding-top: max(0.75rem, env(safe-area-inset-top));
+  padding-left: max(1rem, env(safe-area-inset-left));
+  padding-right: max(1rem, env(safe-area-inset-right));
+  border-bottom: 1px solid var(--border, #21262d);
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+.logo {
+  font-weight: 600;
+  font-size: 1.125rem;
+  color: inherit;
+  text-decoration: none;
+}
+
+.logo:active {
+  opacity: 0.85;
+}
+
+.back {
+  font-size: 0.9375rem;
+  color: var(--muted, #8b949e);
+  text-decoration: none;
+  padding: 0.5rem 0.75rem;
+  margin: -0.5rem -0.75rem;
+  border-radius: 6px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.back:active {
+  background: var(--hover, #21262d);
+}
+
+.main {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+  padding: 1rem;
+  padding-left: max(1rem, env(safe-area-inset-left));
+  padding-right: max(1rem, env(safe-area-inset-right));
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+}
+
+.footer {
+  flex-shrink: 0;
+  padding: 1rem;
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  border-top: 1px solid var(--border, #21262d);
+  text-align: center;
+}
+
+.fullSite {
+  font-size: 0.875rem;
+  color: var(--muted, #8b949e);
+  text-decoration: none;
+}
+
+.fullSite:active {
+  color: var(--fg, #e6edf3);
+}

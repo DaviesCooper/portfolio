@@ -4,35 +4,44 @@
   line-height: 1.5;
 }
 
-.principles-sim-row {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  gap: 1.25rem;
-  flex-wrap: nowrap;
-  min-width: 0;
-  max-width: 100%;
-}
-
-.principles-sim-row .burn-simulation-wrap {
-  margin: 0;
-  flex: 1 1 0;
-  min-width: 10rem;
-  max-width: 22rem;
-}
-
+/* Desktop: controls in a row — power spans canvas height (grid row 1), laser type top-aligned */
 .principles-controls {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 1rem;
   flex: 0 0 auto;
+  min-height: 0;
+  align-items: stretch;
+}
+
+/* When inside grid (PrinciplesWithControls), fill the cell so power slider gets full canvas height */
+.burn-principles-controls-cell .principles-controls {
+  flex: 1 1 auto;
+  min-height: 0;
+  height: 100%;
+}
+
+.burn-principles-controls-cell .principles-control-power {
+  height: 100%;
 }
 
 .principles-control {
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
-  align-items: flex-start;
+  align-items: center;
+  min-height: 0;
+}
+
+.principles-control-power {
+  flex: 1;
+  min-width: 0;
+  align-self: stretch;
+  min-height: 0; /* allow slider wrap to shrink and take remaining space */
+}
+
+.principles-control-laser-type {
+  align-self: flex-start;
 }
 
 .principles-control-label {
@@ -41,43 +50,109 @@
   color: var(--fg-muted);
 }
 
+.principles-laser-type-toggle-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.principles-laser-type-option-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--fg-muted);
+  transition: color 0.2s ease;
+}
+
+.principles-laser-type-option-label.active {
+  color: var(--accent);
+}
+
 .principles-laser-type-toggle {
   display: flex;
   flex-direction: column;
+  padding: 3px;
+  border-radius: 9999px;
+  background: var(--bg-muted, rgba(0, 0, 0, 0.06));
   border: 1px solid var(--border);
-  border-radius: 8px;
-  overflow: hidden;
-  background: var(--bg-card);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.06);
+  cursor: pointer;
+  font: inherit;
+  min-height: 0;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+  /* Desktop: narrow vertical pill */
+  width: 1.75rem;
+  min-height: 4rem;
+}
+
+.principles-laser-type-toggle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.principles-laser-type-toggle:hover {
+  border-color: var(--fg-muted);
 }
 
 .principles-laser-type-segment {
   flex: 1;
-  padding: 0.5rem 0.75rem;
-  font-family: var(--font-sans);
-  font-size: 0.95rem;
-  font-weight: 500;
-  border: none;
+  min-height: 1.5rem;
+  min-width: 0;
+  border-radius: 9999px;
   background: transparent;
-  color: var(--fg-muted);
-  cursor: pointer;
-  transition: background 0.15s, color 0.15s;
-}
-
-.principles-laser-type-segment:hover {
-  color: var(--fg);
-  background: var(--border);
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+  pointer-events: none;
 }
 
 .principles-laser-type-segment.active {
   background: var(--accent);
-  color: var(--bg);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
 }
 
-.principles-laser-type-segment.active:hover {
-  background: var(--accent-dim);
-  color: var(--bg);
-}
+/* Mobile: column layout — power full width, laser toggle centered below */
+@media (max-width: 768px) {
+  .principles-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
 
-.principles-laser-type-segment:not(:last-child) {
-  border-bottom: 1px solid var(--border);
+  .principles-control-power {
+    align-self: stretch;
+    width: 100%;
+  }
+
+  .principles-control-laser-type {
+    align-self: center;
+    width: 100%;
+    max-width: 18rem;
+  }
+
+  .principles-laser-type-toggle-wrap {
+    flex-direction: row;
+    gap: 0.5rem;
+  }
+
+  .principles-laser-type-toggle-wrap .principles-laser-type-option-label:first-child {
+    order: 1;
+  }
+
+  .principles-laser-type-toggle-wrap .principles-laser-type-toggle {
+    order: 2;
+  }
+
+  .principles-laser-type-toggle-wrap .principles-laser-type-option-label:last-child {
+    order: 3;
+  }
+
+  .principles-laser-type-toggle {
+    flex-direction: row;
+    width: auto;
+    min-height: 0;
+  }
+
+  .principles-laser-type-segment {
+    min-height: 1.65rem;
+    min-width: 2.25rem;
+  }
 }

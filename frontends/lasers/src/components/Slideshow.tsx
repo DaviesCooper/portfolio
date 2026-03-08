@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Slide } from './Slide';
 import { TitleSlide } from './TitleSlide';
 import { useSlideNavigation, type UseSlideNavigationResult } from '../hooks';
@@ -15,16 +16,22 @@ export interface SlideshowProps {
   readonly slideSource?: SlideSource;
   /** Selected laser machine; used to conditionally render tool-specific slide content. */
   readonly selectedTool: LaserTool;
+  /** Called when the current slide index changes (e.g. for hiding UI on non-intro slides on mobile). */
+  readonly onSlideChange?: (index: number) => void;
 }
 
 export function Slideshow(props: SlideshowProps): JSX.Element {
-  const { slideSource = defaultSlideSource, selectedTool } = props;
+  const { slideSource = defaultSlideSource, selectedTool, onSlideChange } = props;
   const slides: SlideSource['slides'] = slideSource.slides.filter(
     (s: SlideData) => s.whenTool == null || s.whenTool === selectedTool
   );
   const slideCount: number = slides.length;
   const navigation: UseSlideNavigationResult = useSlideNavigation(slideCount);
   const { index, total, goNext, goPrev, goTo } = navigation;
+
+  useEffect(() => {
+    onSlideChange?.(index);
+  }, [index, onSlideChange]);
 
   if (total === 0) {
     return (

@@ -67,10 +67,12 @@ export interface BurnSimulationProps {
   power?: number;
   /** Laser type (XTool); for display only unless we add behavior later. */
   laserType?: 'ir' | 'blue';
+  /** When provided, layout is a 2x2 grid: canvas | controls, caption+reset | empty. */
+  children?: React.ReactNode;
 }
 
 export function BurnSimulation(props: BurnSimulationProps): JSX.Element {
-  const { power = 100, laserType } = props;
+  const { power = 100, laserType, children } = props;
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const gridRef = useRef<Float32Array>(createBurnHeatGrid());
   const [isDragging, setIsDragging] = useState(false);
@@ -102,7 +104,7 @@ export function BurnSimulation(props: BurnSimulationProps): JSX.Element {
     }
   }, [laserType]);
 
-  const cellFromEvent = useCallback((e: React.MouseEvent<HTMLCanvasElement> | MouseEvent) => {
+  const cellFromEvent = useCallback((e: React.PointerEvent<HTMLCanvasElement> | PointerEvent) => {
     const canvas = canvasRef.current;
     if (!canvas) return { col: 0, row: 0 };
     const rect = canvas.getBoundingClientRect();
@@ -126,8 +128,9 @@ export function BurnSimulation(props: BurnSimulationProps): JSX.Element {
   }, [tick]);
 
   const handlePointerDown = useCallback(
-    (e: React.MouseEvent<HTMLCanvasElement>) => {
+    (e: React.PointerEvent<HTMLCanvasElement>) => {
       if (e.button !== 0) return;
+      e.currentTarget.setPointerCapture(e.pointerId);
       lastPosRef.current = cellFromEvent(e);
       setIsDragging(true);
     },
@@ -135,17 +138,25 @@ export function BurnSimulation(props: BurnSimulationProps): JSX.Element {
   );
 
   const handlePointerMove = useCallback(
-    (e: React.MouseEvent<HTMLCanvasElement>) => {
+    (e: React.PointerEvent<HTMLCanvasElement>) => {
       if (isDragging) lastPosRef.current = cellFromEvent(e);
     },
     [isDragging, cellFromEvent]
   );
 
-  const handlePointerUp = useCallback(() => {
+  const handlePointerUp = useCallback(
+    (e: React.PointerEvent<HTMLCanvasElement>) => {
+      e.currentTarget.releasePointerCapture(e.pointerId);
+      setIsDragging(false);
+      lastPosRef.current = null;
+    },
+    []
+  );
+  const handlePointerLeave = useCallback(() => {
     setIsDragging(false);
     lastPosRef.current = null;
   }, []);
-  const handlePointerLeave = useCallback(() => {
+  const handlePointerCancel = useCallback(() => {
     setIsDragging(false);
     lastPosRef.current = null;
   }, []);
@@ -156,8 +167,12 @@ export function BurnSimulation(props: BurnSimulationProps): JSX.Element {
 
   useEffect(() => {
     const onUp = () => setIsDragging(false);
-    window.addEventListener('mouseup', onUp);
-    return () => window.removeEventListener('mouseup', onUp);
+    window.addEventListener('pointerup', onUp);
+    window.addEventListener('pointercancel', onUp);
+    return () => {
+      window.removeEventListener('pointerup', onUp);
+      window.removeEventListener('pointercancel', onUp);
+    };
   }, []);
 
   useEffect(() => {
@@ -171,23 +186,45 @@ export function BurnSimulation(props: BurnSimulationProps): JSX.Element {
     draw();
   }, [draw]);
 
-  return (
-    <div className="burn-simulation-wrap">
-      <canvas
-        ref={canvasRef}
-        className="burn-simulation-canvas"
-        width={BURN_GRID_SIZE}
-        height={BURN_GRID_SIZE}
-        onMouseDown={handlePointerDown}
-        onMouseMove={handlePointerMove}
-        onMouseUp={handlePointerUp}
-        onMouseLeave={handlePointerLeave}
-        aria-label="Drag to simulate laser burning material; areas turn red when cut through"
-      />
+  const canvasEl = (
+    <canvas
+      ref={canvasRef}
+      className="burn-simulation-canvas"
+      width={BURN_GRID_SIZE}
+      height={BURN_GRID_SIZE}
+      onPointerDown={handlePointerDown}
+      onPointerMove={handlePointerMove}
+      onPointerUp={handlePointerUp}
+      onPointerLeave={handlePointerLeave}
+      onPointerCancel={handlePointerCancel}
+      aria-label="Drag to simulate laser burning material; areas turn red when cut through"
+    />
+  );
+
+  const metaEl = (
+    <>
       <p className="burn-simulation-caption">Drag to engrave (black); hold in one spot to ablate until it cuts through (background color).</p>
       <button type="button" className="burn-simulation-reset" onClick={handleReset}>
         Reset
       </button>
+    </>
+  );
+
+  if (children != null) {
+    return (
+      <div className="burn-principles-grid">
+        <div className="burn-simulation-canvas-cell">{canvasEl}</div>
+        <div className="burn-principles-controls-cell">{children}</div>
+        <div className="burn-simulation-meta-cell">{metaEl}</div>
+        <div className="burn-principles-empty-cell" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="burn-simulation-wrap">
+      {canvasEl}
+      {metaEl}
     </div>
   );
 }

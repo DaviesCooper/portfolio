@@ -79,7 +79,6 @@ COPY frontends/lasers/ frontends/lasers/
 RUN npm run lasers:install && npm run lasers:build
 
 COPY server/ server/
-# So the server can serve static assets
 RUN mkdir -p server/frontends/vfs/dist && cp -r frontends/vfs/dist/. server/frontends/vfs/dist/
 RUN mkdir -p server/frontends/lasers/dist && cp -r frontends/lasers/dist/. server/frontends/lasers/dist/
 

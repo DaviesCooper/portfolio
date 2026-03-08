@@ -1,4 +1,4 @@
-# Production: single container serving VFS + lasers from built assets.
+# Production: single container serving VFS + mobile + lasers from built assets.
 # Usage: docker compose up --build -d   then open http://localhost:3000 and http://localhost:3000/lasers
 services:
   app:

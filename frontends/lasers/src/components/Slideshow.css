@@ -363,3 +363,95 @@
   font-size: 0.85rem;
   color: var(--fg-muted);
 }
+
+/* Mobile: single column — text on top, full-width canvas/sims, nav at bottom */
+@media (max-width: 768px) {
+  .slideshow {
+    max-width: 100%;
+    padding: 1rem;
+  }
+
+  .slide {
+    justify-content: flex-start;
+    padding: 1rem 0 1.5rem;
+  }
+
+  .slide:has(.slide-two-col) {
+    padding-top: 0.5rem;
+  }
+
+  .slide h2,
+  .slide .slide-title {
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .slide-subtitle {
+    font-size: 1rem;
+  }
+
+  .title-slide .title-slide-title {
+    font-size: 2.25rem;
+  }
+
+  .title-slide .title-slide-subtitle {
+    font-size: 1.2rem;
+  }
+
+  /* Center title slide content vertically on mobile */
+  .title-slide {
+    justify-content: center;
+  }
+
+  /* Stack columns: text first, then canvas/controls full width */
+  .slide-two-col {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+    gap: 1.5rem;
+    align-items: stretch;
+  }
+
+  .slide-two-col-left {
+    max-width: none;
+  }
+
+  .slide-two-col-right {
+    width: 100%;
+    max-width: none;
+    align-items: stretch;
+  }
+
+  .slide-two-col-right .burn-simulation-wrap {
+    max-width: none;
+    width: 100%;
+  }
+
+  .slide-two-col-right .burn-simulation-canvas {
+    width: 100%;
+  }
+
+  /* All sim/canvas wrappers in right column full width on mobile */
+  .slide-two-col-right .gcode-path-sim-canvas-wrap,
+  .slide-two-col-right .air-assist-sim-canvas-wrap,
+  .slide-two-col-right .resolution-limit-sim-canvas-wrap,
+  .slide-two-col-right .kerf-sim-svg-wrap {
+    width: 100%;
+    max-width: none;
+  }
+
+  .slide-outline-wrap,
+  .slide-outline-divider,
+  .slide-outline-wrap .slide-outline {
+    max-width: 100%;
+  }
+
+  .measured-brace-wrap {
+    max-width: 100%;
+  }
+
+  .nav {
+    padding: 0.75rem 0 0;
+    margin-top: auto;
+    flex-shrink: 0;
+  }
+}

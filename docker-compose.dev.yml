@@ -1,11 +1,11 @@
 # Development: live code updates without rebuilding the image.
 # Server: mount ./server, nodemon restarts on .ts changes.
-# VFS: mount ./frontends/vfs, Vite HMR at http://localhost:5173.
+# VFS: mount ./frontends/vfs, Vite HMR at http://localhost:5173 (desktop + mobile view via ?mobile=1).
 # Lasers: mount ./frontends/lasers, Vite HMR at http://localhost:5174.
 #
 # Usage: docker compose -f docker-compose.dev.yml up --build -d   (background)
 # Or:    docker compose -f docker-compose.dev.yml up --build     (foreground, logs in terminal)
-# Then:  server http://localhost:3000 | vfs http://localhost:5173 | lasers http://localhost:5174
+# Then:  server http://localhost:3001 | vfs http://localhost:5173 | lasers http://localhost:5174
 # Logs:  docker compose -f docker-compose.dev.yml logs -f
 
 services:
@@ -14,7 +14,7 @@ services:
       context: .
       target: dev
     ports:
-      - "3000:3000"
+      - "3001:3000"
     environment:
       - NODE_ENV=development
       - PORT=3000

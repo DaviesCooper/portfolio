@@ -23,6 +23,7 @@ function readStoredTool(): LaserTool {
 export default function App(): JSX.Element {
   const [theme, setTheme] = useState<Theme>(readStoredTheme);
   const [tool, setTool] = useState<LaserTool>(readStoredTool);
+  const [slideIndex, setSlideIndex] = useState(0);
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
@@ -35,8 +36,12 @@ export default function App(): JSX.Element {
 
   return (
     <LaserToolProvider value={{ tool, setTool }}>
-      <ThemeToggle theme={theme} onToggle={setTheme} />
-      <Slideshow selectedTool={tool} />
+      <ThemeToggle
+        theme={theme}
+        onToggle={setTheme}
+        isIntroSlide={slideIndex === 0}
+      />
+      <Slideshow selectedTool={tool} onSlideChange={setSlideIndex} />
     </LaserToolProvider>
   );
 }
