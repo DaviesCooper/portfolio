@@ -1,5 +1,5 @@
 import { createContext, useContext, type ReactNode } from 'react';
-import type { LaserTool } from '../types';
+import type { LaserTool } from '../lib';
 
 export interface LaserToolContextValue {
   readonly tool: LaserTool;

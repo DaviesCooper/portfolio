@@ -10,24 +10,17 @@
   --kerf-beam: #b91c1c;
 }
 
-.kerf-sim-row {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  gap: 1.25rem;
-  flex-wrap: wrap;
-  min-width: 0;
-  max-width: 100%;
-}
-
 .kerf-sim-svg-wrap {
-  flex: 1 1 0;
-  min-width: 22rem;
-  max-width: 36rem;
+  width: 34rem;
+  max-width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
+}
+
+.sim-layout-has-controls .sim-layout-canvas-cell .kerf-sim-svg-wrap {
+  width: 34rem;
+  max-width: 100%;
 }
 
 .kerf-sim-svg {
@@ -47,28 +40,31 @@
   fill: var(--fg-muted);
 }
 
-.kerf-sim-svg-wrap .kerf-sim-caption {
-  margin: 0;
-  font-size: 0.8rem;
-  color: var(--fg-muted);
-  text-align: center;
-  min-width: 18em;
-}
-
 .kerf-sim-controls {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  flex: 0 0 auto;
+  flex: 1 1 auto;
   min-height: 0;
+  height: 100%;
 }
 
 .kerf-sim-control {
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
-  align-items: flex-start;
-  flex: 1;
+  align-items: center;
+  min-height: 0;
+  flex: 1 1 auto;
+  height: 100%;
+}
+
+.kerf-sim-control .kerf-sim-control-label {
+  flex-shrink: 0;
+}
+
+.kerf-sim-control .power-slider-wrap {
+  flex: 1 1 0;
   min-height: 0;
 }
 
@@ -86,6 +82,13 @@
 .kerf-sim-angle-value {
   font-size: 0.85rem;
   color: var(--fg-muted);
+}
+
+.kerf-sim-caption {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--fg-muted);
+  text-align: center;
 }
 
 /* Laser head: draggable for gantry, fixed for XTool */
@@ -106,14 +109,22 @@
 }
 
 @media (max-width: 768px) {
-  .kerf-sim-row {
-    flex-direction: column;
-    align-items: stretch;
+  .sim-layout-has-controls .sim-layout-canvas-cell .kerf-sim-svg-wrap {
+    width: 100%;
+    max-width: none;
   }
 
-  .kerf-sim-svg-wrap {
-    min-width: 0;
-    max-width: none;
-    width: 100%;
+  .kerf-sim-controls {
+    height: auto;
+  }
+
+  .kerf-sim-control {
+    height: auto;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .kerf-sim-control-label {
+    text-align: center;
   }
 }

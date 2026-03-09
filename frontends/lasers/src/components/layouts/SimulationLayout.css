@@ -1,0 +1,111 @@
+/* SimulationLayout: canvas, optional controls, caption + buttons */
+
+.simulation-layout {
+  min-width: 0;
+  max-width: 100%;
+  display: grid;
+  gap: 0.5rem 1.25rem;
+}
+
+.simulation-layout-canvas {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 0;
+}
+
+.simulation-layout-buttons-caption {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: -0.15rem;
+}
+
+.simulation-layout-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.simulation-layout-caption {
+  margin: 0;
+  font-size: 0.65rem;
+  color: var(--fg-muted);
+  text-align: center;
+}
+
+.simulation-layout-caption p {
+  margin: 0;
+}
+
+/* Desktop: no controls — 1 column × 2 rows. (0,0) canvas, (0,1) caption + reset */
+.simulation-layout {
+  grid-template-columns: 1fr;
+  grid-template-rows: auto auto;
+}
+
+.simulation-layout-canvas {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.simulation-layout-buttons-caption {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+/* Desktop: with controls — 2 columns × 2 rows. (0,0) canvas, (0,1) controls, (1,0) play/reset/caption, (1,1) empty */
+.simulation-layout-has-controls {
+  grid-template-columns: minmax(28rem, 1fr) auto;
+  grid-template-rows: auto auto;
+}
+
+.simulation-layout-has-controls .simulation-layout-canvas {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.simulation-layout-has-controls .simulation-layout-controls {
+  grid-column: 2;
+  grid-row: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  min-height: 0;
+}
+
+.simulation-layout-has-controls .simulation-layout-buttons-caption {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+/* Cell (1,1) is empty — no element there */
+
+/* Mobile: 1 column × 3 rows (or 2 if no controls). (0,0) canvas, (0,1) play/reset/caption, (0,2) controls */
+@media (max-width: 768px) {
+  .simulation-layout-has-controls {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    gap: 1rem;
+  }
+
+  .simulation-layout-has-controls .simulation-layout-canvas {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .simulation-layout-has-controls .simulation-layout-buttons-caption {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .simulation-layout-has-controls .simulation-layout-controls {
+    grid-column: 1;
+    grid-row: 3;
+    max-width: 20rem;
+    margin: 0 auto;
+    width: 100%;
+  }
+}

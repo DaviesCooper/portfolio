@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { useLayoutEffect, useRef, useState } from 'react';
-import braceSvg from '../assets/curly-brace.svg?raw';
+// import braceSvg from '../assets/curly-brace.svg?raw';
 
 /** Uses your curly-brace.svg; height is set to match the measured content to its left. */
 export function MeasuredBrace(props: { children: ReactNode; label?: string }): JSX.Element {
@@ -22,6 +22,8 @@ export function MeasuredBrace(props: { children: ReactNode; label?: string }): J
     return () => ro.disconnect();
   }, [children]);
 
+  // Broken: curly-brace.svg removed during reorganization
+  const braceSvg = '';
   const svgHtml = braceSvg
     .replace(/stroke:white/g, 'stroke:currentColor')
     .replace(/fill:white/g, 'fill:currentColor')

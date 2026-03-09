@@ -1,0 +1,157 @@
+/* Burn visualization: square canvas + playback controls bottom-left */
+
+.burn-visualization {
+  display: inline-block;
+  min-width: 0;
+}
+
+.burn-visualization-canvas-wrap {
+  position: relative;
+  display: inline-block;
+  line-height: 0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.burn-visualization-canvas {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  cursor: crosshair;
+  touch-action: none;
+  border-radius: 8px;
+  vertical-align: top;
+}
+
+.burn-visualization-canvas-wrap .burn-visualization-reset {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 0.35rem;
+  pointer-events: auto;
+  padding: 0.2rem;
+  border: 1px solid var(--accent-dim);
+  border-radius: 4px;
+  background: var(--bg-card);
+  color: var(--accent);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.burn-visualization-canvas-wrap .burn-visualization-reset .burn-visualization-icon,
+.burn-visualization-canvas-wrap .burn-visualization-reset .burn-visualization-icon svg {
+  color: inherit;
+  fill: currentColor;
+}
+
+.burn-visualization-canvas-wrap .burn-visualization-reset:hover {
+  background: var(--accent-dim);
+  color: var(--bg);
+  border-color: var(--accent);
+}
+
+.burn-visualization-canvas-wrap .burn-visualization-reset .burn-visualization-icon svg {
+  width: 40px;
+  height: 40px;
+}
+
+.burn-visualization-canvas-wrap .burn-visualization-path-toggle {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 0.35rem;
+  pointer-events: auto;
+  padding: 0.1rem;
+  border: 1px solid var(--accent-dim);
+  border-radius: 4px;
+  background: var(--bg-card);
+  color: var(--accent);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  overflow: hidden;
+}
+
+.burn-visualization-canvas-wrap .burn-visualization-path-toggle .burn-visualization-icon,
+.burn-visualization-canvas-wrap .burn-visualization-path-toggle .burn-visualization-icon svg {
+  color: inherit;
+  fill: none;
+  stroke: currentColor;
+}
+
+.burn-visualization-canvas-wrap .burn-visualization-path-toggle:hover {
+  background: var(--accent-dim);
+  color: var(--bg);
+  border-color: var(--accent);
+}
+
+.burn-visualization-path-toggle.active {
+  background: var(--accent-dim);
+  color: var(--bg);
+  border-color: var(--accent);
+}
+
+.burn-visualization-path-toggle.active:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--bg);
+}
+
+.burn-visualization-path-toggle .burn-visualization-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 20px;
+}
+
+.burn-visualization-path-toggle .burn-visualization-icon svg {
+  width: 40px;
+  height: 20px;
+  transform: scale(1.6);
+  transform-origin: center;
+}
+
+.burn-visualization-controls {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem;
+  pointer-events: none;
+}
+
+.burn-visualization-controls .burn-visualization-btn {
+  pointer-events: auto;
+  padding: 0.2rem;
+  border: 1px solid var(--accent-dim);
+  border-radius: 4px;
+  background: var(--bg-card);
+  color: var(--accent);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.burn-visualization-controls .burn-visualization-btn .burn-visualization-icon,
+.burn-visualization-controls .burn-visualization-btn .burn-visualization-icon svg {
+  color: inherit;
+  fill: currentColor;
+}
+
+.burn-visualization-controls .burn-visualization-btn:hover {
+  background: var(--accent-dim);
+  color: var(--bg);
+  border-color: var(--accent);
+}
+
+.burn-visualization-controls .burn-visualization-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.burn-visualization-controls .burn-visualization-icon svg {
+  width: 40px;
+  height: 40px;
+}

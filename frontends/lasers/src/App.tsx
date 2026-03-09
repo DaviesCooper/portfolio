@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import type { JSX } from 'react';
 import { LaserToolProvider } from './context/LaserToolContext';
-import { Slideshow } from './components/Slideshow';
-import { ThemeToggle, type Theme } from './components/ThemeToggle';
-import type { LaserTool } from './types';
+import { ThemeProvider } from './context/ThemeContext';
+import { Slideshow } from './components/layouts/Slideshow';
+import { ThemeToggle } from './components/controls/ThemeToggle';
+import type { LaserTool } from './lib';
+import type { Theme } from './context/ThemeContext';
 
 const THEME_STORAGE_KEY = 'lasers-theme';
 const TOOL_STORAGE_KEY = 'lasers-tool';
@@ -35,13 +37,11 @@ export default function App(): JSX.Element {
   }, [tool]);
 
   return (
-    <LaserToolProvider value={{ tool, setTool }}>
-      <ThemeToggle
-        theme={theme}
-        onToggle={setTheme}
-        isIntroSlide={slideIndex === 0}
-      />
-      <Slideshow selectedTool={tool} onSlideChange={setSlideIndex} />
-    </LaserToolProvider>
+    <ThemeProvider value={{ theme, setTheme }}>
+      <LaserToolProvider value={{ tool, setTool }}>
+        <ThemeToggle isIntroSlide={slideIndex === 0} />
+        <Slideshow selectedTool={tool} onSlideChange={setSlideIndex} />
+      </LaserToolProvider>
+    </ThemeProvider>
   );
 }

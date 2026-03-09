@@ -1,0 +1,30 @@
+/* Match nav "Next" button theme: bg-card, accent border, accent color, same radius/transition */
+.tri-select {
+  display: inline-flex;
+  gap: 0.5rem;
+}
+
+.tri-select__option {
+  padding: 0.5rem 1rem;
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--fg);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.tri-select__option:hover {
+  background: var(--border);
+  border-color: var(--fg-muted);
+}
+
+.tri-select__option--selected,
+.tri-select__option--selected:hover {
+  background: var(--accent-dim);
+  color: var(--bg);
+  border-color: var(--accent);
+}

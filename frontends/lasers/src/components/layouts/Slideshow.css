@@ -1,0 +1,399 @@
+.slideshow {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  max-height: 100%;
+  max-width: min(88rem, 96vw);
+  margin: 0 auto;
+  padding: 2rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.slideshow::-webkit-scrollbar {
+  display: none;
+}
+
+.slide {
+  flex: 1 1 auto;
+  min-height: min-content;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2rem 0;
+  animation: slideIn 0.25s ease-out;
+}
+
+.slide:has(.column-slide) {
+  padding-top: 0;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.slide h2,
+.slide .slide-title {
+  margin: 0 0 1.5rem;
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: -0.02em;
+}
+
+.slide-subtitle {
+  margin: 0 0 0.5rem;
+  font-size: 1.2rem;
+  color: var(--fg-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* Title slide: main title (e.g. Protospace) is the big hero text; center to match slider */
+.title-slide {
+  text-align: center;
+  align-items: center;
+}
+
+.title-slide .title-slide-title {
+  margin: 0 0 0.75rem;
+  font-size: 4rem;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+}
+
+.title-slide .title-slide-subtitle {
+  font-size: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.slide-lead {
+  font-size: 1.25rem;
+  line-height: 1.6;
+  color: var(--fg);
+  margin: 0;
+}
+
+.slide-note {
+  margin: 1.25rem 0 0;
+  font-size: 1.25rem;
+  color: var(--fg-muted);
+  font-style: italic;
+}
+
+.slide ul,
+.slide ol {
+  margin: 0;
+  padding-left: 1.75rem;
+  line-height: 1.7;
+  font-size: 1.25rem;
+}
+
+/* Column slide (left text, right sim) layout is in ColumnSlide.css. Overrides for sim canvases in right column. */
+.slide .column-slide-right .burn-simulation-canvas {
+  max-width: 100%;
+  width: 100%;
+}
+
+/* Housekeeping slide: centered block, title and list left-aligned */
+.slide[data-slide-id="housekeeping"] {
+  align-items: center;
+}
+
+.slide[data-slide-id="housekeeping"] .slide-title,
+.slide[data-slide-id="housekeeping"] .slide-content {
+  width: 100%;
+  max-width: 24rem;
+  text-align: left;
+}
+
+.slide[data-slide-id="housekeeping"] .slide-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* Class outline slide: center the title */
+.slide[data-slide-id="outline"] .slide-title {
+  text-align: center;
+}
+
+.slide-outline-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.slide-outline-divider {
+  width: 100%;
+  max-width: 32rem;
+  margin: 1rem auto;
+  border: none;
+  border-top: 1px solid var(--border);
+}
+
+.slide-outline-wrap .slide-outline {
+  width: 100%;
+  max-width: 28rem;
+}
+
+.slide-outline-duration-inline {
+  margin-left: 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: var(--fg-muted);
+}
+
+/* Measured brace: content on left, brace on right with height = content height */
+.measured-brace-wrap {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  width: 100%;
+  max-width: 32rem;
+  margin: 0 auto 1rem;
+}
+
+.measured-brace-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.measured-brace-graphic {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+  color: var(--accent);
+}
+
+.measured-brace-svg-wrap {
+  flex-shrink: 0;
+  min-width: 1.5rem;
+  width: 1.5rem;
+}
+
+.measured-brace-svg-wrap svg {
+  height: 100%;
+  width: 100%;
+  min-height: 2rem;
+  display: block;
+}
+
+.measured-brace-svg {
+  height: 100%;
+  width: auto;
+  min-height: 2rem;
+  flex-shrink: 0;
+}
+
+.measured-brace-label {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--fg-muted);
+  white-space: nowrap;
+}
+
+.slide-outline {
+  list-style: none;
+  padding-left: 0;
+  font-size: 1.25rem;
+}
+
+.slide-outline li {
+  margin-bottom: 1rem;
+  padding-left: 1.75rem;
+  position: relative;
+}
+
+.slide-outline li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.5em;
+  width: 0.4em;
+  height: 0.4em;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.slide li {
+  margin-bottom: 0.75rem;
+}
+
+.slide li:last-child {
+  margin-bottom: 0;
+}
+
+.slide p {
+  margin: 0 0 0.75rem;
+  font-size: 1.25rem;
+}
+
+.slide p:last-child {
+  margin-bottom: 0;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 0 0;
+  border-top: 1px solid var(--border);
+  margin-top: auto;
+}
+
+.nav-dots {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.nav-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  border: none;
+  padding: 0;
+  background: var(--border);
+  cursor: pointer;
+  transition: background 0.15s, transform 0.15s;
+}
+
+.nav-dot:hover {
+  background: var(--fg-muted);
+}
+
+.nav-dot.active {
+  background: var(--accent);
+  transform: scale(1.2);
+}
+
+.nav-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.nav-btn {
+  padding: 0.5rem 1rem;
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--fg);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.nav-btn:hover:not(:disabled) {
+  background: var(--border);
+  border-color: var(--fg-muted);
+}
+
+.nav-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.nav-btn.next {
+  color: var(--accent);
+  border-color: var(--accent-dim);
+}
+
+.nav-btn.next:hover:not(:disabled) {
+  background: var(--accent-dim);
+  color: var(--bg);
+  border-color: var(--accent);
+}
+
+.slide-counter {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--fg-muted);
+}
+
+/* Mobile: single column — text on top, full-width canvas/sims, nav at bottom */
+@media (max-width: 768px) {
+  .slideshow {
+    max-width: 100%;
+    padding: 1rem;
+  }
+
+  .slide {
+    justify-content: flex-start;
+    padding: 1rem 0 1.5rem;
+  }
+
+  .slide:has(.column-slide) {
+    padding-top: 0.5rem;
+  }
+
+  .slide h2,
+  .slide .slide-title {
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .slide-subtitle {
+    font-size: 1rem;
+  }
+
+  .title-slide .title-slide-title {
+    font-size: 2.25rem;
+  }
+
+  .title-slide .title-slide-subtitle {
+    font-size: 1.2rem;
+  }
+
+  /* Center title slide content vertically on mobile */
+  .title-slide {
+    justify-content: center;
+  }
+
+  /* Housekeeping slide: vertically center on mobile */
+  .slide[data-slide-id="housekeeping"] {
+    justify-content: center;
+  }
+
+  /* ColumnSlide.css handles mobile grid; ensure right column content full width */
+  .slide .column-slide-right .burn-simulation-canvas,
+  .slide .column-slide-right .gcode-path-sim-canvas-wrap,
+  .slide .column-slide-right .resolution-limit-sim-canvas-wrap,
+  .slide .column-slide-right .kerf-sim-svg-wrap {
+    width: 100%;
+    max-width: none;
+  }
+
+  .slide-outline-wrap,
+  .slide-outline-divider,
+  .slide-outline-wrap .slide-outline {
+    max-width: 100%;
+  }
+
+  .measured-brace-wrap {
+    max-width: 100%;
+  }
+
+  .nav {
+    padding: 0.75rem 0 0;
+    margin-top: auto;
+    flex-shrink: 0;
+  }
+}

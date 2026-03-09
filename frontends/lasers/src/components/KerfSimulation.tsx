@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
-import type { LaserTool } from '../types';
-import { PowerSlider } from './PowerSlider';
+import { useLaserTool } from '../context/LaserToolContext';
+import type { SimulationLayoutParts } from './layouts/SimulationLayout';
+// import { PowerSlider } from './controls/PowerSlider';
 import './KerfSimulation.css';
 
 const SVG_WIDTH = 320;
@@ -82,10 +83,12 @@ function kerfInMaterial(
 }
 
 export interface KerfSimulationProps {
-  tool: LaserTool;
+  /** Render prop: receives layout parts; parent composes SimulationLayout. */
+  children: (parts: SimulationLayoutParts) => React.ReactNode;
 }
 
-export function KerfSimulation({ tool }: KerfSimulationProps): JSX.Element {
+export function KerfSimulation({ children }: KerfSimulationProps): JSX.Element {
+  const { tool } = useLaserTool();
   const isXTool = tool === 'xtool';
 
   const [headX, setHeadX] = useState(160);
@@ -95,6 +98,7 @@ export function KerfSimulation({ tool }: KerfSimulationProps): JSX.Element {
 
   const [isDragging, setIsDragging] = useState(false);
   const dragStartRef = useRef({ x: 0, y: 0, headX: 0, headY: 0 });
+  const svgRef = useRef<SVGSVGElement>(null);
 
   const focalLength =
     FOCAL_LENGTH_MIN +
@@ -149,13 +153,20 @@ export function KerfSimulation({ tool }: KerfSimulationProps): JSX.Element {
   const handlePointerMove = useCallback(
     (e: React.PointerEvent) => {
       if (!isXTool && isDragging) {
-        const dx = e.clientX - dragStartRef.current.x;
-        const dy = e.clientY - dragStartRef.current.y;
+        const svg = svgRef.current;
+        if (!svg) return;
+        const rect = svg.getBoundingClientRect();
+        const scaleX = SVG_WIDTH / rect.width;
+        const scaleY = SVG_HEIGHT / rect.height;
+        const dxScreen = e.clientX - dragStartRef.current.x;
+        const dyScreen = e.clientY - dragStartRef.current.y;
+        const dxSvg = dxScreen * scaleX;
+        const dySvg = dyScreen * scaleY;
         setHeadX(
-          Math.max(HEAD_MIN_X, Math.min(HEAD_MAX_X, dragStartRef.current.headX + dx))
+          Math.max(HEAD_MIN_X, Math.min(HEAD_MAX_X, dragStartRef.current.headX + dxSvg))
         );
         setHeadY(
-          Math.max(HEAD_MIN_Y, Math.min(HEAD_MAX_Y, dragStartRef.current.headY + dy))
+          Math.max(HEAD_MIN_Y, Math.min(HEAD_MAX_Y, dragStartRef.current.headY + dySvg))
         );
       }
     },
@@ -174,134 +185,123 @@ export function KerfSimulation({ tool }: KerfSimulationProps): JSX.Element {
   const focusLabel =
     fy <= MAT_TOP ? 'Surface-focused' : fy >= MAT_BOTTOM ? 'Bottom-focused' : 'Center-focused';
 
+  const canvas = (
+    <div className="kerf-sim-svg-wrap">
+      <svg
+        ref={svgRef}
+        className="kerf-sim-svg"
+        viewBox={`0 0 ${SVG_WIDTH} ${SVG_HEIGHT}`}
+        aria-label="Side view of laser beam and material; kerf is the maximum beam width inside the material"
+      >
+        <defs>
+          <linearGradient id="kerf-mat-fill" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="var(--kerf-mat-top)" />
+            <stop offset="100%" stopColor="var(--kerf-mat-bottom)" />
+          </linearGradient>
+        </defs>
+        <text x={SVG_WIDTH - 12} y={22} textAnchor="end" className="kerf-sim-value-text" aria-hidden>
+          {kerf.kerfPx.toFixed(1)} px
+        </text>
+        <rect
+          x={MAT_LEFT}
+          y={MAT_TOP}
+          width={MAT_RIGHT - MAT_LEFT}
+          height={MAT_BOTTOM - MAT_TOP}
+          fill="url(#kerf-mat-fill)"
+          stroke="var(--border)"
+          strokeWidth="1.5"
+        />
+        <line
+          x1={beamLines.leftAbove.x}
+          y1={beamLines.leftAbove.y}
+          x2={beamLines.leftBelow.x}
+          y2={beamLines.leftBelow.y}
+          className="kerf-beam-edge"
+          stroke="var(--kerf-beam)"
+          strokeWidth="2"
+        />
+        <line
+          x1={beamLines.rightAbove.x}
+          y1={beamLines.rightAbove.y}
+          x2={beamLines.rightBelow.x}
+          y2={beamLines.rightBelow.y}
+          className="kerf-beam-edge"
+          stroke="var(--kerf-beam)"
+          strokeWidth="2"
+        />
+        <circle cx={fx} cy={fy} r="3" fill="var(--kerf-beam)" aria-hidden />
+        <line
+          x1={kerf.left}
+          y1={kerf.atY}
+          x2={kerf.right}
+          y2={kerf.atY}
+          className="kerf-brace-line"
+          stroke="var(--fg)"
+          strokeWidth="2"
+        />
+        <line x1={kerf.left} y1={kerf.atY} x2={kerf.left} y2={kerf.atY + 8} stroke="var(--fg)" strokeWidth="1.5" />
+        <line x1={kerf.right} y1={kerf.atY} x2={kerf.right} y2={kerf.atY + 8} stroke="var(--fg)" strokeWidth="1.5" />
+        <g
+          role={isXTool ? undefined : 'button'}
+          aria-label={isXTool ? undefined : 'Laser head; drag to move'}
+          tabIndex={isXTool ? undefined : 0}
+          className={`kerf-head ${isDragging ? 'dragging' : ''} ${isXTool ? 'fixed' : 'draggable'}`}
+          transform={`translate(${effectiveHeadX}, ${effectiveHeadY})`}
+          onPointerDown={handlePointerDown}
+          onPointerMove={handlePointerMove}
+          onPointerUp={handlePointerUp}
+          onPointerLeave={handlePointerUp}
+        >
+          <circle r="10" fill="var(--bg-card)" stroke="var(--accent)" strokeWidth="2" />
+        </g>
+      </svg>
+    </div>
+  );
+  const controls = (
+    <div className="kerf-sim-controls">
+      <div className="kerf-sim-control">
+        <span className="kerf-sim-control-label">Focal length</span>
+        {/* <PowerSlider value={focalLengthNorm} onChange={setFocalLengthNorm} aria-label="Focal length" /> */}
+        <input
+          type="range"
+          min={0}
+          max={100}
+          value={focalLengthNorm}
+          onChange={(e) => setFocalLengthNorm(Number(e.target.value))}
+          aria-label="Focal length"
+        />
+        <span>{focalLengthNorm}</span>
+      </div>
+      {isXTool && (
+        <div className="kerf-sim-control">
+          <span className="kerf-sim-control-label">Beam angle (galvo)</span>
+          <div className="power-slider-wrap">
+            <input
+              type="range"
+              min={-30}
+              max={30}
+              value={beamAngleDeg}
+              onChange={(e) => setBeamAngleDeg(Number(e.target.value))}
+              className="power-slider-input kerf-sim-angle-slider"
+              aria-label="Beam angle"
+            />
+            <span className="power-slider-value kerf-sim-angle-value">{beamAngleDeg}°</span>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+  const caption = (
+    <p className="kerf-sim-caption">Max width in material · {focusLabel}</p>
+  );
   return (
     <div className="kerf-sim">
-      <div className="kerf-sim-row">
-        <div className="kerf-sim-svg-wrap">
-          <svg
-            className="kerf-sim-svg"
-            viewBox={`0 0 ${SVG_WIDTH} ${SVG_HEIGHT}`}
-            aria-label="Side view of laser beam and material; kerf is the maximum beam width inside the material"
-          >
-            <defs>
-              <linearGradient
-                id="kerf-mat-fill"
-                x1="0"
-                y1="0"
-                x2="0"
-                y2="1"
-              >
-                <stop offset="0%" stopColor="var(--kerf-mat-top)" />
-                <stop offset="100%" stopColor="var(--kerf-mat-bottom)" />
-              </linearGradient>
-            </defs>
-            {/* Kerf value in top right (on canvas to avoid caption resizing / flicker) */}
-            <text
-              x={SVG_WIDTH - 12}
-              y={22}
-              textAnchor="end"
-              className="kerf-sim-value-text"
-              aria-hidden
-            >
-              {kerf.kerfPx.toFixed(1)} px
-            </text>
-            {/* Material */}
-            <rect
-              x={MAT_LEFT}
-              y={MAT_TOP}
-              width={MAT_RIGHT - MAT_LEFT}
-              height={MAT_BOTTOM - MAT_TOP}
-              fill="url(#kerf-mat-fill)"
-              stroke="var(--border)"
-              strokeWidth="1.5"
-            />
-            {/* Beam: left edge */}
-            <line
-              x1={beamLines.leftAbove.x}
-              y1={beamLines.leftAbove.y}
-              x2={beamLines.leftBelow.x}
-              y2={beamLines.leftBelow.y}
-              className="kerf-beam-edge"
-              stroke="var(--kerf-beam)"
-              strokeWidth="2"
-            />
-            {/* Beam: right edge */}
-            <line
-              x1={beamLines.rightAbove.x}
-              y1={beamLines.rightAbove.y}
-              x2={beamLines.rightBelow.x}
-              y2={beamLines.rightBelow.y}
-              className="kerf-beam-edge"
-              stroke="var(--kerf-beam)"
-              strokeWidth="2"
-            />
-            {/* Focal point */}
-            <circle
-              cx={fx}
-              cy={fy}
-              r="3"
-              fill="var(--kerf-beam)"
-              aria-hidden
-            />
-            {/* Kerf brace */}
-            <line
-              x1={kerf.left}
-              y1={kerf.atY}
-              x2={kerf.right}
-              y2={kerf.atY}
-              className="kerf-brace-line"
-              stroke="var(--fg)"
-              strokeWidth="2"
-            />
-            <line x1={kerf.left} y1={kerf.atY} x2={kerf.left} y2={kerf.atY + 8} stroke="var(--fg)" strokeWidth="1.5" />
-            <line x1={kerf.right} y1={kerf.atY} x2={kerf.right} y2={kerf.atY + 8} stroke="var(--fg)" strokeWidth="1.5" />
-            {/* Laser head (draggable for non-XTool) */}
-            <g
-              role={isXTool ? undefined : 'button'}
-              aria-label={isXTool ? undefined : 'Laser head; drag to move'}
-              tabIndex={isXTool ? undefined : 0}
-              className={`kerf-head ${isDragging ? 'dragging' : ''} ${isXTool ? 'fixed' : 'draggable'}`}
-              transform={`translate(${effectiveHeadX}, ${effectiveHeadY})`}
-              onPointerDown={handlePointerDown}
-              onPointerMove={handlePointerMove}
-              onPointerUp={handlePointerUp}
-              onPointerLeave={handlePointerUp}
-            >
-              <circle r="10" fill="var(--bg-card)" stroke="var(--accent)" strokeWidth="2" />
-            </g>
-          </svg>
-          <p className="kerf-sim-caption">
-            Max width in material · {focusLabel}
-          </p>
-        </div>
-        <div className="kerf-sim-controls">
-          <div className="kerf-sim-control">
-            <span className="kerf-sim-control-label">Focal length</span>
-            <PowerSlider
-              value={focalLengthNorm}
-              onChange={setFocalLengthNorm}
-              aria-label="Focal length"
-            />
-          </div>
-          {isXTool && (
-            <div className="kerf-sim-control">
-              <span className="kerf-sim-control-label">Beam angle (galvo)</span>
-              <div className="power-slider-wrap">
-                <input
-                  type="range"
-                  min={-30}
-                  max={30}
-                  value={beamAngleDeg}
-                  onChange={(e) => setBeamAngleDeg(Number(e.target.value))}
-                  className="power-slider-input kerf-sim-angle-slider"
-                  aria-label="Beam angle"
-                />
-                <span className="power-slider-value kerf-sim-angle-value">{beamAngleDeg}°</span>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
+      {children({
+        canvas,
+        caption,
+        buttons: null,
+        controls,
+      })}
     </div>
   );
 }

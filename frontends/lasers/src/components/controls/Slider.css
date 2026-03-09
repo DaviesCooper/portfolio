@@ -1,0 +1,136 @@
+/* Match nav "Next" button theme: bg-card, accent border, accent color, same radius/transition */
+.slider {
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+}
+
+.slider__label {
+  display: block;
+  font-weight: 600;
+  color: var(--accent);
+  margin-bottom: 0.35rem;
+}
+
+.slider--horizontal .slider__label {
+  text-align: left;
+}
+
+.slider--vertical {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 4rem;
+}
+
+.slider--vertical .slider__label {
+  width: 100%;
+  text-align: center;
+}
+
+.slider__track-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.slider__input {
+  flex: 1;
+  min-width: 0;
+  height: 6px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: var(--border);
+  border-radius: 3px;
+  outline: none;
+}
+
+.slider__input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  margin-top: -6px; /* center 18px thumb on 6px track */
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid var(--bg-card);
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+}
+
+.slider__input::-webkit-slider-thumb:hover {
+  background: var(--accent-dim);
+  transform: scale(1.08);
+}
+
+.slider__input::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  margin-top: -6px; /* center 18px thumb on 6px track */
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid var(--bg-card);
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+}
+
+.slider__input::-moz-range-thumb:hover {
+  background: var(--accent-dim);
+  transform: scale(1.08);
+}
+
+.slider__input::-webkit-slider-runnable-track {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--border);
+}
+
+.slider__input::-moz-range-track {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--border);
+}
+
+/* Filled track (left of thumb) using accent - WebKit */
+.slider__input {
+  accent-color: var(--accent);
+}
+
+.slider__value {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent);
+  min-width: 2.5em;
+  text-align: right;
+}
+
+/* Vertical: rotated horizontal track, fixed height */
+.slider__vertical-inner {
+  position: relative;
+  width: 6px;
+  height: 120px;
+  flex: none;
+}
+
+.slider__vertical-inner .slider__input {
+  position: absolute;
+  width: 120px;
+  height: 6px;
+  left: 50%;
+  top: 50%;
+  margin-left: -60px;
+  margin-top: -3px;
+  transform: rotate(-90deg);
+  flex: none;
+  min-width: unset;
+}
+
+.slider--vertical .slider__track-wrap {
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+}
+
+.slider--vertical .slider__value {
+  text-align: center;
+}
