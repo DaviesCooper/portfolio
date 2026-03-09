@@ -1,5 +1,4 @@
 import type { LaserTool, SlideComponentProps } from '../lib';
-import { CenterSlide } from '../components/layouts/CenterSlide';
 import { useLaserTool } from '../context/LaserToolContext';
 import { TriSelect, type TriSelectIndex } from '../components/controls/TriSelect';
 import { defineSlide } from './defineSlide';
@@ -16,7 +15,7 @@ function Slide2(_props: SlideComponentProps): JSX.Element {
   const index = toolToIndex(tool);
 
   return (
-    <CenterSlide>
+    <>
       <p className="tool-slider-label">Select which laser</p>
       <TriSelect
         value={index}
@@ -24,7 +23,7 @@ function Slide2(_props: SlideComponentProps): JSX.Element {
         options={['XTool', 'Trotec', 'Thunder']}
         aria-label="Laser machine"
       />
-    </CenterSlide>
+    </>
   );
 }
 

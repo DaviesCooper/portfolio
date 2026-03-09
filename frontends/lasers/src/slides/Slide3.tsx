@@ -1,20 +1,24 @@
 import type { SlideComponentProps } from '../lib';
-import { CenterSlide } from '../components/layouts/CenterSlide';
+import { ColumnSlide } from '../components/layouts/ColumnSlide';
 import { defineSlide } from './defineSlide';
+import './Slide3.css';
 
 function Slide3(_props: SlideComponentProps): JSX.Element {
   return (
-    <CenterSlide>
-      <ul>
-        <li>Vetted vs. Unvetted Members</li>
-        <li>Recording During Class</li>
-        <li>
-          <a href="https://drive.google.com/drive/folders/0By-vvp6fxFekaHBreG1Id2dEb00?resourcekey=0-SUrE5drsOBu9F0jGrk1fZQ&usp=drive_link">
-            Other Slides
-          </a>
-        </li>
-      </ul>
-    </CenterSlide>
+    <ColumnSlide
+      left={
+        <ul className="slide-bullet-list">
+          <li>Vetted vs. Unvetted Members</li>
+          <li>Recording During Class</li>
+          <li>
+            <a href="https://drive.google.com/drive/folders/0By-vvp6fxFekaHBreG1Id2dEb00?resourcekey=0-SUrE5drsOBu9F0jGrk1fZQ&usp=drive_link">
+              Other Slides
+            </a>
+          </li>
+        </ul>
+      }
+      right={null}
+    />
   );
 }
 

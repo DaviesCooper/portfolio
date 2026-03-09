@@ -59,9 +59,9 @@ export function Slideshow(props: SlideshowProps): JSX.Element {
   return (
     <div className="slideshow">
       {isTitleSlide ? (
-        <TitleSlide {...slideProps} />
+        <TitleSlide key={SlideComponent.id} {...slideProps} />
       ) : (
-        <Slide {...slideProps} />
+        <Slide key={SlideComponent.id} {...slideProps} />
       )}
 
       <nav className="nav" aria-label="Slideshow navigation">

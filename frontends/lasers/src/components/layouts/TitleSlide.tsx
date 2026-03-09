@@ -1,5 +1,6 @@
 import type { ComponentPropsWithoutRef, ReactNode } from 'react';
 import { getSlideAriaLabel } from '../../lib';
+import './TitleSlide.css';
 
 export interface TitleSlideProps extends Omit<ComponentPropsWithoutRef<'section'>, 'title'> {
   readonly id: string;

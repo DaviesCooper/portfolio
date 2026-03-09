@@ -26,6 +26,20 @@
   animation: slideIn 0.25s ease-out;
 }
 
+/* Non-title slides: title in top left, content fills and centers below */
+.slide:not(.title-slide) {
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.slide:not(.title-slide) .slide-content {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 .slide:has(.column-slide) {
   padding-top: 0;
 }
@@ -58,26 +72,6 @@
   letter-spacing: 0.08em;
 }
 
-/* Title slide: main title (e.g. Protospace) is the big hero text; center to match slider */
-.title-slide {
-  text-align: center;
-  align-items: center;
-}
-
-.title-slide .title-slide-title {
-  margin: 0 0 0.75rem;
-  font-size: 4rem;
-  font-weight: 700;
-  color: var(--accent);
-  letter-spacing: -0.03em;
-  line-height: 1.15;
-}
-
-.title-slide .title-slide-subtitle {
-  font-size: 1.5rem;
-  margin-bottom: 1.25rem;
-}
-
 .slide-lead {
   font-size: 1.25rem;
   line-height: 1.6;
@@ -95,139 +89,22 @@
 .slide ul,
 .slide ol {
   margin: 0;
-  padding-left: 1.75rem;
+  padding-left: 0;
   line-height: 1.7;
   font-size: 1.25rem;
-}
-
-/* Column slide (left text, right sim) layout is in ColumnSlide.css. Overrides for sim canvases in right column. */
-.slide .column-slide-right .burn-simulation-canvas {
-  max-width: 100%;
-  width: 100%;
-}
-
-/* Housekeeping slide: centered block, title and list left-aligned */
-.slide[data-slide-id="housekeeping"] {
-  align-items: center;
-}
-
-.slide[data-slide-id="housekeeping"] .slide-title,
-.slide[data-slide-id="housekeeping"] .slide-content {
-  width: 100%;
-  max-width: 24rem;
   text-align: left;
-}
-
-.slide[data-slide-id="housekeeping"] .slide-content {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-/* Class outline slide: center the title */
-.slide[data-slide-id="outline"] .slide-title {
-  text-align: center;
-}
-
-.slide-outline-wrap {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-}
-
-.slide-outline-divider {
-  width: 100%;
-  max-width: 32rem;
-  margin: 1rem auto;
-  border: none;
-  border-top: 1px solid var(--border);
-}
-
-.slide-outline-wrap .slide-outline {
-  width: 100%;
-  max-width: 28rem;
-}
-
-.slide-outline-duration-inline {
-  margin-left: 0.5rem;
-  font-size: 1.25rem;
-  font-weight: 500;
-  color: var(--fg-muted);
-}
-
-/* Measured brace: content on left, brace on right with height = content height */
-.measured-brace-wrap {
-  display: flex;
-  align-items: flex-start;
-  gap: 1rem;
-  width: 100%;
-  max-width: 32rem;
-  margin: 0 auto 1rem;
-}
-
-.measured-brace-content {
-  flex: 1;
-  min-width: 0;
-}
-
-.measured-brace-graphic {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 0.5rem;
-  flex-shrink: 0;
-  color: var(--accent);
-}
-
-.measured-brace-svg-wrap {
-  flex-shrink: 0;
-  min-width: 1.5rem;
-  width: 1.5rem;
-}
-
-.measured-brace-svg-wrap svg {
-  height: 100%;
-  width: 100%;
-  min-height: 2rem;
-  display: block;
-}
-
-.measured-brace-svg {
-  height: 100%;
-  width: auto;
-  min-height: 2rem;
-  flex-shrink: 0;
-}
-
-.measured-brace-label {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--fg-muted);
-  white-space: nowrap;
-}
-
-.slide-outline {
   list-style: none;
-  padding-left: 0;
-  font-size: 1.25rem;
 }
 
-.slide-outline li {
-  margin-bottom: 1rem;
+.slide ul:not(.slide-outline):not(.slide-bullet-list) li,
+.slide ol li {
   padding-left: 1.75rem;
   position: relative;
 }
 
-.slide-outline li::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0.5em;
-  width: 0.4em;
-  height: 0.4em;
-  border-radius: 50%;
-  background: var(--accent);
+.slide ul:not(.slide-outline):not(.slide-bullet-list) li::marker,
+.slide ol li::marker {
+  color: var(--accent);
 }
 
 .slide li {
@@ -328,15 +205,17 @@
   color: var(--fg-muted);
 }
 
-/* Mobile: single column — text on top, full-width canvas/sims, nav at bottom */
 @media (max-width: 768px) {
   .slideshow {
     max-width: 100%;
     padding: 1rem;
   }
 
-  .slide {
+  .slide:not(.title-slide) {
     justify-content: flex-start;
+  }
+
+  .slide {
     padding: 1rem 0 1.5rem;
   }
 
@@ -352,43 +231,6 @@
 
   .slide-subtitle {
     font-size: 1rem;
-  }
-
-  .title-slide .title-slide-title {
-    font-size: 2.25rem;
-  }
-
-  .title-slide .title-slide-subtitle {
-    font-size: 1.2rem;
-  }
-
-  /* Center title slide content vertically on mobile */
-  .title-slide {
-    justify-content: center;
-  }
-
-  /* Housekeeping slide: vertically center on mobile */
-  .slide[data-slide-id="housekeeping"] {
-    justify-content: center;
-  }
-
-  /* ColumnSlide.css handles mobile grid; ensure right column content full width */
-  .slide .column-slide-right .burn-simulation-canvas,
-  .slide .column-slide-right .gcode-path-sim-canvas-wrap,
-  .slide .column-slide-right .resolution-limit-sim-canvas-wrap,
-  .slide .column-slide-right .kerf-sim-svg-wrap {
-    width: 100%;
-    max-width: none;
-  }
-
-  .slide-outline-wrap,
-  .slide-outline-divider,
-  .slide-outline-wrap .slide-outline {
-    max-width: 100%;
-  }
-
-  .measured-brace-wrap {
-    max-width: 100%;
   }
 
   .nav {

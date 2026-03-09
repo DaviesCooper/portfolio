@@ -1,0 +1,32 @@
+.title-slide {
+  text-align: center;
+  align-items: center;
+}
+
+.title-slide .title-slide-title {
+  margin: 0 0 0.75rem;
+  font-size: 4rem;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+}
+
+.title-slide .title-slide-subtitle {
+  font-size: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+
+@media (max-width: 768px) {
+  .title-slide {
+    justify-content: center;
+  }
+
+  .title-slide .title-slide-title {
+    font-size: 2.25rem;
+  }
+
+  .title-slide .title-slide-subtitle {
+    font-size: 1.2rem;
+  }
+}

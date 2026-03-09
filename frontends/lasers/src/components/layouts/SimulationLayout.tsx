@@ -7,7 +7,7 @@ export interface SimulationLayoutProps {
   caption: ReactNode;
   /** Play button (if any), reset button, etc. */
   buttons: ReactNode;
-  /** When set, desktop uses 2x2 grid with controls in (0,1); mobile adds third row for controls. */
+  // A list of either sliders, or command lists.
   controls?: ReactNode;
 }
 
@@ -15,9 +15,8 @@ export type SimulationLayoutParts = SimulationLayoutProps;
 
 /**
  * Layout for simulation slides.
- * Desktop with controls: 2 cols × 2 rows — (0,0) canvas, (0,1) controls, (1,0) play/reset/caption, (1,1) empty.
- * Desktop without controls: 1 col × 2 rows — (0,0) canvas, (0,1) caption and reset.
- * Mobile: 1 col × 3 rows (or 2 if no controls) — (0,0) canvas, (0,1) play/reset/caption, (0,2) controls.
+ * Desktop: BurnVisualization and the controls in a row right of it. Sliders should be vertical. Sliders and command lists should be the height of the burn visualization.
+ * Mobile: BurnVisualization and the controls in a column below it. Sliders should be horizontal. Sliders, command lists, and the burn visualization should be the width of the screen.
  */
 export function SimulationLayout({
   canvas,

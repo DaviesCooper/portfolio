@@ -1,0 +1,206 @@
+/* CommandList: palette of commands + reorderable list, scrollable; mobile full width */
+
+.command-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.command-list-palette {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.command-list-palette-item {
+  padding: 0.4rem 0.75rem;
+  font-size: 0.85rem;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  color: var(--accent);
+  background: var(--bg-card);
+  border: 1px solid var(--accent-dim);
+  border-radius: 6px;
+  cursor: grab;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.command-list-palette-item:hover {
+  background: var(--accent-dim);
+  color: var(--bg);
+  border-color: var(--accent);
+}
+
+.command-list-palette-item:active {
+  cursor: grabbing;
+}
+
+.command-list-drop-zone {
+  min-height: 4rem;
+  border: 2px dashed var(--border);
+  border-radius: 8px;
+  background: var(--bg-card);
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.command-list-drop-zone:focus-within,
+.command-list-drop-zone:has(.command-list-item) {
+  border-color: var(--accent-dim);
+}
+
+.command-list-list {
+  list-style: none;
+  margin: 0;
+  padding: 0.5rem;
+  max-height: 16rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.command-list-drop-indicator {
+  list-style: none;
+  height: 4px;
+  min-height: 4px;
+  padding: 0;
+  margin: 0.2rem 0;
+  border: none;
+  border-radius: 2px;
+  background: #22c55e;
+  pointer-events: none;
+  flex-shrink: 0;
+}
+
+.command-list-empty {
+  padding: 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--fg-muted);
+}
+
+.command-list-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.5rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: grab;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  font-size: 0.9rem;
+}
+
+.command-list-item:hover {
+  border-color: var(--accent-dim);
+}
+
+.command-list-item:active {
+  cursor: grabbing;
+}
+
+.command-list-item-index {
+  flex-shrink: 0;
+  min-width: 1.5em;
+  font-variant-numeric: tabular-nums;
+  color: var(--fg-muted);
+  font-size: 0.85rem;
+}
+
+.command-list-item-handle {
+  flex-shrink: 0;
+  font-size: 0.7rem;
+  letter-spacing: -0.05em;
+  color: var(--fg-muted);
+  cursor: grab;
+  user-select: none;
+  opacity: 0.7;
+}
+
+.command-list-item-handle:hover {
+  opacity: 1;
+}
+
+.command-list-item-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.command-list-item-label {
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.command-list-item-goto {
+  gap: 0.5rem;
+}
+
+.command-list-goto-prefix {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--fg-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.command-list-goto-input {
+  width: 3.25rem;
+  padding: 0.2rem 0.3rem;
+  font-size: 0.85rem;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--fg);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+
+.command-list-goto-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.command-list-remove {
+  flex: 0 0 auto;
+  width: 1.75rem;
+  height: 1.75rem;
+  padding: 0;
+  font-size: 1.25rem;
+  line-height: 1;
+  color: var(--fg-muted);
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s;
+}
+
+.command-list-remove:hover {
+  color: var(--fg);
+  background: var(--border);
+}
+
+/* Mobile: full width of screen */
+@media (max-width: 768px) {
+  .command-list {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .command-list-palette {
+    width: 100%;
+  }
+
+  .command-list-drop-zone {
+    width: 100%;
+  }
+
+  .command-list-list {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
