@@ -15,8 +15,10 @@
 
 .burn-visualization-canvas {
   display: block;
-  max-width: 100%;
+  max-width: min(100%, 100vw);
   height: auto;
+  min-width: 512px;
+  min-height: 512px;
   cursor: crosshair;
   touch-action: none;
   border-radius: 8px;
@@ -154,4 +156,12 @@
 .burn-visualization-controls .burn-visualization-icon svg {
   width: 40px;
   height: 40px;
+}
+
+/* Allow canvas to shrink below 512px so it never exceeds screen width */
+@media (max-width: 999px) {
+  .burn-visualization-canvas {
+    min-width: 0;
+    min-height: 0;
+  }
 }

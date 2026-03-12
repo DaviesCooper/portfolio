@@ -12,6 +12,12 @@
   flex-direction: column;
   align-items: center;
   min-width: 0;
+  max-width: min(100%, 100vw);
+}
+
+.simulation-layout-canvas > * {
+  max-width: min(100%, 100vw);
+  box-sizing: border-box;
 }
 
 .simulation-layout-buttons-caption {
@@ -56,24 +62,69 @@
   grid-row: 2;
 }
 
-/* Desktop: with controls — 2 columns × 2 rows. (0,0) canvas, (0,1) controls, (1,0) play/reset/caption, (1,1) empty */
+/* Desktop: with controls — 1 cell (canvas + controls). Canvas drives row height; controls fill that height. */
 .simulation-layout-has-controls {
-  grid-template-columns: minmax(28rem, 1fr) auto;
+  grid-template-columns: 1fr;
   grid-template-rows: auto auto;
 }
 
-.simulation-layout-has-controls .simulation-layout-canvas {
+.simulation-layout-has-controls .simulation-layout-canvas-and-controls {
   grid-column: 1;
   grid-row: 1;
+  position: relative;
+  min-width: 0;
 }
 
-.simulation-layout-has-controls .simulation-layout-controls {
-  grid-column: 2;
-  grid-row: 1;
+/* Canvas in flow so this cell's height = canvas height. Reserve space for controls on the right; align canvas right so it sits next to them. */
+.simulation-layout-has-controls .simulation-layout-canvas-and-controls > .simulation-layout-canvas {
+  margin-right: 21rem; /* ~350px so controls don't overlap */
+  align-items: flex-end;
+}
+
+/* Controls: absolute so they don't affect row height; fill canvas height (top to bottom). */
+.simulation-layout-has-controls .simulation-layout-canvas-and-controls > .simulation-layout-controls {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 20rem;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  gap: 1rem;
+  min-height: 0;
+  min-width: 0;
+}
+
+.simulation-layout-has-controls .simulation-layout-controls > *:first-child {
+  flex-shrink: 0;
+  align-self: stretch;
+  position: relative;
+  z-index: 1;
+}
+.simulation-layout-has-controls .simulation-layout-controls > .command-list {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  align-self: stretch;
   display: flex;
   flex-direction: column;
-  align-items: stretch;
+  height: 100%;
+}
+
+.simulation-layout-has-controls .simulation-layout-controls > .command-list .command-list-drop-zone {
+  flex: 1;
   min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.simulation-layout-has-controls .simulation-layout-controls > .command-list .command-list-list {
+  flex: 1;
+  min-height: 0;
+  max-height: none;
+  overflow-y: auto;
 }
 
 .simulation-layout-has-controls .simulation-layout-buttons-caption {
@@ -83,17 +134,32 @@
 
 /* Cell (1,1) is empty — no element there */
 
-/* Mobile: 1 column × 3 rows (or 2 if no controls). (0,0) canvas, (0,1) play/reset/caption, (0,2) controls */
-@media (max-width: 768px) {
+/* Mobile: <1000px. Row 1 = canvas + controls (stacked), row 2 = caption. */
+@media (max-width: 999px) {
   .simulation-layout-has-controls {
     grid-template-columns: 1fr;
-    grid-template-rows: auto auto auto;
+    grid-template-rows: auto auto;
+    gap: 1rem;
+    width: fit-content;
+    max-width: 100%;
+  }
+
+  .simulation-layout-has-controls .simulation-layout-canvas-and-controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     gap: 1rem;
   }
 
-  .simulation-layout-has-controls .simulation-layout-canvas {
-    grid-column: 1;
-    grid-row: 1;
+  .simulation-layout-has-controls .simulation-layout-canvas-and-controls > .simulation-layout-canvas {
+    margin-right: 0;
+    align-items: center;
+  }
+
+  .simulation-layout-has-controls .simulation-layout-canvas-and-controls > .simulation-layout-controls {
+    position: static;
+    width: 100%;
+    flex-direction: column;
   }
 
   .simulation-layout-has-controls .simulation-layout-buttons-caption {
@@ -101,11 +167,13 @@
     grid-row: 2;
   }
 
-  .simulation-layout-has-controls .simulation-layout-controls {
-    grid-column: 1;
-    grid-row: 3;
-    max-width: 20rem;
-    margin: 0 auto;
-    width: 100%;
+  .simulation-layout-has-controls .simulation-layout-controls > *:first-child {
+    flex-shrink: 0;
+    min-height: 0;
+  }
+
+  .simulation-layout-has-controls .simulation-layout-controls > .command-list {
+    flex: 0 1 auto;
+    min-height: 0;
   }
 }

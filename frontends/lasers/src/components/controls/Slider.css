@@ -20,6 +20,7 @@
   flex-direction: column;
   align-items: center;
   width: 4rem;
+  min-height: 0;
 }
 
 .slider--vertical .slider__label {
@@ -104,33 +105,39 @@
   text-align: right;
 }
 
-/* Vertical: rotated horizontal track, fixed height */
+/* Vertical: rotated track; inner defines height so we can use it for track length via container query */
 .slider__vertical-inner {
   position: relative;
   width: 6px;
-  height: 120px;
-  flex: none;
+  min-height: 120px;
+  flex: 1;
+  container-type: size;
 }
 
+/* Input is wide (track length) × 6px (thickness); rotate -90deg so width becomes vertical track; origin left so track sits on left */
 .slider__vertical-inner .slider__input {
   position: absolute;
-  width: 120px;
+  width: 100cqh;
   height: 6px;
-  left: 50%;
-  top: 50%;
-  margin-left: -60px;
+  left: 1.9rem;
+  top: 100%;
   margin-top: -3px;
   transform: rotate(-90deg);
+  transform-origin: left center;
   flex: none;
   min-width: unset;
 }
 
 .slider--vertical .slider__track-wrap {
+  flex: 1;
+  min-height: 0;
+  display: flex;
   flex-direction: column;
   width: 100%;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .slider--vertical .slider__value {
+  width: 100%;
   text-align: center;
 }

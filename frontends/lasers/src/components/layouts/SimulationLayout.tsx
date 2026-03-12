@@ -30,9 +30,13 @@ export function SimulationLayout({
       className={`simulation-layout ${hasControls ? 'simulation-layout-has-controls' : ''}`}
       data-has-controls={hasControls}
     >
-      <div className="simulation-layout-cell simulation-layout-canvas">{canvas}</div>
-      {hasControls && (
-        <div className="simulation-layout-cell simulation-layout-controls">{controls}</div>
+      {hasControls ? (
+        <div className="simulation-layout-cell simulation-layout-canvas-and-controls">
+          <div className="simulation-layout-canvas">{canvas}</div>
+          <div className="simulation-layout-controls">{controls}</div>
+        </div>
+      ) : (
+        <div className="simulation-layout-cell simulation-layout-canvas">{canvas}</div>
       )}
       <div className="simulation-layout-cell simulation-layout-buttons-caption">
         {buttons != null && <div className="simulation-layout-buttons">{buttons}</div>}

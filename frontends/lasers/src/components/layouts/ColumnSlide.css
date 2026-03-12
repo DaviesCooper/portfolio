@@ -12,6 +12,20 @@
   max-width: 34rem;
 }
 
+/* Give right column more width (e.g. for slides with command list). */
+.column-slide-narrow-left .column-slide-left {
+  max-width: 24rem;
+}
+
+/* This slide: left column only as wide as content (max 16rem), right takes the rest. */
+.column-slide-compact-left {
+  grid-template-columns: minmax(0, 16rem) 1fr;
+}
+
+.column-slide-compact-left .column-slide-left {
+  max-width: 16rem;
+}
+
 .column-slide-left p {
   margin: 0 0 1rem;
   line-height: 1.6;
@@ -37,14 +51,25 @@
   width: 100%;
 }
 
-@media (max-width: 768px) {
-  .column-slide {
+/* Mobile: single column, left column full width. Override all modifiers. */
+@media (max-width: 1399px) {
+  .column-slide,
+  .column-slide-compact-left,
+  .column-slide-narrow-left {
     grid-template-columns: 1fr;
     gap: 1.5rem;
+    width: 100%;
   }
 
-  .column-slide-left {
+  .column-slide-left,
+  .column-slide-narrow-left .column-slide-left,
+  .column-slide-compact-left .column-slide-left {
     max-width: none;
+    width: 100%;
+  }
+
+  .column-slide-right {
+    align-items: center;
   }
 
   .column-slide-right .burn-simulation-canvas,

@@ -6,7 +6,7 @@ import { BurnVariables } from '../../lib/burnVariables';
 import { applyBurn, cmdToGrid, drawCommandPath, drawGrid } from '../../lib/burn';
 
 // ---- Consts ----
-const GRID_RESOLUTION = 175;
+const GRID_RESOLUTION = 150;
 const MAX_VALUE = 1;
 /** Default canvas width/height in pixels when canvasSize prop is not provided. */
 const DEFAULT_CANVAS_SIZE = 512;
@@ -15,7 +15,10 @@ const BURN_COORD_MAX = 100;
 /** Default ms per command step and per segment when animationSpeedMs is not provided. */
 const DEFAULT_ANIMATION_SPEED_MS = 80;
 /** Substeps along the segment per frame so the trail has no gaps. */
-const PLAYBACK_SUBSTEPS_PER_FRAME = 8;
+const PLAYBACK_SUBSTEPS_PER_FRAME = 20;
+/** Min/max substeps when interpolating drag segments to avoid gaps. */
+const DRAG_INTERPOLATION_MIN = 2;
+const DRAG_INTERPOLATION_MAX = 48;
 /** Variables.radius is 0..1; scale to grid cells. */
 const RADIUS_TO_GRID = GRID_RESOLUTION / 20;
 
@@ -58,6 +61,41 @@ export function BurnVisualization(props: BurnVisualizationProps): JSX.Element {
   const [redrawTick, setRedrawTick] = useState(0);
   const [showPath, setShowPath] = useState(false);
 
+  /** Convert client coords to grid coords for the canvas. */
+  const clientToGrid = useCallback(
+    (clientX: number, clientY: number): { gx: number; gy: number } | null => {
+      const canvas = canvasRef.current;
+      if (!canvas) return null;
+      const rect = canvas.getBoundingClientRect();
+      const scale = canvasSize / rect.width;
+      const px = (clientX - rect.left) * scale;
+      const py = (clientY - rect.top) * scale;
+      return {
+        gx: (px / canvasSize) * GRID_RESOLUTION,
+        gy: (py / canvasSize) * GRID_RESOLUTION,
+      };
+    },
+    [canvasSize]
+  );
+
+  /** Apply burn at grid coords only (no redraw tick). */
+  const applyBurnAtGrid = useCallback(
+    (gx: number, gy: number) => {
+      const radiusGrid = Math.max(1, variables.radius * RADIUS_TO_GRID);
+      applyBurn(
+        gridRef.current,
+        gx,
+        gy,
+        radiusGrid,
+        variables.power * 0.02,
+        variables.radialFalloff,
+        MAX_VALUE,
+        GRID_RESOLUTION
+      );
+    },
+    [variables.radius, variables.power, variables.radialFalloff]
+  );
+
   const redrawCanvas = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -96,28 +134,10 @@ export function BurnVisualization(props: BurnVisualizationProps): JSX.Element {
 
   const applyAtPointer = useCallback(
     (clientX: number, clientY: number) => {
-      const canvas = canvasRef.current;
-      if (!canvas) return;
-      const rect = canvas.getBoundingClientRect();
-      const scale = canvasSize / rect.width;
-      const px = (clientX - rect.left) * scale;
-      const py = (clientY - rect.top) * scale;
-      const gx = (px / canvasSize) * GRID_RESOLUTION;
-      const gy = (py / canvasSize) * GRID_RESOLUTION;
-      const radiusGrid = Math.max(1, variables.radius * RADIUS_TO_GRID);
-      applyBurn(
-        gridRef.current,
-        gx,
-        gy,
-        radiusGrid,
-        variables.power * 0.02,
-        variables.radialFalloff,
-        MAX_VALUE,
-        GRID_RESOLUTION
-      );
-      setRedrawTick((n) => n + 1);
+      const g = clientToGrid(clientX, clientY);
+      if (g) applyBurnAtGrid(g.gx, g.gy);
     },
-    [variables.radius, variables.power, variables.radialFalloff, canvasSize]
+    [clientToGrid, applyBurnAtGrid]
   );
 
   const runHoldLoop = useCallback(() => {
@@ -128,6 +148,7 @@ export function BurnVisualization(props: BurnVisualizationProps): JSX.Element {
       }
       const pos = lastPointerRef.current;
       if (pos) applyAtPointer(pos.clientX, pos.clientY);
+      setRedrawTick((n) => n + 1);
       holdRafRef.current = requestAnimationFrame(loop);
     };
     holdRafRef.current = requestAnimationFrame(loop);
@@ -148,6 +169,7 @@ export function BurnVisualization(props: BurnVisualizationProps): JSX.Element {
       lastPointerRef.current = { clientX: e.clientX, clientY: e.clientY };
       (e.target as HTMLElement).setPointerCapture(e.pointerId);
       applyAtPointer(e.clientX, e.clientY);
+      setRedrawTick((n) => n + 1);
       runHoldLoop();
     },
     [applyAtPointer, runHoldLoop]
@@ -156,10 +178,30 @@ export function BurnVisualization(props: BurnVisualizationProps): JSX.Element {
   const handlePointerMove = useCallback(
     (e: React.PointerEvent) => {
       if (!isDrawingRef.current) return;
+      const prev = lastPointerRef.current;
       lastPointerRef.current = { clientX: e.clientX, clientY: e.clientY };
-      applyAtPointer(e.clientX, e.clientY);
+      const g1 = clientToGrid(e.clientX, e.clientY);
+      if (!g1) return;
+      if (prev) {
+        const g0 = clientToGrid(prev.clientX, prev.clientY);
+        if (g0) {
+          const dist = Math.hypot(g1.gx - g0.gx, g1.gy - g0.gy);
+          const steps = Math.min(
+            DRAG_INTERPOLATION_MAX,
+            Math.max(DRAG_INTERPOLATION_MIN, Math.ceil(dist))
+          );
+          for (let i = 1; i < steps; i++) {
+            const t = i / steps;
+            applyBurnAtGrid(
+              g0.gx + (g1.gx - g0.gx) * t,
+              g0.gy + (g1.gy - g0.gy) * t
+            );
+          }
+        }
+      }
+      applyBurnAtGrid(g1.gx, g1.gy);
     },
-    [applyAtPointer]
+    [clientToGrid, applyBurnAtGrid]
   );
 
   const handlePointerUp = useCallback((e: React.PointerEvent) => {
@@ -199,7 +241,7 @@ export function BurnVisualization(props: BurnVisualizationProps): JSX.Element {
       laserOnRef.current = true;
       laserPositionRef.current = lastPosRef.current != null ? { ...lastPosRef.current } : null;
       commandIndexRef.current = idx + 1;
-      tickTimeoutRef.current = setTimeout(runPlayback, animationSpeedMs);
+      tickTimeoutRef.current = setTimeout(runPlayback, 0);
       setRedrawTick((n) => n + 1);
       return;
     }
@@ -208,13 +250,21 @@ export function BurnVisualization(props: BurnVisualizationProps): JSX.Element {
       lastPosRef.current = null;
       laserPositionRef.current = null;
       commandIndexRef.current = idx + 1;
-      tickTimeoutRef.current = setTimeout(runPlayback, animationSpeedMs);
+      tickTimeoutRef.current = setTimeout(runPlayback, 0);
       setRedrawTick((n) => n + 1);
       return;
     }
     if (cmd.type === 'goto' && cmd.x != null && cmd.y != null) {
       const { gx: toGx, gy: toGy } = cmdToGrid(cmd.x, cmd.y, BURN_COORD_MAX, GRID_RESOLUTION);
       const last = lastPosRef.current;
+      const from = last ?? { gx: 0, gy: 0 };
+      const zeroLength = from.gx === toGx && from.gy === toGy;
+      if (zeroLength) {
+        lastPosRef.current = { gx: toGx, gy: toGy };
+        commandIndexRef.current = idx + 1;
+        tickTimeoutRef.current = setTimeout(runPlayback, 0);
+        return;
+      }
       if (last != null) {
         // Lerp from last to target over time using rAF
         segmentFromRef.current = last;

@@ -1,16 +1,6 @@
 import { useCallback, useState } from 'react';
 import './Slider.css';
-
-export interface HorizontalSliderProps {
-  label?: string;
-  minValue?: number;
-  maxValue?: number;
-  step?: number;
-  value?: number;
-  defaultValue?: number;
-  onChange?: (value: number) => void;
-  formatValue?: (value: number) => string;
-}
+import { SliderProps } from './Slider';
 
 export function HorizontalSlider({
   minValue = 0,
@@ -21,7 +11,7 @@ export function HorizontalSlider({
   label,
   onChange,
   formatValue,
-}: HorizontalSliderProps): JSX.Element {
+}: SliderProps): JSX.Element {
   const [uncontrolledValue, setUncontrolledValue] = useState<number>(
     () => defaultValue ?? minValue + (maxValue - minValue) / 2
   );

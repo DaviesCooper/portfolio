@@ -37,7 +37,10 @@
 }
 
 .command-list-drop-zone {
+  position: relative;
   min-height: 4rem;
+  min-width: 0;
+  overflow-x: hidden;
   border: 2px dashed var(--border);
   border-radius: 8px;
   background: var(--bg-card);
@@ -52,7 +55,7 @@
 .command-list-list {
   list-style: none;
   margin: 0;
-  padding: 0.5rem;
+  padding: 0.35rem 0.5rem 0.5rem 0.35rem;
   max-height: 16rem;
   overflow-y: auto;
   display: flex;
@@ -61,16 +64,17 @@
 }
 
 .command-list-drop-indicator {
-  list-style: none;
+  position: absolute;
+  left: 0.35rem;
+  right: 0.5rem;
   height: 4px;
-  min-height: 4px;
   padding: 0;
-  margin: 0.2rem 0;
+  margin: 0;
   border: none;
   border-radius: 2px;
   background: #22c55e;
   pointer-events: none;
-  flex-shrink: 0;
+  /* top set via inline style; positioned relative to .command-list-drop-zone */
 }
 
 .command-list-empty {
@@ -80,11 +84,17 @@
   color: var(--fg-muted);
 }
 
+/* Override .slide ul li from Slideshow.css; add a little left inset */
+.command-list-list .command-list-item {
+  padding-left: 0.4rem;
+  margin-bottom: 0;
+}
+
 .command-list-item {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.35rem 0.5rem;
+  padding: 0.35rem 0.5rem 0.35rem 0;
   background: var(--bg);
   border: 1px solid var(--border);
   border-radius: 6px;
@@ -101,18 +111,9 @@
   cursor: grabbing;
 }
 
-.command-list-item-index {
-  flex-shrink: 0;
-  min-width: 1.5em;
-  font-variant-numeric: tabular-nums;
-  color: var(--fg-muted);
-  font-size: 0.85rem;
-}
-
 .command-list-item-handle {
   flex-shrink: 0;
   font-size: 0.7rem;
-  letter-spacing: -0.05em;
   color: var(--fg-muted);
   cursor: grab;
   user-select: none;

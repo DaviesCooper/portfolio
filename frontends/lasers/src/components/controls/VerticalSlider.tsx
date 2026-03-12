@@ -1,16 +1,8 @@
 import { useCallback, useState } from 'react';
 import './Slider.css';
+import { SliderProps } from './Slider';
 
-export interface VerticalSliderProps {
-  label?: string;
-  minValue?: number;
-  maxValue?: number;
-  step?: number;
-  value?: number;
-  defaultValue?: number;
-  onChange?: (value: number) => void;
-  formatValue?: (value: number) => string;
-}
+
 
 export function VerticalSlider({
   minValue = 0,
@@ -21,7 +13,7 @@ export function VerticalSlider({
   label,
   onChange,
   formatValue,
-}: VerticalSliderProps): JSX.Element {
+}: SliderProps): JSX.Element {
   const [uncontrolledValue, setUncontrolledValue] = useState<number>(
     () => defaultValue ?? minValue + (maxValue - minValue) / 2
   );

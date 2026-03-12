@@ -96,19 +96,23 @@
   list-style: none;
 }
 
-.slide ul:not(.slide-outline):not(.slide-bullet-list) li,
-.slide ol li {
+.slide ul:not(.slide-outline):not(.slide-bullet-list):not(.command-list-list) li,
+.slide ol:not(.command-list-list) li {
   padding-left: 1.75rem;
   position: relative;
 }
 
-.slide ul:not(.slide-outline):not(.slide-bullet-list) li::marker,
-.slide ol li::marker {
+.slide ul:not(.slide-outline):not(.slide-bullet-list):not(.command-list-list) li::marker,
+.slide ol:not(.command-list-list) li::marker {
   color: var(--accent);
 }
 
 .slide li {
   margin-bottom: 0.75rem;
+}
+
+.slide .command-list-list li {
+  margin-bottom: 0;
 }
 
 .slide li:last-child {

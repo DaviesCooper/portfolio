@@ -23,11 +23,57 @@ function clamp(value: number, min: number, max: number): number {
   return Math.min(max, Math.max(min, value));
 }
 
+/** Compute the Y position (in list content coordinates) for the drop line at insertIndex. Same gap = same position. */
+function getDropLineTopPx(
+  list: HTMLUListElement | null,
+  insertIndex: number,
+  itemCount: number
+): number {
+  if (!list || itemCount === 0) return 0;
+  if (insertIndex === 0) return 0;
+  if (insertIndex >= itemCount) {
+    const last = list.children[itemCount - 1] as HTMLElement | undefined;
+    if (!last) return 0;
+    const listRect = list.getBoundingClientRect();
+    return last.getBoundingClientRect().bottom - listRect.top + list.scrollTop;
+  }
+  const child = list.children[insertIndex] as HTMLElement | undefined;
+  if (!child) return 0;
+  const listRect = list.getBoundingClientRect();
+  return child.getBoundingClientRect().top - listRect.top + list.scrollTop;
+}
+
+/** Compute insertion index from cursor Y when we're over the list but not necessarily over a list item (e.g. padding, gaps). */
+function getInsertIndexFromClientY(
+  list: HTMLUListElement | null,
+  clientY: number,
+  itemCount: number
+): number {
+  if (!list || itemCount === 0) return 0;
+  for (let i = 0; i < itemCount; i++) {
+    const child = list.children[i] as HTMLElement | undefined;
+    if (!child) continue;
+    const rect = child.getBoundingClientRect();
+    const mid = rect.top + rect.height / 2;
+    if (clientY < mid) return i;
+  }
+  return itemCount;
+}
+
 export function CommandList(props: CommandListProps): JSX.Element {
   const { value: controlledValue, defaultValue = [], onChange, 'aria-label': ariaLabel } = props;
   const [uncontrolledValue, setUncontrolledValue] = useState<Command[]>(() => defaultValue ?? []);
-  const [dropIndicatorIndex, setDropIndicatorIndex] = useState<number | null>(null);
+  const [dropIndicator, setDropIndicator] = useState<{ index: number; topPx: number } | null>(null);
+  /** When set, the user is editing this goto field; value is the raw string (allows empty for backspace). */
+  const [editingGoto, setEditingGoto] = useState<{
+    index: number;
+    field: 'x' | 'y';
+    value: string;
+  } | null>(null);
   const dropZoneRef = useRef<HTMLDivElement>(null);
+  const listRef = useRef<HTMLUListElement>(null);
+  /** Ref mirror of insertion index so drop handler uses the last drag-over position, not the drop target element. */
+  const dropIndexRef = useRef<number | null>(null);
   const isControlled = controlledValue !== undefined;
   const commands = isControlled ? controlledValue : uncontrolledValue;
 
@@ -60,7 +106,14 @@ export function CommandList(props: CommandListProps): JSX.Element {
         : 'move';
       const target = e.target as HTMLElement;
       if (!target.closest('.command-list-item')) {
-        setDropIndicatorIndex(commands.length === 0 ? 0 : commands.length);
+        const list = listRef.current;
+        const index =
+          commands.length === 0
+            ? 0
+            : getInsertIndexFromClientY(list, e.clientY, commands.length);
+        const topPx = getDropLineTopPx(list, index, commands.length);
+        dropIndexRef.current = index;
+        setDropIndicator({ index, topPx });
       }
     },
     [commands.length]
@@ -71,22 +124,31 @@ export function CommandList(props: CommandListProps): JSX.Element {
     e.dataTransfer.dropEffect = e.dataTransfer.types.includes('application/x-command-type')
       ? 'copy'
       : 'move';
-    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+    const itemEl = e.currentTarget as HTMLElement;
+    const list = listRef.current;
+    const rect = itemEl.getBoundingClientRect();
     const mid = rect.top + rect.height / 2;
-    setDropIndicatorIndex(e.clientY < mid ? index : index + 1);
-  }, []);
+    const insertIndex = e.clientY < mid ? index : index + 1;
+    const topPx = getDropLineTopPx(list, insertIndex, commands.length);
+    dropIndexRef.current = insertIndex;
+    setDropIndicator({ index: insertIndex, topPx });
+  }, [commands.length]);
 
   const handleDropZoneDragLeave = useCallback((e: React.DragEvent) => {
     const related = e.relatedTarget as Node | null;
     if (!dropZoneRef.current?.contains(related)) {
-      setDropIndicatorIndex(null);
+      dropIndexRef.current = null;
+      setDropIndicator(null);
     }
   }, []);
 
   const handleDrop = useCallback(
-    (e: React.DragEvent, dropIndex: number) => {
+    (e: React.DragEvent) => {
       e.preventDefault();
-      setDropIndicatorIndex(null);
+      const insertIndex = dropIndexRef.current ?? commands.length;
+      dropIndexRef.current = null;
+      setDropIndicator(null);
+
       const type = e.dataTransfer.getData('application/x-command-type');
       const fromIndexRaw = e.dataTransfer.getData('application/x-command-index');
 
@@ -95,7 +157,7 @@ export function CommandList(props: CommandListProps): JSX.Element {
           type === 'goto' ? { type: 'goto', x: 0, y: 0 } : { type: type as 'on' | 'off' };
         setCommands((prev) => {
           const out = [...prev];
-          out.splice(dropIndex, 0, newCmd);
+          out.splice(insertIndex, 0, newCmd);
           return out;
         });
         return;
@@ -107,7 +169,7 @@ export function CommandList(props: CommandListProps): JSX.Element {
         setCommands((prev) => {
           const out = [...prev];
           const [removed] = out.splice(fromIndex, 1);
-          const insertAt = fromIndex < dropIndex ? dropIndex - 1 : dropIndex;
+          const insertAt = fromIndex < insertIndex ? insertIndex - 1 : insertIndex;
           out.splice(insertAt, 0, removed);
           return out;
         });
@@ -145,6 +207,16 @@ export function CommandList(props: CommandListProps): JSX.Element {
     [commands, updateCommand]
   );
 
+  const commitGotoEdit = useCallback(
+    (index: number, field: 'x' | 'y', raw: string) => {
+      const num = clamp(parseInt(raw, 10) || 0, 0, 100);
+      if (field === 'x') updateGotoCoords(index, num, undefined);
+      else updateGotoCoords(index, undefined, num);
+      setEditingGoto(null);
+    },
+    [updateGotoCoords]
+  );
+
   return (
     <div className="command-list" role="group" aria-label={ariaLabel ?? 'Command list'}>
       <div className="command-list-palette" aria-label="Available commands">
@@ -166,39 +238,28 @@ export function CommandList(props: CommandListProps): JSX.Element {
         className="command-list-drop-zone"
         onDragOver={handleDropZoneDragOver}
         onDragLeave={handleDropZoneDragLeave}
-        onDrop={(e) => handleDrop(e, commands.length)}
+        onDrop={handleDrop}
         aria-label="Drop here to append"
       >
-        <ul className="command-list-list" aria-label="Ordered commands">
+        <ul ref={listRef} className="command-list-list" aria-label="Ordered commands">
           {commands.length === 0 ? (
-            <>
-              {dropIndicatorIndex === 0 && (
-                <li className="command-list-drop-indicator" aria-hidden />
-              )}
-              <li className="command-list-empty" aria-hidden onDragOver={handleDropZoneDragOver}>
-                Drag commands here
-              </li>
-            </>
+            <li className="command-list-empty" aria-hidden onDragOver={handleDropZoneDragOver}>
+              Drag commands here
+            </li>
           ) : (
             commands.map((cmd, index) => (
-              <React.Fragment key={`${cmd.type}-${index}-${cmd.x ?? ''}-${cmd.y ?? ''}`}>
-                {dropIndicatorIndex === index && (
-                  <li className="command-list-drop-indicator" aria-hidden />
-                )}
-                <li
-                  className="command-list-item"
-                  draggable
-                  onDragStart={(e) => handleDragStartItem(e, index)}
-                  onDragOver={(e) => handleItemDragOver(e, index)}
-                  onDrop={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    handleDrop(e, index);
-                  }}
-                >
-                <span className="command-list-item-index" aria-hidden>
-                  {index + 1}.
-                </span>
+              <li
+                key={index}
+                className="command-list-item"
+                draggable
+                onDragStart={(e) => handleDragStartItem(e, index)}
+                onDragOver={(e) => handleItemDragOver(e, index)}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  handleDrop(e);
+                }}
+              >
                 <span className="command-list-item-handle" aria-hidden title="Drag to reorder">
                   ⋮⋮
                 </span>
@@ -209,10 +270,24 @@ export function CommandList(props: CommandListProps): JSX.Element {
                       type="number"
                       min={0}
                       max={100}
-                      value={cmd.x ?? 0}
-                      onChange={(e) =>
-                        updateGotoCoords(index, clamp(Number(e.target.value) || 0, 0, 100), undefined)
+                      value={
+                        editingGoto?.index === index && editingGoto?.field === 'x'
+                          ? editingGoto.value
+                          : String(cmd.x ?? 0)
                       }
+                      onFocus={() =>
+                        setEditingGoto({ index, field: 'x', value: String(cmd.x ?? 0) })
+                      }
+                      onChange={(e) => {
+                        if (editingGoto?.index === index && editingGoto?.field === 'x') {
+                          setEditingGoto({ ...editingGoto, value: e.target.value });
+                        }
+                      }}
+                      onBlur={(e) => {
+                        if (editingGoto?.index === index && editingGoto?.field === 'x') {
+                          commitGotoEdit(index, 'x', e.target.value);
+                        }
+                      }}
                       className="command-list-goto-input"
                       aria-label="X (0–100)"
                     />
@@ -221,10 +296,24 @@ export function CommandList(props: CommandListProps): JSX.Element {
                       type="number"
                       min={0}
                       max={100}
-                      value={cmd.y ?? 0}
-                      onChange={(e) =>
-                        updateGotoCoords(index, undefined, clamp(Number(e.target.value) || 0, 0, 100))
+                      value={
+                        editingGoto?.index === index && editingGoto?.field === 'y'
+                          ? editingGoto.value
+                          : String(cmd.y ?? 0)
                       }
+                      onFocus={() =>
+                        setEditingGoto({ index, field: 'y', value: String(cmd.y ?? 0) })
+                      }
+                      onChange={(e) => {
+                        if (editingGoto?.index === index && editingGoto?.field === 'y') {
+                          setEditingGoto({ ...editingGoto, value: e.target.value });
+                        }
+                      }}
+                      onBlur={(e) => {
+                        if (editingGoto?.index === index && editingGoto?.field === 'y') {
+                          commitGotoEdit(index, 'y', e.target.value);
+                        }
+                      }}
                       className="command-list-goto-input"
                       aria-label="Y (0–100)"
                     />
@@ -243,13 +332,23 @@ export function CommandList(props: CommandListProps): JSX.Element {
                   ×
                 </button>
               </li>
-              </React.Fragment>
             ))
           )}
-          {commands.length > 0 && dropIndicatorIndex === commands.length && (
-            <li className="command-list-drop-indicator" aria-hidden />
-          )}
         </ul>
+        {dropIndicator !== null && (() => {
+          const list = listRef.current;
+          const topPx =
+            list != null
+              ? list.offsetTop + dropIndicator.topPx - list.scrollTop
+              : dropIndicator.topPx;
+          return (
+            <div
+              className="command-list-drop-indicator"
+              aria-hidden
+              style={{ top: topPx }}
+            />
+          );
+        })()}
       </div>
     </div>
   );
