@@ -71,23 +71,28 @@
 .simulation-layout-has-controls .simulation-layout-canvas-and-controls {
   grid-column: 1;
   grid-row: 1;
-  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  gap: 1rem;
   min-width: 0;
+  width: fit-content;
 }
 
-/* Canvas in flow so this cell's height = canvas height. Reserve space for controls on the right; align canvas right so it sits next to them. */
+/* Canvas: natural size (no margin hack); stays at 512px etc. Vertically centered when controls are present. */
 .simulation-layout-has-controls .simulation-layout-canvas-and-controls > .simulation-layout-canvas {
-  margin-right: 21rem; /* ~350px so controls don't overlap */
-  align-items: flex-end;
+  flex: 0 0 auto;
+  margin-right: 0;
+  align-items: center;
+  justify-content: center;
 }
 
-/* Controls: absolute so they don't affect row height; fill canvas height (top to bottom). */
+/* Controls: fixed width, capped height so they don't outgrow the canvas; list scrolls. */
 .simulation-layout-has-controls .simulation-layout-canvas-and-controls > .simulation-layout-controls {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: 0;
+  flex: 0 0 20rem;
+  position: static;
   width: 20rem;
+  max-height: 512px; /* match default canvas size so layout matches slides 5/6 */
   display: flex;
   flex-direction: row;
   align-items: stretch;
@@ -101,6 +106,11 @@
   align-self: stretch;
   position: relative;
   z-index: 1;
+}
+
+/* Pill toggle: fixed size, taller than wide; don’t stretch to canvas height */
+.simulation-layout-has-controls .simulation-layout-controls > .pill-toggle-wrap {
+  align-self: center;
 }
 .simulation-layout-has-controls .simulation-layout-controls > .command-list {
   flex: 1;
@@ -120,10 +130,11 @@
   flex-direction: column;
 }
 
+/* List fills drop zone so scrollbar reaches the dashed border; overflow scrolls. */
 .simulation-layout-has-controls .simulation-layout-controls > .command-list .command-list-list {
   flex: 1;
   min-height: 0;
-  max-height: none;
+  max-height: none; /* override CommandList.css 16rem so list fills drop zone */
   overflow-y: auto;
 }
 
@@ -139,9 +150,10 @@
   .simulation-layout-has-controls {
     grid-template-columns: 1fr;
     grid-template-rows: auto auto;
-    gap: 1rem;
-    width: fit-content;
+    gap: 0.5rem 1rem; /* tight row gap between controls and caption */
+    width: 100%;
     max-width: 100%;
+    justify-items: center; /* center canvas + controls and caption in the column */
   }
 
   .simulation-layout-has-controls .simulation-layout-canvas-and-controls {
@@ -149,6 +161,7 @@
     flex-direction: column;
     align-items: center;
     gap: 1rem;
+    width: fit-content; /* shrink-wrap so justify-items: center can center it */
   }
 
   .simulation-layout-has-controls .simulation-layout-canvas-and-controls > .simulation-layout-canvas {
@@ -159,7 +172,9 @@
   .simulation-layout-has-controls .simulation-layout-canvas-and-controls > .simulation-layout-controls {
     position: static;
     width: 100%;
+    flex: 0 0 auto; /* override desktop 0 0 20rem so height is content-sized, not 20rem */
     flex-direction: column;
+    align-items: center;
   }
 
   .simulation-layout-has-controls .simulation-layout-buttons-caption {
@@ -172,8 +187,18 @@
     min-height: 0;
   }
 
+  /* Mobile: center pill under the canvas */
+  .simulation-layout-has-controls .simulation-layout-controls > .pill-toggle-wrap {
+    align-self: center;
+  }
+
   .simulation-layout-has-controls .simulation-layout-controls > .command-list {
     flex: 0 1 auto;
     min-height: 0;
+    height: auto;
+  }
+
+  .simulation-layout-has-controls .simulation-layout-buttons-caption {
+    margin-top: -0.5rem; /* pull caption up toward controls */
   }
 }

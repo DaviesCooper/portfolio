@@ -1,7 +1,7 @@
 /* Dark theme (default) — slate + teal accent */
 :root,
 [data-theme="dark"] {
-  --bg: #0c1327;
+  --bg: #202738;
   --bg-card: #0f172a;
   --fg: #f1f5f9;
   --fg-muted: #94a3b8;
