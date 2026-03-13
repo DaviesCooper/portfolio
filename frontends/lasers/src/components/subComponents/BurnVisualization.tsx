@@ -6,7 +6,7 @@ import { BurnVariables } from '../../lib/burnVariables';
 import { applyBurn, cmdToGrid, drawCommandPath, drawGrid } from '../../lib/burn';
 
 // ---- Consts ----
-const GRID_RESOLUTION = 150;
+const GRID_RESOLUTION = 175;
 const MAX_VALUE = 1;
 /** Default canvas width/height in pixels when canvasSize prop is not provided. */
 const DEFAULT_CANVAS_SIZE = 512;

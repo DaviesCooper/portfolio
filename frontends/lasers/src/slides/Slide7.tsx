@@ -57,7 +57,7 @@ function Slide7(_props: SlideComponentProps): JSX.Element {
     />
   );
   const speedSliderProps = {
-    label: 'Laser speed',
+    label: 'Speed',
     minValue: 0,
     maxValue: 1,
     step: 0.05,
@@ -76,8 +76,6 @@ function Slide7(_props: SlideComponentProps): JSX.Element {
 
   return (
     <ColumnSlide
-      narrowLeft
-      className="column-slide-compact-left"
       left={
         <>
           <p>
