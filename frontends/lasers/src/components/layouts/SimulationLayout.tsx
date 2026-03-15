@@ -5,8 +5,6 @@ import './SimulationLayout.css';
 export interface SimulationLayoutProps {
   canvas: ReactNode;
   caption: ReactNode;
-  /** Play button (if any), reset button, etc. */
-  buttons: ReactNode;
   // A list of either sliders, or command lists.
   controls?: ReactNode;
 }
@@ -21,7 +19,6 @@ export type SimulationLayoutParts = SimulationLayoutProps;
 export function SimulationLayout({
   canvas,
   caption,
-  buttons,
   controls,
 }: SimulationLayoutProps): JSX.Element {
   const hasControls = controls != null;
@@ -39,7 +36,6 @@ export function SimulationLayout({
         <div className="simulation-layout-cell simulation-layout-canvas">{canvas}</div>
       )}
       <div className="simulation-layout-cell simulation-layout-buttons-caption">
-        {buttons != null && <div className="simulation-layout-buttons">{buttons}</div>}
         <div className="simulation-layout-caption">{caption}</div>
       </div>
     </div>

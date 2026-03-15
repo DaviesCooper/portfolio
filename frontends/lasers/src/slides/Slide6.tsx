@@ -86,7 +86,6 @@ function Slide6({ tool }: SlideComponentProps): JSX.Element {
         <SimulationLayout
           canvas={canvas}
           caption={<p>Drag to simulate a laser being used on a material.</p>}
-          buttons={null}
           controls={controls}
         />
       }

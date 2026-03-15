@@ -6,7 +6,7 @@ import { BurnVariables } from '../../lib/burnVariables';
 import { applyBurn, cmdToGrid, drawCommandPath, drawGrid } from '../../lib/burn';
 
 // ---- Consts ----
-const GRID_RESOLUTION = 175;
+const GRID_RESOLUTION = 200;
 const MAX_VALUE = 1;
 /** Default canvas width/height in pixels when canvasSize prop is not provided. */
 const DEFAULT_CANVAS_SIZE = 512;
@@ -14,8 +14,8 @@ const DEFAULT_CANVAS_SIZE = 512;
 const BURN_COORD_MAX = 100;
 /** Default ms per command step and per segment when animationSpeedMs is not provided. */
 const DEFAULT_ANIMATION_SPEED_MS = 80;
-/** Substeps along the segment per frame so the trail has no gaps. */
-const PLAYBACK_SUBSTEPS_PER_FRAME = 20;
+/** Substeps along the segment per frame so the trail has no gaps. Lower = less CPU when laser is on. */
+const PLAYBACK_SUBSTEPS_PER_FRAME = 30;
 /** Min/max substeps when interpolating drag segments to avoid gaps. */
 const DRAG_INTERPOLATION_MIN = 2;
 const DRAG_INTERPOLATION_MAX = 48;
@@ -50,6 +50,8 @@ export function BurnVisualization(props: BurnVisualizationProps): JSX.Element {
   const segmentStartTimeRef = useRef(0);
   const segmentFromRef = useRef<{ gx: number; gy: number } | null>(null);
   const segmentToRef = useRef<{ gx: number; gy: number } | null>(null);
+  /** Duration in ms for the current segment (derived from length so speed is constant). */
+  const segmentDurationMsRef = useRef(0);
   const segmentLastAppliedRef = useRef<{ gx: number; gy: number } | null>(null);
   const segmentCommandIdxRef = useRef(0);
   /** Current laser position in grid coords when playing; null when idle. Used to draw laser pointer. */
@@ -247,7 +249,7 @@ export function BurnVisualization(props: BurnVisualizationProps): JSX.Element {
     }
     if (cmd.type === 'off') {
       laserOnRef.current = false;
-      lastPosRef.current = null;
+      // Keep lastPosRef so the next goto animates from current position, not from (0,0)
       laserPositionRef.current = null;
       commandIndexRef.current = idx + 1;
       tickTimeoutRef.current = setTimeout(runPlayback, 0);
@@ -266,9 +268,12 @@ export function BurnVisualization(props: BurnVisualizationProps): JSX.Element {
         return;
       }
       if (last != null) {
-        // Lerp from last to target over time using rAF
+        // Lerp from last to target over time using rAF; duration by length so speed is constant
+        const segmentLengthGrid = Math.hypot(toGx - from.gx, toGy - from.gy);
+        const durationMs = Math.max(1, (segmentLengthGrid / GRID_RESOLUTION) * animationSpeedMs);
         segmentFromRef.current = last;
         segmentToRef.current = { gx: toGx, gy: toGy };
+        segmentDurationMsRef.current = durationMs;
         segmentStartTimeRef.current = performance.now();
         segmentLastAppliedRef.current = last;
         segmentCommandIdxRef.current = idx;
@@ -281,7 +286,8 @@ export function BurnVisualization(props: BurnVisualizationProps): JSX.Element {
           const from = segmentFromRef.current!;
           const to = segmentToRef.current!;
           const elapsed = performance.now() - segmentStartTimeRef.current;
-          const t = Math.min(elapsed / animationSpeedMs, 1);
+          const durationMs = segmentDurationMsRef.current;
+          const t = Math.min(elapsed / durationMs, 1);
           const gx = from.gx + (to.gx - from.gx) * t;
           const gy = from.gy + (to.gy - from.gy) * t;
           laserPositionRef.current = { gx, gy };
@@ -315,8 +321,11 @@ export function BurnVisualization(props: BurnVisualizationProps): JSX.Element {
       } else {
         // Laser starts at (0,0); animate from origin to first point without burning
         const start = { gx: 0, gy: 0 };
+        const segmentLengthGrid = Math.hypot(toGx - start.gx, toGy - start.gy);
+        const durationMs = Math.max(1, (segmentLengthGrid / GRID_RESOLUTION) * animationSpeedMs);
         segmentFromRef.current = start;
         segmentToRef.current = { gx: toGx, gy: toGy };
+        segmentDurationMsRef.current = durationMs;
         segmentStartTimeRef.current = performance.now();
         segmentLastAppliedRef.current = start;
         segmentCommandIdxRef.current = idx;
@@ -329,7 +338,8 @@ export function BurnVisualization(props: BurnVisualizationProps): JSX.Element {
           const from = segmentFromRef.current!;
           const to = segmentToRef.current!;
           const elapsed = performance.now() - segmentStartTimeRef.current;
-          const t = Math.min(elapsed / animationSpeedMs, 1);
+          const durationMs = segmentDurationMsRef.current;
+          const t = Math.min(elapsed / durationMs, 1);
           const gx = from.gx + (to.gx - from.gx) * t;
           const gy = from.gy + (to.gy - from.gy) * t;
           laserPositionRef.current = { gx, gy };

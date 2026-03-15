@@ -161,7 +161,7 @@
     flex-direction: column;
     align-items: center;
     gap: 1rem;
-    width: fit-content; /* shrink-wrap so justify-items: center can center it */
+    width: fit-content; /* width driven by canvas so controls match canvas width */
   }
 
   .simulation-layout-has-controls .simulation-layout-canvas-and-controls > .simulation-layout-canvas {
@@ -174,7 +174,7 @@
     width: 100%;
     flex: 0 0 auto; /* override desktop 0 0 20rem so height is content-sized, not 20rem */
     flex-direction: column;
-    align-items: center;
+    align-items: stretch; /* full-width sliders; center would size them by content so only first looks full width */
   }
 
   .simulation-layout-has-controls .simulation-layout-buttons-caption {

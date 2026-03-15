@@ -34,6 +34,16 @@
   gap: 0.75rem;
 }
 
+.slider__track-hit-area {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+}
+
+.slider__hit-area-overlay {
+  display: none; /* only show and use on touch viewports */
+}
+
 .slider__input {
   flex: 1;
   min-width: 0;
@@ -140,4 +150,24 @@
 .slider--vertical .slider__value {
   width: 100%;
   text-align: center;
+}
+
+/* Invisible larger tap target on touch/narrow viewports; track stays 6px */
+@media (max-width: 999px), (hover: none) and (pointer: coarse) {
+  .slider--horizontal .slider__track-hit-area {
+    position: relative;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .slider--horizontal .slider__track-hit-area .slider__hit-area-overlay {
+    display: block;
+    position: absolute;
+    inset: 0;
+    cursor: pointer;
+    z-index: 1;
+  }
 }

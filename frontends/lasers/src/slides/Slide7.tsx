@@ -92,7 +92,6 @@ function Slide7(_props: SlideComponentProps): JSX.Element {
         <SimulationLayout
           canvas={canvas}
           caption={<p>Drag commands into the list, then play to run the path.</p>}
-          buttons={null}
           controls={controls}
         />
       }
