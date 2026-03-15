@@ -57,9 +57,28 @@
 .column-slide-right .burn-simulation-canvas,
 .column-slide-right .gcode-path-sim-canvas-wrap,
 .column-slide-right .resolution-limit-sim-canvas-wrap,
-.column-slide-right .kerf-sim-svg-wrap {
+.column-slide-right .kerf-sim-svg-wrap,
+.column-slide-right .column-slide-video-wrap {
   max-width: 100%;
   width: 100%;
+}
+
+/* Video in right column: same slot size as canvas (e.g. 512px). */
+.column-slide-video-wrap {
+  min-height: 512px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-subtle, #111);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.column-slide-video-wrap video {
+  width: 100%;
+  height: 100%;
+  max-height: 512px;
+  object-fit: contain;
 }
 
 /* Mobile: single column, left column full width. Override all modifiers. */
@@ -86,8 +105,17 @@
   .column-slide-right .burn-simulation-canvas,
   .column-slide-right .gcode-path-sim-canvas-wrap,
   .column-slide-right .resolution-limit-sim-canvas-wrap,
-  .column-slide-right .kerf-sim-svg-wrap {
+  .column-slide-right .kerf-sim-svg-wrap,
+  .column-slide-right .column-slide-video-wrap {
     max-width: none;
+  }
+
+  .column-slide-video-wrap {
+    min-height: 320px;
+  }
+
+  .column-slide-video-wrap video {
+    max-height: 320px;
   }
 
   .column-slide-left .sigmoid-graph {
