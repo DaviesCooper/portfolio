@@ -1,13 +1,8 @@
 import type { SlideComponentProps } from '../lib';
 import { ColumnSlide } from '../components/layouts/ColumnSlide';
 import { defineSlide } from './defineSlide';
-import { useLaserTool } from '../context/LaserToolContext';
 
-function Slide10(_props: SlideComponentProps): JSX.Element {
-
-  const {tool} = useLaserTool();
-
-  const toolName = tool === 'xtool' ? 'XTool' : tool === 'trotec' ? 'Trotec' : 'Thunder';
+function Slide10_2(_props: SlideComponentProps): JSX.Element {
   return (
     <ColumnSlide
       left={
@@ -18,12 +13,6 @@ function Slide10(_props: SlideComponentProps): JSX.Element {
           want to use as little oxygen as possible in order to increase the precision of the
           engraving. If we supply too much oxygen the engraving will &quot;blur&quot; as the
           burning spreads more than is intended.
-          {(tool === 'xtool' || tool === 'trotec') && (
-            <p>
-              The {toolName} automatically sets its own ait-assist based on the sattings you use.
-            </p>
-          )}
-
         </p>
       }
       right={
@@ -33,7 +22,7 @@ function Slide10(_props: SlideComponentProps): JSX.Element {
   );
 }
 
-export default defineSlide(Slide10, {
-  id: 'principles-controls-air-assist',
+export default defineSlide(Slide10_2, {
+  id: 'principles-controls-dithering',
   title: 'Principles of Laser CNC Machines',
 });

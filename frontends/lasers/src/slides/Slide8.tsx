@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import type { SlideComponentProps } from '../lib';
 import type { Command } from '../lib/command';
 import { ColumnSlide } from '../components/layouts/ColumnSlide';
@@ -9,7 +9,7 @@ import { Gradient } from '../lib/gradient';
 import { defineSlide } from './defineSlide';
 import { BurnVariables } from '../lib/burnVariables';
 
-const defaultVariables: BurnVariables = { power: 4, radius: .2, radialFalloff: 4 };
+const defaultVariables: BurnVariables = { power: 5, radius: .2, radialFalloff: 4 };
 
 /** Star vertices from Slide7 (same polygon), in path order. */
 const STAR_VERTICES: [number, number][] = [
@@ -82,6 +82,9 @@ const generateCommandsFromCoords = (resolution: number): Command[] => {
 };
 
 
+
+
+
 const ANIMATION_SPEED_MIN_MS = 160;
 const ANIMATION_SPEED_MAX_MS = 8000;
 /** Slider 0–1 mapped exponentially so high speeds don’t spike: 0 = slow (8s), 1 = fast but watchable (80ms per full width). */
@@ -91,7 +94,7 @@ const normalizedFromMs = (ms: number) =>
   1 - Math.log(ms / ANIMATION_SPEED_MIN_MS) / Math.log(ANIMATION_SPEED_MAX_MS / ANIMATION_SPEED_MIN_MS);
 
 function Slide8(_props: SlideComponentProps): JSX.Element {
-  const [animationSpeedMs, setAnimationSpeedMs] = useState(4000);
+  const [animationSpeedMs, setAnimationSpeedMs] = useState(1110);
   const [power, setPower] = useState(defaultVariables.power);
 
   const commands = useMemo(() => generateCommandsFromCoords(50), []);
