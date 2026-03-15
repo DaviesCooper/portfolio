@@ -112,6 +112,12 @@
 .simulation-layout-has-controls .simulation-layout-controls > .pill-toggle-wrap {
   align-self: center;
 }
+
+/* Square tri-select (e.g. slide 10_d3): 2×2 grid centered vertically in controls column */
+.simulation-layout-has-controls .simulation-layout-controls > .tri-select--square {
+  align-self: center;
+}
+
 .simulation-layout-has-controls .simulation-layout-controls > .command-list {
   flex: 1;
   min-width: 0;
@@ -159,9 +165,10 @@
   .simulation-layout-has-controls .simulation-layout-canvas-and-controls {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: stretch; /* full width so canvas is width of screen */
     gap: 1rem;
-    width: fit-content; /* width driven by canvas so controls match canvas width */
+    width: 100%;
+    max-width: 100%;
   }
 
   .simulation-layout-has-controls .simulation-layout-canvas-and-controls > .simulation-layout-canvas {

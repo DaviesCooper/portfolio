@@ -1,8 +1,8 @@
 import type { ReactNode } from 'react';
-import type { LaserTool, SlideComponent, SlideComponentProps } from '../lib';
+import type { LaserTool, SlideComponent } from '../lib';
 
 export function defineSlide(
-  Component: React.ComponentType<SlideComponentProps>,
+  Component: React.ComponentType,
   meta: {
     id: string;
     title?: ReactNode;

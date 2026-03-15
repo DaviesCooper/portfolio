@@ -1,11 +1,60 @@
-import type { SlideComponentProps } from '../lib';
+import { useMemo, useState } from 'react';
 import { ColumnSlide } from '../components/layouts/ColumnSlide';
-import { defineSlide } from './defineSlide';
+import { SimulationLayout } from '../components/layouts/SimulationLayout';
+import { BurnVisualization } from '../components/subComponents/BurnVisualization';
+import { Slider } from '../components/controls/Slider';
+ import { defineSlide } from './defineSlide';
+import { BurnVariables } from '../lib/burnVariables';
 import { useLaserTool } from '../context/LaserToolContext';
+import { woodGradient } from '../lib/consts';
 
-function Slide10(_props: SlideComponentProps): JSX.Element {
+const defaultVariables: BurnVariables = { power: 5, radius: .2, radialFalloff: 8 };
 
-  const {tool} = useLaserTool();
+function Slide10(): JSX.Element {
+  const { tool} = useLaserTool();
+  const [power, setPower] = useState(defaultVariables.power);
+  const [radius, setRadius] = useState(defaultVariables.radius);
+
+  const variables = useMemo(
+    () => ({ ...defaultVariables, power, radius }),
+    [power, radius]
+  );
+
+  const canvas = (
+    <BurnVisualization
+      variables={variables}
+      colorPalette={woodGradient}
+    />
+  );
+
+  const airAssistSliderProps = {
+    label: 'Air',
+    minValue: 0,
+    maxValue: 1,
+    step: 0.05,
+    value: radius - 0.2,
+    onChange: (n: number) => setRadius(n + 0.2),
+    formatValue: (v: number) => v.toFixed(2),
+    'aria-label': 'Air assist radius',
+  };
+
+  const powerSliderProps = {
+    label: 'Power',
+    minValue: 0,
+    maxValue: 1,
+    step: 0.05,
+    value: power / 10,
+    onChange: (n: number) => setPower(n * 10),
+    formatValue: (v: number) => v.toFixed(2),
+    'aria-label': 'Laser power',
+  };
+
+  const controls = (
+    <>
+      <Slider {...powerSliderProps} />
+      <Slider {...airAssistSliderProps} />
+    </>
+  );
 
   const toolName = tool === 'xtool' ? 'XTool' : tool === 'trotec' ? 'Trotec' : 'Thunder';
   return (
@@ -27,7 +76,11 @@ function Slide10(_props: SlideComponentProps): JSX.Element {
         </p>
       }
       right={
-        <p>(Air assist simulation placeholder)</p>
+        <SimulationLayout
+          canvas={canvas}
+          caption={<p>Change the amount of air assist to see the effect on the image.</p>}
+          controls={controls}
+        />
       }
     />
   );

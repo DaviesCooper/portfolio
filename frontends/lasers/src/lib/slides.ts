@@ -6,13 +6,8 @@ export type LaserTool = 'xtool' | 'trotec' | 'thunder';
 /** Opaque id for a slide; use for keys and DOM id. */
 export type SlideId = string;
 
-/** Props passed to each slide component. */
-export interface SlideComponentProps {
-  readonly tool: LaserTool;
-}
-
 /** A slide is a component with attached metadata. The slides list is just an array of these. */
-export type SlideComponent = React.ComponentType<SlideComponentProps> & {
+export type SlideComponent = React.ComponentType & {
   id: SlideId;
   title?: ReactNode;
   subtitle?: ReactNode;

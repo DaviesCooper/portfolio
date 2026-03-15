@@ -1,9 +1,8 @@
-import type { SlideComponentProps } from '../lib';
 import { ColumnSlide } from '../components/layouts/ColumnSlide';
 import { defineSlide } from './defineSlide';
 import './Slide3.css';
 
-function Slide3(_props: SlideComponentProps): JSX.Element {
+function Slide3(): JSX.Element {
   return (
     <ColumnSlide
       left={

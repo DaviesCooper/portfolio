@@ -1,23 +1,21 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
-import { useLaserTool } from '../context/LaserToolContext';
-import type { SimulationLayoutParts } from './layouts/SimulationLayout';
-// import { PowerSlider } from './controls/PowerSlider';
 import './KerfSimulation.css';
+
+/** Match other simulation canvases (BurnVisualization, DitheringVisualization). */
+export const KERF_CANVAS_SIZE = 512;
 
 const SVG_WIDTH = 320;
 const SVG_HEIGHT = 260;
-const MAT_TOP = 120;
-const MAT_BOTTOM = 210;
+const MAT_TOP = 180;
+const MAT_BOTTOM = 230;
 const MAT_LEFT = 0;
 const MAT_RIGHT = SVG_WIDTH;
 const HEAD_MIN_Y = 18;
-const HEAD_MAX_Y = 115;
+const HEAD_MAX_Y = 160;
 const HEAD_MIN_X = 15;
 const HEAD_MAX_X = 300;
 /** When XTool (galvo): head is fixed near top of canvas */
 const XTOOL_HEAD_Y = 28;
-const FOCAL_LENGTH_MIN = 25;
-const FOCAL_LENGTH_MAX = 250;
 /** Beam half-angle scale: tan(halfAngle) ≈ BEAM_RADIUS_AT_LENS / focalLength (larger = wider beam at head) */
 const BEAM_RADIUS_AT_LENS = 10;
 
@@ -82,20 +80,43 @@ function kerfInMaterial(
   };
 }
 
-export interface KerfSimulationProps {
-  /** Render prop: receives layout parts; parent composes SimulationLayout. */
-  children: (parts: SimulationLayoutParts) => React.ReactNode;
+export const FOCAL_LENGTH_MIN = 25;
+export const FOCAL_LENGTH_MAX = 150;
+
+/** Focus label for caption from same inputs as the simulation. */
+export function getKerfFocusLabel(
+  headX: number,
+  headY: number,
+  focalLengthNorm: number,
+  beamAngleDeg: number,
+  isXTool: boolean
+): string {
+  const focalLength =
+    FOCAL_LENGTH_MIN +
+    (FOCAL_LENGTH_MAX - FOCAL_LENGTH_MIN) * (focalLengthNorm / 100);
+  const beamAngleRad = (beamAngleDeg * Math.PI) / 180;
+  const effectiveHeadY = isXTool ? XTOOL_HEAD_Y : headY;
+  const { fy } = getFocal(headX, effectiveHeadY, focalLength, beamAngleRad);
+  return fy <= MAT_TOP ? 'Surface-focused' : fy >= MAT_BOTTOM ? 'Bottom-focused' : 'Center-focused';
 }
 
-export function KerfSimulation({ children }: KerfSimulationProps): JSX.Element {
-  const { tool } = useLaserTool();
-  const isXTool = tool === 'xtool';
+export interface KerfSimulationProps {
+  headX: number;
+  headY: number;
+  focalLengthNorm: number; // 0–100
+  beamAngleDeg: number; // XTool: degrees, -30 to 30
+  isXTool: boolean;
+  onHeadChange?: (x: number, y: number) => void;
+}
 
-  const [headX, setHeadX] = useState(160);
-  const [headY, setHeadY] = useState(75);
-  const [focalLengthNorm, setFocalLengthNorm] = useState(50); // 0–100
-  const [beamAngleDeg, setBeamAngleDeg] = useState(0); // XTool: degrees, -30 to 30
-
+export function KerfSimulation({
+  headX,
+  headY,
+  focalLengthNorm,
+  beamAngleDeg,
+  isXTool,
+  onHeadChange,
+}: KerfSimulationProps): JSX.Element {
   const [isDragging, setIsDragging] = useState(false);
   const dragStartRef = useRef({ x: 0, y: 0, headX: 0, headY: 0 });
   const svgRef = useRef<SVGSVGElement>(null);
@@ -108,6 +129,11 @@ export function KerfSimulation({ children }: KerfSimulationProps): JSX.Element {
   const effectiveHeadX = headX;
   const effectiveHeadY = isXTool ? XTOOL_HEAD_Y : headY;
   const { fx, fy } = getFocal(effectiveHeadX, effectiveHeadY, focalLength, beamAngleRad);
+
+  const setHead = useCallback(
+    (x: number, y: number) => onHeadChange?.(x, y),
+    [onHeadChange]
+  );
 
   const kerf = useMemo(
     () => kerfInMaterial(fx, fy, beamAngleRad, theta),
@@ -162,15 +188,13 @@ export function KerfSimulation({ children }: KerfSimulationProps): JSX.Element {
         const dyScreen = e.clientY - dragStartRef.current.y;
         const dxSvg = dxScreen * scaleX;
         const dySvg = dyScreen * scaleY;
-        setHeadX(
-          Math.max(HEAD_MIN_X, Math.min(HEAD_MAX_X, dragStartRef.current.headX + dxSvg))
-        );
-        setHeadY(
+        setHead(
+          Math.max(HEAD_MIN_X, Math.min(HEAD_MAX_X, dragStartRef.current.headX + dxSvg)),
           Math.max(HEAD_MIN_Y, Math.min(HEAD_MAX_Y, dragStartRef.current.headY + dySvg))
         );
       }
     },
-    [isXTool, isDragging]
+    [isXTool, isDragging, setHead]
   );
 
   const handlePointerUp = useCallback(
@@ -182,10 +206,7 @@ export function KerfSimulation({ children }: KerfSimulationProps): JSX.Element {
     []
   );
 
-  const focusLabel =
-    fy <= MAT_TOP ? 'Surface-focused' : fy >= MAT_BOTTOM ? 'Bottom-focused' : 'Center-focused';
-
-  const canvas = (
+  return (
     <div className="kerf-sim-svg-wrap">
       <svg
         ref={svgRef}
@@ -255,53 +276,6 @@ export function KerfSimulation({ children }: KerfSimulationProps): JSX.Element {
           <circle r="10" fill="var(--bg-card)" stroke="var(--accent)" strokeWidth="2" />
         </g>
       </svg>
-    </div>
-  );
-  const controls = (
-    <div className="kerf-sim-controls">
-      <div className="kerf-sim-control">
-        <span className="kerf-sim-control-label">Focal length</span>
-        {/* <PowerSlider value={focalLengthNorm} onChange={setFocalLengthNorm} aria-label="Focal length" /> */}
-        <input
-          type="range"
-          min={0}
-          max={100}
-          value={focalLengthNorm}
-          onChange={(e) => setFocalLengthNorm(Number(e.target.value))}
-          aria-label="Focal length"
-        />
-        <span>{focalLengthNorm}</span>
-      </div>
-      {isXTool && (
-        <div className="kerf-sim-control">
-          <span className="kerf-sim-control-label">Beam angle (galvo)</span>
-          <div className="power-slider-wrap">
-            <input
-              type="range"
-              min={-30}
-              max={30}
-              value={beamAngleDeg}
-              onChange={(e) => setBeamAngleDeg(Number(e.target.value))}
-              className="power-slider-input kerf-sim-angle-slider"
-              aria-label="Beam angle"
-            />
-            <span className="power-slider-value kerf-sim-angle-value">{beamAngleDeg}°</span>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-  const caption = (
-    <p className="kerf-sim-caption">Max width in material · {focusLabel}</p>
-  );
-  return (
-    <div className="kerf-sim">
-      {children({
-        canvas,
-        caption,
-        buttons: null,
-        controls,
-      })}
     </div>
   );
 }
