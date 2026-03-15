@@ -10,7 +10,7 @@ import { defineSlide } from './defineSlide';
 import { BurnVariables } from '../lib/burnVariables';
 import { useLaserTool } from '../context/LaserToolContext';
 
-const defaultVariables: BurnVariables = { power: 4, radius: .2, radialFalloff: 4 };
+const defaultVariables: BurnVariables = { power: 5, radius: .2, radialFalloff: 4 };
 
 /** Star vertices from Slide7 (same polygon), in path order. */
 const STAR_VERTICES: [number, number][] = [
@@ -91,10 +91,15 @@ const msFromNormalized = (n: number) =>
 const normalizedFromMs = (ms: number) =>
   1 - Math.log(ms / ANIMATION_SPEED_MIN_MS) / Math.log(ANIMATION_SPEED_MAX_MS / ANIMATION_SPEED_MIN_MS);
 
+
+
+
+
+
 function Slide9(_props: SlideComponentProps): JSX.Element {
-  const [animationSpeedMs, setAnimationSpeedMs] = useState(4000);
+  const [animationSpeedMs, setAnimationSpeedMs] = useState(1110);
   const [power, setPower] = useState(defaultVariables.power);
-  const [resolution, setResolution] = useState(25);
+  const [resolution, setResolution] = useState(60);
   const [commands, setCommands] = useState<Command[]>(generateCommandsFromCoords(resolution));
   const { tool} = useLaserTool();
 
