@@ -1,10 +1,12 @@
-import type { SlideComponentProps } from '../lib';
 import { ColumnSlide } from '../components/layouts/ColumnSlide';
 import { defineSlide } from './defineSlide';
 import './Slide4.css';
+import { useLaserTool } from '../context/LaserToolContext';
 
-function Slide4({ tool }: SlideComponentProps): JSX.Element {
+function Slide4(): JSX.Element {
+  const tool = useLaserTool().tool;
   const toolLabel = tool === 'xtool' ? 'XTool' : tool === 'trotec' ? 'Trotec' : 'Thunder';
+  
   return (
     <ColumnSlide
       left={

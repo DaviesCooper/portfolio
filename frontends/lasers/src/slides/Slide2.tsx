@@ -1,4 +1,4 @@
-import type { LaserTool, SlideComponentProps } from '../lib';
+import type { LaserTool } from '../lib';
 import { useLaserTool } from '../context/LaserToolContext';
 import { TriSelect, type TriSelectIndex } from '../components/controls/TriSelect';
 import { defineSlide } from './defineSlide';
@@ -10,7 +10,7 @@ function toolToIndex(tool: LaserTool): TriSelectIndex {
   return (i >= 0 ? i : 0) as TriSelectIndex;
 }
 
-function Slide2(_props: SlideComponentProps): JSX.Element {
+function Slide2(): JSX.Element {
   const { tool, setTool } = useLaserTool();
   const index = toolToIndex(tool);
 

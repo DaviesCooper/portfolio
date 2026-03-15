@@ -1,0 +1,18 @@
+.dithering-visualization-wrap {
+  display: inline-block;
+  line-height: 0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.dithering-visualization-canvas {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  min-width: 512px;
+  min-height: 512px;
+  border-radius: 8px;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}

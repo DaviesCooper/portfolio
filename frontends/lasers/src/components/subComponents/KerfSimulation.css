@@ -1,0 +1,66 @@
+/* CSS custom properties scoped to the canvas wrap (same as other simulation canvases) */
+.kerf-sim-svg-wrap {
+  --kerf-mat-top: #b45309;
+  --kerf-mat-bottom: #92400e;
+  --kerf-beam: #dc2626;
+}
+
+[data-theme="light"] .kerf-sim-svg-wrap {
+  --kerf-mat-top: #d97706;
+  --kerf-mat-bottom: #b45309;
+  --kerf-beam: #b91c1c;
+}
+
+/* Same height as burn canvas (512px); width from SVG aspect ratio 320/260 */
+.kerf-sim-svg-wrap {
+  position: relative;
+  display: inline-block;
+  line-height: 0;
+  width: calc(512px * 320 / 260);
+  height: 512px;
+  max-width: min(100%, 100vw);
+  box-sizing: border-box;
+}
+
+.kerf-sim-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  touch-action: none;
+}
+
+.kerf-sim-value-text {
+  font-size: 14px;
+  font-family: var(--font-sans);
+  fill: var(--fg-muted);
+}
+
+/* Laser head: draggable for gantry, fixed for XTool */
+.kerf-head.draggable {
+  cursor: grab;
+}
+
+.kerf-head.draggable:focus {
+  outline: none;
+}
+
+.kerf-head.draggable.dragging {
+  cursor: grabbing;
+}
+
+.kerf-head.fixed {
+  cursor: default;
+}
+
+/* On mobile: canvas is full width of screen */
+@media (max-width: 999px) {
+  .kerf-sim-svg-wrap {
+    width: 100%;
+    max-width: 100vw;
+    height: auto;
+    aspect-ratio: 320 / 260;
+  }
+}

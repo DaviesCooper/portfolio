@@ -10,6 +10,7 @@ import Slide8 from './Slide8';
 import Slide9 from './Slide9';
 import Slide10 from './Slide10';
 import Slide10_2 from './Slide10d2';
+import Slide10_3 from './Slide10d3';  
 import Slide11 from './Slide11';
 import Slide12 from './Slide12';
 import Slide13 from './Slide13';
@@ -26,6 +27,7 @@ export { default as Slide8 } from './Slide8';
 export { default as Slide9 } from './Slide9';
 export { default as Slide10 } from './Slide10';
 export { default as Slide10_2 } from './Slide10d2';
+export { default as Slide10_3 } from './Slide10d3';
 export { default as Slide11 } from './Slide11';
 export { default as Slide12 } from './Slide12';
 export { default as Slide13 } from './Slide13';
@@ -44,6 +46,7 @@ export const slides = [
   Slide9,
   Slide10,
   Slide10_2,
+  Slide10_3,
   Slide11,
   Slide12,
   Slide13,

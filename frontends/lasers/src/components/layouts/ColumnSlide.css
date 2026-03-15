@@ -36,6 +36,17 @@
   margin-bottom: 0;
 }
 
+.column-slide-left .sigmoid-graph {
+  margin-top: 1.25rem;
+  max-width: 100%;
+}
+
+.column-slide-left .sigmoid-graph-svg {
+  display: block;
+  max-width: 18rem;
+  height: auto;
+}
+
 .column-slide-right {
   display: flex;
   flex-direction: column;
@@ -77,5 +88,12 @@
   .column-slide-right .resolution-limit-sim-canvas-wrap,
   .column-slide-right .kerf-sim-svg-wrap {
     max-width: none;
+  }
+
+  .column-slide-left .sigmoid-graph {
+    width: fit-content;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
   }
 }
