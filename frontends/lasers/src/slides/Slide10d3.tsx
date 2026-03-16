@@ -9,7 +9,7 @@ import { defineSlide } from './defineSlide';
 const CANVAS_SIZE = 512;
 
 /** Image in public folder for the dithering demo. */
-const DITHER_IMAGE_PATH = '/dither-sample.png';
+const DITHER_IMAGE_PATH = `${import.meta.env.BASE_URL}eric.jpeg`;
 
 /** Create 512×512 ImageData: white canvas with RGB gradient (used when no image is loaded). */
 function createGradientImageData(): ImageData {

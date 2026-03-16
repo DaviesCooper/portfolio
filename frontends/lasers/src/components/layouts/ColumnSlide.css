@@ -57,28 +57,92 @@
 .column-slide-right .burn-simulation-canvas,
 .column-slide-right .gcode-path-sim-canvas-wrap,
 .column-slide-right .resolution-limit-sim-canvas-wrap,
-.column-slide-right .kerf-sim-svg-wrap,
-.column-slide-right .column-slide-video-wrap {
+.column-slide-right .kerf-sim-svg-wrap {
   max-width: 100%;
   width: 100%;
 }
 
-/* Video in right column: same slot size as canvas (e.g. 512px). */
-.column-slide-video-wrap {
-  min-height: 512px;
+.column-slide-right .column-slide-video-wrap {
+  max-width: 100%;
+  width: fit-content;
+}
+
+.column-slide-right .column-slide-media-viewer {
+  width: 100%;
+  height: 512px;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Video wrap: size to the video's intrinsic dimensions. */
+.column-slide-video-wrap {
+  display: block;
   background: var(--bg-subtle, #111);
   border-radius: 0.5rem;
   overflow: hidden;
 }
 
-.column-slide-video-wrap video {
+.column-slide-video-wrap video,
+.column-slide-video-wrap img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  vertical-align: top;
+}
+
+/* Media viewer: one media at a time with dot indicators (match .nav-dots / .nav-dot). */
+.column-slide-media-viewer-content {
+  flex: 1;
+  min-height: 0;
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+}
+
+.column-slide-media-viewer-content img,
+.column-slide-media-viewer-content video {
   width: 100%;
   height: 100%;
-  max-height: 512px;
   object-fit: contain;
+  object-position: center;
+  display: block;
+  vertical-align: top;
+}
+
+.column-slide-media-dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}
+
+.column-slide-media-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  border: none;
+  padding: 0;
+  background: var(--border);
+  cursor: pointer;
+  transition: background 0.15s, transform 0.15s;
+}
+
+.column-slide-media-dot:hover {
+  background: var(--fg-muted);
+}
+
+.column-slide-media-dot[aria-selected="true"] {
+  background: var(--accent);
+  transform: scale(1.2);
+}
+
+.column-slide-media-dot:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 /* Mobile: single column, left column full width. Override all modifiers. */
@@ -105,17 +169,12 @@
   .column-slide-right .burn-simulation-canvas,
   .column-slide-right .gcode-path-sim-canvas-wrap,
   .column-slide-right .resolution-limit-sim-canvas-wrap,
-  .column-slide-right .kerf-sim-svg-wrap,
-  .column-slide-right .column-slide-video-wrap {
+  .column-slide-right .kerf-sim-svg-wrap {
     max-width: none;
   }
 
-  .column-slide-video-wrap {
-    min-height: 320px;
-  }
-
-  .column-slide-video-wrap video {
-    max-height: 320px;
+  .column-slide-right .column-slide-media-viewer {
+    height: 320px;
   }
 
   .column-slide-left .sigmoid-graph {
