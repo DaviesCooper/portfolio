@@ -60,20 +60,21 @@ function Slide10(): JSX.Element {
   return (
     <ColumnSlide
       left={
-        <p>
-          Fire consumes oxygen to burn. The more oxygen we use while the laser is burning, the
-          stringer the burning effect will be. When cutting through material, we want to use as much
-          oxygen as possible in order to increase the effectiveness of the laser. When engraving, we
-          want to use as little oxygen as possible in order to increase the precision of the
-          engraving. If we supply too much oxygen the engraving will &quot;blur&quot; as the
-          burning spreads more than is intended.
+        <>
+          <p>
+            Fire consumes oxygen to burn. The more oxygen we use while the laser is burning, the
+            stronger the burning effect will be. When cutting through material, we want to use as much
+            oxygen as possible in order to increase the effectiveness of the laser. When engraving, we
+            want to use as little oxygen as possible in order to increase the precision of the
+            engraving. If we supply too much oxygen the engraving will &quot;blur&quot; as the
+            burning spreads more than is intended.
+          </p>
           {(tool === 'xtool' || tool === 'trotec') && (
             <p>
-              The {toolName} automatically sets its own ait-assist based on the sattings you use.
+              The {toolName} automatically sets its own air-assist based on the settings you use.
             </p>
           )}
-
-        </p>
+        </>
       }
       right={
         <SimulationLayout

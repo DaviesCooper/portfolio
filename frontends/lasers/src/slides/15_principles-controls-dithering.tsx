@@ -64,8 +64,9 @@ function loadImageAsImageData(path: string): Promise<ImageData> {
 const DITHER_OPTIONS: readonly { value: DitherOption; label: string }[] = [
   { value: 'none', label: 'None' },
   { value: 'greyscale', label: 'Greyscale' },
-  { value: 'stucki', label: 'Stucki' },
+  { value: 'threshold', label: 'Threshold' },
   { value: 'blue', label: 'Blue noise' },
+  { value: 'stucki', label: 'Stucki' },
 ];
 
 function Slide10_2(): JSX.Element {

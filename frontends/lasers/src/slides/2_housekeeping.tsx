@@ -1,6 +1,6 @@
 import { ColumnSlide } from '../components/layouts/ColumnSlide';
 import { defineSlide } from './defineSlide';
-import './Slide3.css';
+import './2_housekeeping.css';
 
 function Slide3(): JSX.Element {
   return (

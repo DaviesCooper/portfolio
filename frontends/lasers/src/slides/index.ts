@@ -1,63 +1,48 @@
 import type { SlideSource } from '../lib';
 import { getSlideLabel } from '../lib';
-import Slide2 from './Slide2';
-import Slide3 from './Slide3';
-import Slide4 from './Slide4';
-import Slide5 from './Slide5';
-import Slide6 from './Slide6';
-import Slide7 from './Slide7';
-import Slide8 from './Slide8';
-import Slide9 from './Slide9';
-import Slide10 from './Slide10';
-import Slide10_2 from './Slide10d2';
-import Slide10_3 from './Slide10d3';  
-import Slide11 from './Slide11';
-import Slide12 from './Slide12';
-import Slide12d2 from './Slide12d2';
-import Slide12d3 from './Slide12d3';
-import Slide13 from './Slide13';
-import Slide14 from './Slide14';
-import Slide15 from './Slide15';
-
-export { default as Slide2 } from './Slide2';
-export { default as Slide3 } from './Slide3';
-export { default as Slide4 } from './Slide4';
-export { default as Slide5 } from './Slide5';
-export { default as Slide6 } from './Slide6';
-export { default as Slide7 } from './Slide7';
-export { default as Slide8 } from './Slide8';
-export { default as Slide9 } from './Slide9';
-export { default as Slide10 } from './Slide10';
-export { default as Slide10_2 } from './Slide10d2';
-export { default as Slide10_3 } from './Slide10d3';
-export { default as Slide11 } from './Slide11';
-export { default as Slide12 } from './Slide12';
-export { default as Slide12d2 } from './Slide12d2';
-export { default as Slide12d3 } from './Slide12d3';
-export { default as Slide13 } from './Slide13';
-export { default as Slide14 } from './Slide14';
-export { default as Slide15 } from './Slide15';
+import title from './1_title';
+import housekeeping from './2_housekeeping';
+import outline from './3_outline';
+import safetyVideo from './4_safety-video';
+import safetyFireExtinguishers from './5_safety-fire-extinguishers';
+import safetyChlorine from './6_safety-chlorine';
+import safetyInterlock from './7_safety-interlock';
+import principles from './8_principles';
+import principlesControls from './9_principles-controls';
+import principlesControlsPositioning from './10_principles-controls-positioning';
+import rasterPath from './11_raster-path';
+import rasterPathResolution from './12_raster-path-resolution';
+import principlesControlsAirAssist from './13_principles-controls-air-assist';
+import principlesControlsSigmoid from './14_principles-controls-sigmoid';
+import principlesControlsDithering from './15_principles-controls-dithering';
+import principlesControlsKerf from './16_principles-controls-kerf';
+import protospaceEtiquette from './17_protospace-etiquette';
+import protospaceEtiquetteLeftovers from './18_protospace-etiquette-leftovers';
+import safetyAgain from './18_safety-again';
+import toTheShop from './19_to-the-shop';
 
 /** The slides list is just the list of (slide) components. */
 export const slides = [
-  Slide2,
-  Slide3,
-  Slide4,
-  Slide5,
-  Slide6,
-  Slide7,
-  Slide8,
-  Slide9,
-  Slide10,
-  Slide10_2,
-  Slide10_3,
-  Slide11,
-  Slide12,
-  Slide12d2,
-  Slide12d3,
-  Slide13,
-  Slide14,
-  Slide15,
+  title,
+  housekeeping,
+  outline,
+  safetyVideo,
+  safetyFireExtinguishers,
+  safetyChlorine,
+  safetyInterlock,
+  principles,
+  principlesControls,
+  principlesControlsPositioning,
+  rasterPath,
+  rasterPathResolution,
+  principlesControlsAirAssist,
+  principlesControlsSigmoid,
+  principlesControlsDithering,
+  principlesControlsKerf,
+  protospaceEtiquette,
+  protospaceEtiquetteLeftovers,
+  safetyAgain,
+  toTheShop,
 ] as const;
 
 export const defaultSlideSource: SlideSource = {

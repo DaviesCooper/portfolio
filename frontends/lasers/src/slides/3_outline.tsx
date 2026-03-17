@@ -1,11 +1,8 @@
 import { ColumnSlide } from '../components/layouts/ColumnSlide';
 import { defineSlide } from './defineSlide';
-import './Slide4.css';
-import { useLaserTool } from '../context/LaserToolContext';
+import './3_outline.css';
 
 function Slide4(): JSX.Element {
-  const tool = useLaserTool().tool;
-  const toolLabel = tool === 'xtool' ? 'XTool' : tool === 'trotec' ? 'Trotec' : 'Thunder';
   
   return (
     <ColumnSlide
@@ -13,10 +10,9 @@ function Slide4(): JSX.Element {
         <div className="slide-outline-wrap">
           <div className="slide-outline-row">
             <ul className="slide-outline">
-              <li>Principles of Laser CNC Machines</li>
               <li>Safety</li>
+              <li>Principles of Laser CNC Machines</li>
               <li>Protospace Etiquette</li>
-              <li>{toolLabel} specifics</li>
               <li>Safety Again</li>
             </ul>
             <span className="slide-outline-duration">1 Hour</span>

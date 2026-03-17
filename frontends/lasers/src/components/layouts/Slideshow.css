@@ -96,19 +96,19 @@
   list-style: none;
 }
 
-/* Restore bullets for plain uls (outline, bullet-list, and command-list use custom or no markers). */
-.slide ul:not(.slide-outline):not(.slide-bullet-list):not(.command-list-list) {
+/* Default bullet list styling. Slide-specific CSS (e.g. Slide3, Slide4) overrides for custom lists; .command-list-list is a component. */
+.slide ul:not(.command-list-list) {
   list-style-type: disc;
-  padding-left: 1.5em; /* room for the marker */
+  padding-left: 1.5em;
 }
 
-.slide ul:not(.slide-outline):not(.slide-bullet-list):not(.command-list-list) li,
+.slide ul:not(.command-list-list) li,
 .slide ol:not(.command-list-list) li {
   padding-left: 1.75rem;
   position: relative;
 }
 
-.slide ul:not(.slide-outline):not(.slide-bullet-list):not(.command-list-list) li::marker,
+.slide ul:not(.command-list-list) li::marker,
 .slide ol:not(.command-list-list) li::marker {
   color: var(--accent);
 }

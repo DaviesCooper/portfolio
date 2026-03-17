@@ -1,0 +1,46 @@
+.slide15-fire-list-wrap {
+  display: flex;
+  align-items: stretch;
+  gap: 1.25rem;
+}
+
+.slide15-fire-list-wrap > div:first-child {
+  flex: 1;
+  min-width: 0;
+}
+
+.slide15-severity-arrow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+  padding-top: 0.35em;
+  padding-bottom: 0.35em;
+}
+
+.slide15-severity-arrow-line {
+  flex: 1;
+  min-height: 1.5rem;
+  width: 2px;
+  background: var(--fg-muted, #888);
+  position: relative;
+}
+
+.slide15-severity-arrow-line::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: var(--fg-muted, #888);
+  border-bottom: none;
+  margin-bottom: -6px;
+}
+
+.slide15-severity-label {
+  font-size: 0.85rem;
+  color: var(--fg-muted, #888);
+  margin-top: 0.5rem;
+  white-space: nowrap;
+}

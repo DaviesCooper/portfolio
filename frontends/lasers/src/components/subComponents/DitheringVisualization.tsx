@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef } from 'react';
 import './DitheringVisualization.css';
 
-export type DitherOption = 'none' | 'greyscale' | 'stucki' | 'blue';
+export type DitherOption = 'none' | 'greyscale' | 'threshold' | 'stucki' | 'blue';
 
 export interface DitheringVisualizationProps {
   /** RGBA image data (e.g. 512×512). Origin of the image is irrelevant to the visualizer. */
@@ -39,18 +39,22 @@ function ditherStucki(src: Float32Array, out: Uint8Array, w: number, h: number):
   }
 }
 
-/** Deterministic [0,1) from pixel coords for blue-noise style threshold. */
-function randomThreshold(x: number, y: number): number {
-  return Math.random();
-}
-
 /** Blue noise: random threshold per pixel. Above threshold -> white, below -> black. */
 function ditherBlueNoise(src: Float32Array, out: Uint8Array, w: number, h: number): void {
   for (let y = 0; y < h; y++) {
     for (let x = 0; x < w; x++) {
       const i = y * w + x;
-      const thresh = randomThreshold(x, y);
+      const thresh = Math.random();
       out[i] = src[i] < thresh ? 1 : 0;  /* below -> black, above -> white */
+    }
+  }
+}
+
+function ditherThreshold(data: Float32Array<ArrayBufferLike>, out: Uint8Array<ArrayBuffer>, w: number, h: number) {
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+      const i = y * w + x;
+      out[i] = data[i] < 0.5 ? 1 : 0;  /* below -> black, above -> white */
     }
   }
 }
@@ -108,6 +112,9 @@ export function DitheringVisualization(props: DitheringVisualizationProps): JSX.
     const out = new Uint8Array(data.length);
     if (ditherOption === 'stucki') {
       ditherStucki(data, out, w, h);
+    } 
+    else if (ditherOption === 'threshold') {
+      ditherThreshold(data, out, w, h);
     } else {
       ditherBlueNoise(data, out, w, h);
     }
@@ -145,3 +152,5 @@ export function DitheringVisualization(props: DitheringVisualizationProps): JSX.
     </div>
   );
 }
+
+

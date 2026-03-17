@@ -1,9 +1,10 @@
 import { ColumnSlide } from '../components/layouts/ColumnSlide';
 import { defineSlide } from './defineSlide';
-import { useLaserTool } from '../context/LaserToolContext';
+import './6_safety-chlorine.css';
+
+const BASE = import.meta.env.BASE_URL;
 
 function Slide12d3(): JSX.Element {
-  const {tool} = useLaserTool();
   return (
     <ColumnSlide
       left={
@@ -18,14 +19,19 @@ function Slide12d3(): JSX.Element {
         </div>
       }
       right={
-        <div>
-          <ul>
-            <li>NEVER leave the laser cutter unattended.</li>
-            <li>NEVER put chlorine in the machine.</li>
-            {tool === "xtool" && (
-              <li>NEVER disable the lid interlock.</li>
-            )}
-          </ul>
+        <div className="slide-12d2-img slide-12d2-img-back slide-12d3-sds-img">
+          <a
+            href="https://www.behr.com/pro/products/safety-msds"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="View Safety Data Sheets at Behr"
+          >
+            <img
+              src={`${BASE}sds-sheet.png`}
+              alt="A Sample Safety Data Sheet"
+              draggable={false}
+            />
+          </a>
         </div>
       }
     />

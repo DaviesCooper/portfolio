@@ -1,6 +1,6 @@
 import { ColumnSlide } from '../components/layouts/ColumnSlide';
 import { defineSlide } from './defineSlide';
-import './Slide12d2.css';
+import './5_safety-fire-extinguishers.css';
 
 const BASE = import.meta.env.BASE_URL;
 

@@ -1,5 +1,6 @@
 import { ColumnSlide } from '../components/layouts/ColumnSlide';
 import { defineSlide } from './defineSlide';
+import './14_principles-controls-sigmoid.css';
 import { Slider } from '../components/controls/Slider';
 import { useMemo, useState } from 'react';
 import { BurnVariables } from '../lib/burnVariables';
@@ -44,7 +45,7 @@ function SigmoidGraph(): JSX.Element {
 
   return (
     <figure className="sigmoid-graph" aria-hidden>
-      <svg viewBox={`0 0 ${w} ${h}`} width="100%" height="auto" className="sigmoid-graph-svg">
+      <svg viewBox={`0 0 ${w} ${h}`} width="100%" className="sigmoid-graph-svg">
         <path d={pathD} fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
         <line x1={pad.left} y1={h - pad.bottom} x2={w - pad.right} y2={h - pad.bottom} stroke="currentColor" strokeWidth="0.8" />
         <line x1={pad.left} y1={pad.top} x2={pad.left} y2={h - pad.bottom} stroke="currentColor" strokeWidth="0.8" />
