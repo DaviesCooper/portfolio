@@ -32,6 +32,7 @@ function Slide6(): JSX.Element {
         step={0.05}
         value={power / 10}
         onChange={(n) => setPower(n * 10)}
+        formatValue={(v) => v.toFixed(2)}
         aria-label="Laser power"
       />
       {selectedTool == "xtool" &&
