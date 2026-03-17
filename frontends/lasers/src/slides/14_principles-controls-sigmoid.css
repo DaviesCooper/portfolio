@@ -1,0 +1,20 @@
+/* Sigmoid graph (power curve) in left column — only used on this slide */
+.column-slide-left .sigmoid-graph {
+  margin-top: 1.25rem;
+  max-width: 100%;
+}
+
+.column-slide-left .sigmoid-graph-svg {
+  display: block;
+  max-width: 18rem;
+  height: auto;
+}
+
+@media (max-width: 1399px) {
+  .column-slide-left .sigmoid-graph {
+    width: fit-content;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}

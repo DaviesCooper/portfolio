@@ -8,6 +8,7 @@ export function defineSlide(
     title?: ReactNode;
     subtitle?: ReactNode;
     whenTool?: LaserTool;
+    titleSlideLayout?: boolean;
   }
 ): SlideComponent {
   const Slide = Component as SlideComponent;
@@ -15,5 +16,6 @@ export function defineSlide(
   Slide.title = meta.title;
   Slide.subtitle = meta.subtitle;
   Slide.whenTool = meta.whenTool;
+  Slide.titleSlideLayout = meta.titleSlideLayout;
   return Slide;
 }

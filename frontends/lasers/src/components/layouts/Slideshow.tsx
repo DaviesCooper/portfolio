@@ -39,8 +39,9 @@ export function Slideshow(props: SlideshowProps): JSX.Element {
 
   const SlideComponent = slides[index];
   const slideLabel: string = slideSource.getSlideLabel(SlideComponent, index);
-  const isTitleSlide: boolean = SlideComponent.id === 'title';
-  const resolvedContent: ReactNode = <SlideComponent tool={selectedTool} />;
+  const useTitleLayout: boolean =
+    SlideComponent.id === 'title' || SlideComponent.titleSlideLayout === true;
+  const resolvedContent: ReactNode = <SlideComponent />;
 
   const slideProps: {
     id: string;
@@ -58,7 +59,7 @@ export function Slideshow(props: SlideshowProps): JSX.Element {
 
   return (
     <div className="slideshow">
-      {isTitleSlide ? (
+      {useTitleLayout ? (
         <TitleSlide key={SlideComponent.id} {...slideProps} />
       ) : (
         <Slide key={SlideComponent.id} {...slideProps} />

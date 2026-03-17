@@ -13,6 +13,8 @@ export type SlideComponent = React.ComponentType & {
   subtitle?: ReactNode;
   /** If set, slide is only included when this tool is selected. */
   whenTool?: LaserTool;
+  /** If true, use title-slide layout (centered title) like the first slide. */
+  titleSlideLayout?: boolean;
 };
 
 /** Abstraction for a slide deck. Slideshow depends on this, not on concrete arrays (D). */
