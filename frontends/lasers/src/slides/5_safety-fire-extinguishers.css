@@ -50,6 +50,7 @@
   position: relative;
   z-index: 1;
   margin-top: 14px; /* back image slightly lower */
+  background: transparent;
 }
 
 @media (max-width: 1399px) {

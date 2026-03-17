@@ -10,6 +10,7 @@
   --danger: #f87171;
   --success: #4ade80;
   --border: #1e293b;
+  --slider-track: #334155; /* lighter than --border so track is visible on dark bg */
   --font-sans: 'DM Sans', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 }
@@ -23,6 +24,7 @@
   --accent: #0d9488;
   --accent-dim: #14b8a6;
   --border: #e2e8f0;
+  --slider-track: #e2e8f0; /* same as border in light theme */
 }
 
 * {

@@ -30,7 +30,7 @@ function createGradientImageData(): ImageData {
   return new ImageData(data, CANVAS_SIZE, CANVAS_SIZE);
 }
 
-/** Load image from path, scale to fit inside CANVAS_SIZE×CANVAS_SIZE, return ImageData. Letterbox is white. */
+/** Load image from path, scale to fit inside CANVAS_SIZE×CANVAS_SIZE, return ImageData. Letterbox is transparent. */
 function loadImageAsImageData(path: string): Promise<ImageData> {
   return new Promise((resolve, reject) => {
     const img = new Image();
@@ -51,8 +51,7 @@ function loadImageAsImageData(path: string): Promise<ImageData> {
         reject(new Error('Could not get canvas context'));
         return;
       }
-      ctx.fillStyle = '#ffffff';
-      ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+      ctx.clearRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
       ctx.drawImage(img, 0, 0, w, h, x0, y0, drawW, drawH);
       resolve(ctx.getImageData(0, 0, CANVAS_SIZE, CANVAS_SIZE));
     };

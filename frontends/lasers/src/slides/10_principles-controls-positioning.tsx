@@ -48,6 +48,7 @@ function Slide7(): JSX.Element {
 
   return (
     <ColumnSlide
+      narrowLeft
       left={
         <>
           <p>

@@ -1,4 +1,9 @@
-/* SDS sheet image: drop shadow on this slide only */
+/* SDS sheet image: no card background; drop-shadow follows image shape */
 .slide-12d3-sds-img {
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15), 0 4px 8px rgba(0, 0, 0, 0.1);
+  background: transparent;
+  overflow: visible;
+}
+
+.slide-12d3-sds-img img {
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1)) drop-shadow(0 8px 24px rgba(0, 0, 0, 0.15));
 }

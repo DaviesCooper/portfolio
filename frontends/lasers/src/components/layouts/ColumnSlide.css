@@ -13,6 +13,9 @@
 }
 
 /* Give right column more width (e.g. for slides with command list). */
+.column-slide-narrow-left {
+  grid-template-columns: minmax(0, 24rem) 1fr;
+}
 .column-slide-narrow-left .column-slide-left {
   max-width: 24rem;
 }

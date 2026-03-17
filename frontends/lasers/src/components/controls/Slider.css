@@ -50,7 +50,7 @@
   height: 6px;
   -webkit-appearance: none;
   appearance: none;
-  background: var(--border);
+  background: var(--slider-track, var(--border));
   border-radius: 3px;
   outline: none;
 }
@@ -92,13 +92,13 @@
 .slider__input::-webkit-slider-runnable-track {
   height: 6px;
   border-radius: 3px;
-  background: var(--border);
+  background: var(--slider-track, var(--border));
 }
 
 .slider__input::-moz-range-track {
   height: 6px;
   border-radius: 3px;
-  background: var(--border);
+  background: var(--slider-track, var(--border));
 }
 
 /* Filled track (left of thumb) using accent - WebKit */
