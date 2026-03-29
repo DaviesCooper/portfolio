@@ -187,8 +187,9 @@ export function TerminalWindow({
     'Everything is written in javascript.',
     'You can find the source code for this portfolio [here](https://github.com/DaviesCooper/portfolio).\n\n',
     'Feel free to explore and toy around with the commands. You can\'t actually break anything so',
-    'don\'t worry about it. For example, see what happens if you "rm -rf /"\n\n',
+    'don\'t worry about it.',
     'Type help to see a list of commands.\n\n',
+    'A good introductory command is open. For example, `open Resume` or `open About`'
   ]);
   const [inputValue, setInputValue] = useState('');
   const [cwd, setCwd] = useState('/home/cooper');
