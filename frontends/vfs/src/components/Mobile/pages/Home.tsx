@@ -7,7 +7,7 @@ export function Home() {
       <section className={styles.hero}>
         <h1 className={styles.name}>Cooper Davies</h1>
         <p className={styles.tagline}>
-          PhD, Calgary — AI/ML & building things.
+          Calgary — AI/ML & building things.
         </p>
       </section>
 

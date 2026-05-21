@@ -181,7 +181,7 @@ export function TerminalWindow({
   onVfsRootCleared,
 }: TerminalWindowProps) {
   const [outputLines, setOutputLines] = useState<string[]>(() => [
-    'Hi, I\'m Cooper Davies, PhD. Thanks for stopping by, glad you\'re here!',
+    'Hi, I\'m Cooper Davies. Thanks for stopping by, glad you\'re here!',
     'This is my personal portfolio which you can use to explore my work and learn more about me.',
     'Although this may look like a linux desktop, it is actually purely emulated.',
     'Everything is written in javascript.',

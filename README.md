@@ -1,6 +1,6 @@
 # Wildrose Plains — Portfolio
 
-Personal portfolio for **Cooper Davies** (PhD, Calgary). Node.js backend and a React frontend that looks like a mint-style terminal. "Apps" open as windows, and you can explore projects and run commands from the shell. **TypeScript** throughout (server and vfs).
+Personal portfolio for **Cooper Davies** ( Calgary). Node.js backend and a React frontend that looks like a mint-style terminal. "Apps" open as windows, and you can explore projects and run commands from the shell. **TypeScript** throughout (server and vfs).
 
 ## Stack
 

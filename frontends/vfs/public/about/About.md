@@ -1,6 +1,6 @@
 # About me
 
-*Cooper Davies — PhD in computer science, mostly doing AI/ML and building things.*
+*Cooper Davies, mostly doing AI/ML and building things.*
 
 <p align="center"><img src="with_my_wife.png" alt="Rock climbing" width="400" /></p>
 <p align="center" style="max-width: 400px; margin-left: auto; margin-right: auto;"><em>Im the one on the left</em></p>
